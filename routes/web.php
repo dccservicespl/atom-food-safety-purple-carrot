@@ -12,6 +12,7 @@ use App\Http\Controllers\GuacamoleFloorManagerController;
 use App\Http\Controllers\GuacamoleMeasureController;
 use App\Http\Controllers\GuacamoleProductionManagerController;
 use App\Http\Controllers\ItemMasterController;
+use App\Http\Controllers\KittingController;
 use App\Http\Controllers\LabelInspectionController;
 use App\Http\Controllers\MeasurementCategoryController;
 use App\Http\Controllers\MetalDetectorController;
@@ -154,7 +155,18 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('admin/label-inspection-items', [LabelInspectionController::class, 'label_inspection_items'])->name('label_inspection_items');
     Route::get('/items/create', LabelInspectionItemMaster::class)->name('items.create');
     Route::get('/items/{id}/edit', LabelInspectionItemMaster::class)->name('items.edit');
-});
+
+
+
+    // Kitting Route
+    Route::get('admin/kitting-measure-date-listing', [KittingController::class, 'kittingMeasureDateListing'])->name('kitting_measure_date_listing');
+    Route::get('admin/meal_kit_type', [KittingController::class, 'meal_kit_type'])->name('meal_kit_type');
+
+
+    // New Route
+    Route::get('admin/portioning_measure_dashboard', [PortioningMeasureController::class, 'portioning_measure_dashboard'])->name('portioning_measure_dashboard');
+    Route::get('admin/portioning_measure_data_upload', [PortioningMeasureController::class, 'portioning_measure_data_upload'])->name('portioning_measure_data_upload');
+ });
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', [AdminAuthController::class, 'admin_login'])->name('login');

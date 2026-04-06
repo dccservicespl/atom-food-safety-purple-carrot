@@ -1,44 +1,41 @@
-<div class="content">
-    <div class="navbar-light navbar-glass navbar-top navbar-expand" style="background-color:#ffff">
-        <div class="d-flex align-items-center ps-3 pe-3" style="justify-content: space-between;">
-            @if (Route::currentRouteName() == 'dashboard')
-                <a class="" href="{{ route('dashboard') }}">
-                    <img class="img-responsive" src="/assets/img/icons/home.png" alt="" width="40" />
-                </a>
-            @else
-                {{-- <a class="" href="#">
-                    <img class="img-responsive" src="/assets/img/icons/back.png" alt="" width="40" />
-                </a> --}}
-                <?php echo add_back_button($get_route); ?>
-            @endif
-
-            <a class="" href="{{ route('work_type') }}">
-                <img class="img-responsive" src="/assets/img/icons/spot-illustrations/logo.png" alt=""
-                    width="100" />
-            </a>
-
-            <!-- <a class="" href="{{ route('logout') }}">
-                {{-- <span class="h5 pe-3 text-dark"> {{ Auth::user()->name }} </span> --}}
-                <span class="pe-2 text-500 h4">{{ Auth::user()->name }} <br><small style="font-size: 14px;">{{Auth::user()->role->name}}</small></span>
-                <img class="img-responsive" src="/assets/img/icons/profile.png" alt="" width="40" />
-            </a> -->
-            <div class="dropdown">
-                <a class="d-flex align-items-center dropdown-toggle" href="#" id="userDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="pe-2 text-500 h4 mb-0">
-                        {{ Auth::user()->name }}
-                        <br>
-                        <small style="font-size: 14px;">{{ Auth::user()->role->name }}</small>
-                    </span>
-                    <img class="img-responsive" src="/assets/img/icons/profile.png" alt="" width="40" />
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                        <a class="dropdown-item" href="{{ route('logout') }}">
-                            Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<div class="shadow-sm">
+    <header class="container d-flex justify-content-between align-items-center">
+        <div class="logo fw-bold fs-4 text-primary">
+            <img src="/assets/atom/Images/logo.png" class="logo" alt="Atom Food Safety" srcset="">
         </div>
-    </div>
+        <div class="dropdown">
+            <div class="profile-trigger d-flex gap-3 align-items-center" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <div class="text-end d-none d-sm-block">
+                    <h4 class="profile-name fs-5 fw-bold">Jack Will</h4>
+                    <p class="profile-role fs-6 text-color">Food Safety Manager</p>
+                </div>
+                <div class="profile-icon-wrapper">
+                    <i class="bi bi-person-circle fs-1"></i>
+                </div>
+            </div>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-person-fill"></i> My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bi bi-shield-lock"></i> Change Password
+                    </a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <a class="dropdown-item text-danger" href="#">
+                        <i class="bi bi-box-arrow-left"></i> Log Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+</div>

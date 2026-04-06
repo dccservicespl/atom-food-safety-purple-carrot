@@ -27,4 +27,14 @@ class PortioningMeasureController extends Controller
         $get_route = route('work_type');
         return view('portioning_measurement_form.portioning_measure_head', compact('get_route'));
     }
+
+    public function portioning_measure_data_upload(){
+        $get_route = route('portioning_measure_dashboard');
+        return view('portioning_measurement_form.portioning_measure_data_upload', compact('get_route'));
+    }
+
+    public function portioning_measure_dashboard(){
+        $get_route = route('work_type');
+        return view('portioning_measurement_form.portioning_measure_dashboard', compact('get_route'));
+    }
 }

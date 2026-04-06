@@ -1,0 +1,463 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-font-smotthing: antialiased;
+  font-family: "Poppins", serif;
+}
+
+:root {
+  --primary-color: #016B9D;
+  --accent-color: #00A659;
+  --text-dark: #6E6E6E;
+  --text-white: #ffffff;
+  --text-black: #000;
+  --border-color: #E9E9E9;
+  --grey-btn: #7A7A7A;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+  height: 2px;
+
+}
+
+.font {
+  font-family: heading, sans-serif;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler,
+.navbar-toggler:active,
+.navbar-toggler .navbar-toggler-icon:focus,
+.navbar-toggler-icon {
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+ul,
+li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-decoration: none;
+}
+
+
+.btn_1 {
+  border: 0;
+  display: flex;
+  padding: 16px 60px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 16px;
+  color: var(--text-white);
+  background: var(--primary-color, #016B9D);
+}
+
+
+.color {
+  color: var(--primary-color);
+}
+
+.text-color {
+  color: var(--text-dark);
+}
+
+
+header .logo {
+  width: 120px;
+}
+
+
+header .dropdown {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 220px;
+  margin-top: 10px !important;
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-main);
+  transition: all 0.2s;
+}
+
+.dropdown-item i {
+  color: var(--text-muted);
+}
+
+.dropdown-item:hover {
+  background-color: #f1f5f9;
+  color: var(--table-header-bg);
+}
+
+.dropdown-item:hover i {
+  color: var(--table-header-bg);
+}
+
+.dropdown-divider {
+  margin: 8px 0;
+  border-top: 1px solid #f1f5f9;
+}
+
+
+
+/* upload page */
+
+section.topbar {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+/* section.upload .upload_box {
+  border-radius: 16px;
+  border: 2px dashed #000;
+  background: #FFF;
+  text-align: center;
+} */
+
+section.upload .upload_icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F3F7FF;
+  color: var(--primary-color);
+}
+
+
+
+/* Container styling to achieve the rounded look from your image */
+section.past_sheets .table-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+}
+
+section.past_sheets .custom-table {
+  margin-bottom: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header Styling */
+section.past_sheets .custom-table thead th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 500;
+  padding: 1.25rem 1rem;
+  border: none;
+  white-space: nowrap;
+}
+
+/* Body Row Styling */
+section.past_sheets .custom-table tbody td {
+  padding: 1.25rem 1rem;
+  vertical-align: middle;
+  color: #333;
+  border-bottom: 1px solid var(--border-color);
+}
+
+section.past_sheets .date-cell {
+  font-weight: 700;
+}
+
+/* Action Buttons Styling */
+section.past_sheets .action-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+section.past_sheets .btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid transparent;
+  background: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+section.past_sheets .btn-download {
+  background-color: #e5ecfc;
+  color: #1E50B4;
+}
+
+
+section.past_sheets .btn-delete {
+  background: #feeded;
+  color: #FF5959;
+}
+
+/* --- Upload Section Styles --- */
+.upload_box {
+  background: white;
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+  padding: 4rem 1.5rem;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+
+.upload_box.dragover {
+  border-color: var(--primary-blue);
+  background-color: #f0f9ff;
+}
+
+.upload_icon {
+  width: 80px;
+  height: 80px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-blue);
+  margin-bottom: 1.5rem;
+}
+
+
+.btn-submit {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 16px 60px;
+  border-radius: 16px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-submit:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-submit:not(:disabled):hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+#file-status {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+/* Spin animation for loading icons */
+.animate-spin {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* upload page */
+
+
+/* dashboard page */
+
+section.month .month_box {
+  border-radius: 9px;
+  border: 1px solid #E9E9E9;
+  background: #FFF;
+  max-width: max-content;
+  padding: 14px 30px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey-btn);
+  cursor: pointer;
+
+}
+
+section.month .month_box.active {
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: var(--accent-color);
+  max-width: max-content;
+  padding: 16px 30px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-white);
+
+}
+
+section.month .month-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: scroll;
+  padding-bottom: 10px;
+  padding-left: 6%;
+  padding-right: 20px;
+  transition: all 0.6s ease;
+}
+section.month .month-scroll::-webkit-scrollbar  {
+ height: 0 !important;
+ 
+}
+
+
+ .week_card {
+  border-radius: 20px;
+  border: 1px solid #EFEFEF;
+  background: #F9F9F9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 20px 20px 20px;
+
+}
+ .week_card.completed {
+  border-radius: 20px;
+  border: 1px solid var(--grey-btn);
+  color: var(--text-dark);
+
+}
+
+ .week_card.completed {
+  border-radius: 20px;
+  border: 1px solid var(--grey-btn);
+  color: var(--text-dark);
+
+}
+ .week_card.present {
+  background-color: #F8FAFF;
+  border-radius: 20px;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color  );
+
+}
+
+.week_card h3{
+  font-size: 14px;
+}
+
+.week_card .badge.completed {
+  border-radius: 20px;
+  background: #CAFFB8;
+  color: #004626;
+  height: max-content;
+  padding: 8px 12px;
+  position: absolute;
+  right: 17px;
+  top: -16px;
+}
+.week_card .badge.present {
+  border-radius: 20px;
+background: #B3E7FF;
+  color: var(--primary-color);
+  height: max-content;
+  padding: 8px 12px;
+  position: absolute;
+  right: 17px;
+  top: -16px;
+}
+
+
+.form-select:focus {
+  border: 1px solid var(--accent-color);
+
+}
+
+
+.week_process .btn_arrow {
+  border-radius: 53px;
+
+  display: flex;
+  width: 53px;
+  height: 60px;
+  /* padding: 16px 8px; */
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+ 
+  font-size: 25px;
+}
+.week_process .btn_arrow.completed {
+   background: #7A7A7A;
+    color: var(--text-white);
+}
+.week_process .btn_arrow.present {
+   background: #016B9D;;
+    color: var(--text-white);
+}
+
+
+
+
+
+/* dashboard page */

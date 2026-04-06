@@ -32,23 +32,23 @@ class AdminAuthController extends Controller
         }
     }
 
-    public function dashboard(Request $request){
+    // public function dashboard(Request $request){
 
-        $user_details = User::join('role_msts', 'role_msts.id','=', 'users.role_id')
-                            ->where('users.id', Auth::user()->id)
-                            ->select('users.*', 'role_msts.name as role_name')
-                            ->first();
+    //     $user_details = User::join('role_msts', 'role_msts.id','=', 'users.role_id')
+    //                         ->where('users.id', Auth::user()->id)
+    //                         ->select('users.*', 'role_msts.name as role_name')
+    //                         ->first();
 
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $query = DailyMeasure::query();
-            $query->whereBetween('measure_date', [$request->start_date, $request->end_date]);
-            $measure_date = $query->orderBy('id', 'DESC')->limit(10)->get();
-        }else{
-            $measure_date = DailyMeasure::orderBy('id', 'DESC')->limit(10)->get();
-        }
-        $get_menu_access = WebHookHelper::check_user_role_map(Auth::user()->id);
-        return view('dashboard', compact('get_menu_access', 'user_details','measure_date'));
-    }
+    //     if ($request->has('start_date') && $request->has('end_date')) {
+    //         $query = DailyMeasure::query();
+    //         $query->whereBetween('measure_date', [$request->start_date, $request->end_date]);
+    //         $measure_date = $query->orderBy('id', 'DESC')->limit(10)->get();
+    //     }else{
+    //         $measure_date = DailyMeasure::orderBy('id', 'DESC')->limit(10)->get();
+    //     }
+    //     $get_menu_access = WebHookHelper::check_user_role_map(Auth::user()->id);
+    //     return view('dashboard', compact('get_menu_access', 'user_details','measure_date'));
+    // }
 
     // public function company_list(){
     //     $get_route = '';
@@ -60,6 +60,11 @@ class AdminAuthController extends Controller
         return view('outlet.select_location', compact('get_route'));
     }
     public function work_type(){
+        // $get_route = route('company_list');
+        $get_route = route('work_type');
+        return view('outlet.work_type_list', compact('get_route'));
+    }
+    public function dashboard(){
         // $get_route = route('company_list');
         $get_route = route('work_type');
         return view('outlet.work_type_list', compact('get_route'));

@@ -1,21 +1,7 @@
 @extends('layouts.main')
 @section('content')
 
-
-<section class="topbar py-3 mb-5">
-    <div class="container">
-        <div class="d-flex align-items-center justify-content-between">
-            <a href="{{ $get_route }}" class="back-btn pointer"><i
-                    class="bi bi-arrow-left-circle-fill text-white fs-2"></i></a>
-            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ $get_route }}" class="text-white">Home</a></li>
-                    <li class="breadcrumb-item active text-white" aria-current="page">Upload Sheet</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-</section>
+<x-breadcrumb-component :get_route="$get_route" :back_route="$get_route" page_title="Upload Sheet" :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => 'Upload Sheet', 'route' => '']]"/>
 
 <!-- upload  -->
 <section class="upload mb-5">

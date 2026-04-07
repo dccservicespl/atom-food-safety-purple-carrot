@@ -37,4 +37,9 @@ class PortioningMeasureController extends Controller
         $get_route = route('work_type');
         return view('portioning_measurement_form.portioning_measure_dashboard', compact('get_route'));
     }
+
+    public function week_details(){
+        $get_route = route('work_type');
+        return view('pages.week_details');
+    }
 }

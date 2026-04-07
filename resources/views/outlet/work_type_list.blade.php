@@ -15,52 +15,51 @@
         font-size: 24px;
     }
 </style>
-<div class="container-fluid">
-    <?php echo flashMessage(); ?>
-    <div class="col-12 mt-4">
-        <div class="rounded-0 card shadow-none rounded-top border-secondary border-bottom">
-            <div class="card_title_color text-dark text-start ps-4" style="font-size: 16px">
-                <a href="{{ route('work_type') }}" style="color: unset;"><span>Purple Carrot</span></a>
-                <span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                        style="display: inline; margin: 0 8px; vertical-align: middle;">
-                        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </span>
-                {{-- <span>43rd Street</span>
-                <span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                        style="display: inline; margin: 0 8px; vertical-align: middle;">
-                        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                    </svg>
-                </span> --}}
-                <strong>Select Work Type</strong>
-            </div>
+
+
+
+
+
+<section class="topbar py-3 mb-5">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+           
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="" class="text-white">Purple Carrot</a></li>
+                    <li class="breadcrumb-item active text-white" aria-current="page">Select Work Type</li>
+           
+                </ol>
+            </nav>
         </div>
     </div>
-    <div class="rounded-0 rounded-bottom page_card bg_white category_card_spacing mt-0">
-        <div class="row">
+</section>  
+
+
+<div class="container">
+    <?php echo flashMessage(); ?>
+ 
+    <div class="rounded-0 rounded-bottom page_card bg_white category_card_spacing mt-5">
+        <div class="row" style="height:80vh">
             <div class="col-6 mb-4">
                 <a class="" href="{{ route('kitting_measure_date_listing') }}">
-                    <div class="measurement_card" style="background-color: #f49e0a1f">
+                    <div class="measurement_card text-center" style="background-color: #f49e0a1f">
                         <!-- <svg width="74" height="80" viewBox="0 0 74 80" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M37.0001 36.0938C37.0001 37.1298 37.4116 38.1233 38.1442 38.8559C38.8767 39.5885 39.8703 40 40.9063 40C41.9423 40 42.9359 39.5885 43.6685 38.8559C44.401 38.1233 44.8126 37.1298 44.8126 36.0938C44.8126 35.0577 44.401 34.0642 43.6685 33.3316C42.9359 32.599 41.9423 32.1875 40.9063 32.1875C39.8703 32.1875 38.8767 32.599 38.1442 33.3316C37.4116 34.0642 37.0001 35.0577 37.0001 36.0938ZM72.8399 70.5566L54.9981 24.375V7.38281H62.0001V0.742188H12.0001V7.38281H19.002V24.375L1.16022 70.5566C0.88678 71.2793 0.740295 72.041 0.740295 72.8125C0.740295 76.2598 3.54303 79.0625 6.9903 79.0625H67.0098C67.7813 79.0625 68.543 78.916 69.2657 78.6426C72.4883 77.4023 74.0899 73.7793 72.8399 70.5566ZM25.6426 25.6152V7.57812H48.3575V25.6152L57.2344 48.5938C55.213 48.0762 53.1231 47.8125 50.9942 47.8125C45.0176 47.8125 39.3536 49.9121 34.8516 53.6719C31.529 56.4475 27.3354 57.9652 23.0059 57.959C19.8126 57.959 16.7462 57.1484 14.0411 55.6445L25.6426 25.6152ZM7.5567 72.4219L11.629 61.8945C15.1153 63.6621 18.9922 64.6094 23.0157 64.6094C28.9922 64.6094 34.6563 62.5098 39.1583 58.75C42.4688 55.9961 46.6094 54.4629 51.004 54.4629C54.4219 54.4629 57.6837 55.3906 60.5352 57.1094L66.4434 72.4219H7.5567Z"
                                     fill="#f49e0a"></path>
                             </svg> -->
-                        <img src="{{asset('assets/img/kitting.png')}}" class="responsive-img" alt="">
+                        <img src="{{asset('assets/img/kitting.png')}}" class="responsive-img mx-auto pb-4" alt="">
                     </div>
-                    <div class="card_title_color" style="background-color: #f49e0a">
+                    <div class="card_title_color text-white text-center py-2" style="background-color: #f49e0a">
                         <strong>Kitting</strong>
                     </div>
                 </a>
             </div>
             <div class="col-6 mb-4">
                 <a class="" href="{{ route('portioning_measure_dashboard') }}">
-                    <div class="measurement_card" style="background-color: #F7F2FD">
+                    <div class="measurement_card text-center pb-4" style="background-color: #F7F2FD">
                         <!-- <svg width="82" height="100" viewBox="0 0 82 100" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -69,7 +68,7 @@
                             </svg> -->
                         <img src="{{asset('assets/img/portioning.png')}}" class="responsive-img" alt="">
                     </div>
-                    <div class="card_title_color" style="background-color: #A982DD">
+                    <div class="card_title_color text-white text-center py-2" style="background-color: #A982DD">
                         <strong>Portioning</strong>
                     </div>
                 </a>

@@ -43,3 +43,11 @@
 
 
       }
+
+
+        @media (max-width: 520px) {
+      .header-card   { padding: 14px 16px; gap: 12px; }
+      .hc-week-title { font-size: 1.2rem; }
+      .hc-qty-value  { font-size: 1.9rem; }
+      .hc-divider    { display: none; }
+    }

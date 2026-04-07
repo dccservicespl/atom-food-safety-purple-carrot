@@ -458,6 +458,175 @@ background: #B3E7FF;
 
 
 
-
-
 /* dashboard page */
+
+ /* ── Header Card ── */
+    .header-card {
+      border-radius: 14px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      /* border: 1px solid #ededed; */
+      /* box-shadow: 0 2px 12px rgba(10,77,120,0.12); */
+      margin-bottom: 36px;
+    }
+
+
+    .header-card.completed{
+      background-color: #ededed;
+      border: 1px solid #bfbfbf;
+      color: #575757;
+    }
+
+    .header-card.present{
+      background-color: #F8FAFF;
+      border: 1px solid #016B9D;
+      color: #0a4d78;
+    }
+
+
+    
+
+    .hc-divider    { width: 1px; height: 44px; background: #d0dce8; flex-shrink: 0; }
+    .hc-week-title { font-size: 1.55rem; font-weight: 500;  line-height: 1.1; }
+    .hc-week-range { font-size: 0.85rem; color: #6b7280; margin-top: 3px; }
+    .hc-meta-label { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: .05em; }
+    .hc-meta-value { font-size: 0.95rem; font-weight: 600;  margin-top: 2px; }
+    .hc-qty        { margin-left: auto; text-align: right; }
+    .hc-qty-label  { font-size: 0.8rem;  text-transform: uppercase; letter-spacing: .05em; }
+    .hc-qty-value  { font-size: 2.6rem;  line-height: 1; }
+ 
+    /* ── Section Title ── */
+    .section-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #1a7abf;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+ 
+    /* ── Horizontal scroll wrapper ── */
+    .tbl-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 14px;
+      width: 100%;
+    }
+    .tbl-scroll::-webkit-scrollbar       { height: 6px; }
+    .tbl-scroll::-webkit-scrollbar-track { background: #1e2a38; border-radius: 10px; }
+    .tbl-scroll::-webkit-scrollbar-thumb { background: #1a7abf; border-radius: 10px; }
+ 
+    /* ── <table> ── */
+    .week-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      table-layout: fixed;
+      border: 1px solid #ededed;
+    }
+ 
+    /* ── <thead> <th> ── */
+    .week-table thead th {
+      padding: 15px 12px;
+      font-size: 0.97rem;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      border: none;
+    }
+    /* Active day (Monday) */
+    .week-table thead th.th-active {
+      background: #0a4d78;
+      color: #ffffff;
+      width: 160px;
+    }
+    /* Other day headers */
+    .week-table thead th.th-inactive {
+      background: #F4F4F4;
+      color: #374151;
+      border-left: 1px solid #dce8f0;
+    }
+ 
+    /* ── <tbody> <td> ── */
+    .week-table tbody td {
+      vertical-align: top;
+      padding: 18px 14px;
+      height: 260px;
+      border: none;
+    }
+    /* Monday sidebar */
+    .week-table tbody td.td-active {
+      background: #e8f4fd;
+    }
+    /* Regular day columns */
+    .week-table tbody td.td-inactive {
+      /* background: #0d1117; */
+      border-left: 1px solid #d1d1d1;
+    }
+ 
+    /* Flex column inside every cell */
+    .cell-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+ 
+    /* ── Sidebar chips ── */
+    .chip {
+      display: block;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+      border: 2px solid transparent;
+      /* white-space: nowrap; */
+      cursor: default;
+      transition: transform .15s;
+      cursor: pointer;
+      width: 100%;
+    }
+    .chip:hover { transform: translateY(-2px); }
+    .chip-blue   { background: #ffffff;  border-color: #1a7abf; color: #0a4d78; }
+    .chip-green  { background: #d4f4c0;  border-color: #5db83a; color: #2d6a10; }
+    .chip-yellow { background: #fdf3c0;  border-color: #c9a800; color: #7a5c00; }
+ 
+    /* ── Order tags ── */
+    .order-tag {
+      display: block;
+      background: #F4F4F4;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #1a2e42;
+      border: 1px solid #ededed;
+      text-align: center;
+      /* white-space: nowrap; */
+      /* box-shadow: 0 2px 8px rgba(0,0,0,0.18); */
+      cursor: default;
+      transition: box-shadow .15s, transform .15s;
+    }
+    .order-tag:hover {
+      box-shadow: 0 4px 16px rgba(10,77,120,0.28);
+      transform: translateY(-2px);
+    }
+ 
+
+
+.page-wrap{
+  height: calc(100vh - 5rem);
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    float: left;
+    padding-right: var(--bs-breadcrumb-item-padding-x);
+    color: #fff !important;
+    content: var(--bs-breadcrumb-divider, "/");
+}

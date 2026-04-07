@@ -169,6 +169,7 @@ Route::group(['middleware' => 'auth'], function(){
     
     Route::get('week_details', [PortioningMeasureController::class, 'week_details'])->name('week_details');
  
+    Route::get('admin/portioning_measure_data_upload_action', [PortioningMeasureController::class, 'portioning_measure_data_upload_action'])->name('portioning_measure_data_upload_action');
  });
 
 Route::group(['middleware' => 'guest'], function () {

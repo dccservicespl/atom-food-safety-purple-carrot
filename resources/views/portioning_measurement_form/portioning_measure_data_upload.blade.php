@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('content')
 
-<x-breadcrumb-component :get_route="$get_route" :back_route="$get_route" page_title="Upload Sheet" :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => 'Upload Sheet', 'route' => '']]"/>
+<x-breadcrumb-component :get_route="$get_route" :back_route="$get_route" page_title="Upload Sheet" :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => 'Dashboard', 'route' => route('portioning_measure_dashboard')], ['name' => 'Upload Sheet', 'route' => '']]"/>
 
 <!-- upload  -->
 <section class="upload mb-5">

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-
+<x-breadcrumb-component :get_route="$get_route" :back_route="$get_route" page_title="Dashboard" :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => 'Dashboard', 'route' => '']]"/>
 <section class="year_selection mt-5">
     <div class="container">
         <div class="row justify-content-between align-items-center ">

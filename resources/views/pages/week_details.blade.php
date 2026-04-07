@@ -6,7 +6,10 @@
 
 <!-- top bar -->
 
-<section class="topbar py-3 mb-5">
+<x-breadcrumb-component :get_route="$get_route" :back_route="$get_route" page_title="Weekly Work Details" :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => '3.2 Week', 'route' => route('portioning_measure_dashboard')], ['name' => 'Days Plan', 'route' =>'']]"/>
+
+
+<!-- <section class="topbar py-3 mb-5">
     <div class="container">
         <div class="d-flex align-items-center justify-content-between">
             <a href="" class="back-btn pointer"><i
@@ -20,14 +23,14 @@
             </nav>
         </div>
     </div>
-</section>  
+</section>   -->
 
 
 
 <section>
     
   <!-- ── Header Card ── -->
-  <div class="header-card container completed">
+  <div class="header-card container present">
     <div>
       <div class="hc-week-title">Week 2</div>
       <div class="hc-week-range">9 Mar to 14 Mar</div>

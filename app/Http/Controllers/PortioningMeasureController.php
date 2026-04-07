@@ -40,6 +40,6 @@ class PortioningMeasureController extends Controller
 
     public function week_details(){
         $get_route = route('work_type');
-        return view('pages.week_details');
+        return view('pages.week_details', compact('get_route'));
     }
 }

@@ -53,48 +53,6 @@ class PortioningMeasureController extends Controller
         return view('pages.week_details', compact('get_route'));
     }
 
-    // public function portioning_measure_data_upload_action(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|file|mimes:xlsx,csv',
-    //     ]);
-
-    //     $target_base_names = [
-    //         '1200 Allergen',
-    //         'Powder',
-    //         'Granular',
-    //         'Piston1200',
-    //         'Sleek',
-    //         'Piston',
-    //         'Hand Allergen',
-    //     ];
-
-    //     // Read all sheet names from the uploaded file
-    //     $spreadsheet = IOFactory::load($request->file('file')->getPathname());
-    //     $all_sheet_names = $spreadsheet->getSheetNames();
-
-    //     // Strip version suffix and match to target base names
-    //     $resolved_sheets = [];
-
-    //     foreach ($all_sheet_names as $sheet_name) {
-    //         $base_name = trim(preg_replace('/\s+[\d.]+$/', '', $sheet_name));
-
-    //         if (in_array($base_name, $target_base_names)) {
-    //             $resolved_sheets[$sheet_name] = $base_name;
-    //         }
-    //     }
-
-    //     $import = new PortioningMultiSheetImport();
-    //     $import->setResolvedSheets($resolved_sheets);
-
-    //     Excel::import($import, $request->file('file'));
-
-    //     $final_array = $import->getData();
-    //     // dd($final_array);
-
-    //     return redirect()->route('portioning_measure_dashboard')->with('success', 'Data uploaded successfully!');
-    // }
-
     public function portioning_measure_data_upload_action(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -212,6 +212,14 @@ class PortioningMeasureController extends Controller
                 DB::table('portioning_order_details')->insert($batch);
             }
 
+            $total_qty = DB::table('portioning_order_details')
+                ->where('order_head_id', $order_head_id)
+                ->sum('quantity');
+
+            // Update the total_qty in the order head table
+            PortioningOrderHead::where('order_head_id', $order_head_id)
+                ->update(['total_qty' => $total_qty]);
+
             DB::commit();
 
             return response()->json([

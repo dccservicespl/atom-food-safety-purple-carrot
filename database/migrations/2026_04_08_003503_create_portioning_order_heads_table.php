@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('from_date');
             $table->date('to_date');
             $table->integer('updated_by');
+            $table->string('total_qty')->nullable();
             $table->timestamps();
         });
     }

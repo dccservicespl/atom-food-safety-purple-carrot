@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Imports\PortioningMultiSheetImport;
+use App\Models\PortioningOrderHead;
 use App\Models\PurpleCarrotItemMst;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -38,7 +41,8 @@ class PortioningMeasureController extends Controller
     public function portioning_measure_data_upload()
     {
         $get_route = route('portioning_measure_dashboard');
-        return view('portioning_measurement_form.portioning_measure_data_upload', compact('get_route'));
+        $past_sheets = PortioningOrderHead::select('portioning_order_heads.*', 'users.name')->leftjoin('users', 'users.id', 'portioning_order_heads.updated_by')->orderBy('order_head_id', 'desc')->get();
+        return view('portioning_measurement_form.portioning_measure_data_upload', compact('get_route', 'past_sheets'));
     }
 
     public function portioning_measure_dashboard()
@@ -56,7 +60,7 @@ class PortioningMeasureController extends Controller
     public function portioning_measure_data_upload_action(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:xlsx,csv',
+            'file' => 'required|file|mimes:xlsx',
         ]);
 
         if ($validator->fails()) {
@@ -100,7 +104,7 @@ class PortioningMeasureController extends Controller
             }
         }
 
-        // Check if NO sheets matched at all
+        // Check if No sheets matched at all
         if (empty($resolved_sheets)) {
             return response()->json([
                 'status'  => 'error',
@@ -124,12 +128,123 @@ class PortioningMeasureController extends Controller
         $import->setResolvedSheets($resolved_sheets);
 
         Excel::import($import, $request->file('file'));
-        // $final_array = $import->getData();
-        // dd($final_array);
 
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Data uploaded successfully.',
-        ], 200);
+        $final_array = $import->getData();
+
+        $firstSheetRows = reset($final_array);
+        $firstRow       = $firstSheetRows[0] ?? [];
+
+        $fromDate = $firstRow['from_date'] ?? now()->toDateString();
+        $toDate   = $firstRow['to_date']   ?? now()->addDays(6)->toDateString();
+        $week     = $firstRow['week'] ?? Carbon::parse($firstRow['from_date'])->format('n.j');
+
+        $check_head_exists = PortioningOrderHead::where('week', $week)
+            ->where('from_date', $fromDate)
+            ->where('to_date', $toDate)
+            ->exists();
+
+        if ($check_head_exists) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => "The data for Week {$week} ({$fromDate} to {$toDate}) has already been uploaded. Please upload a different week.",
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Insert into order head table
+            $order_head             = new PortioningOrderHead();
+            $order_head->week       = $week;
+            $order_head->from_date  = $fromDate;
+            $order_head->to_date    = $toDate;
+            $order_head->updated_by = auth()->id();
+            $order_head->save();
+
+            $order_head_id = $order_head->order_head_id;
+
+            // Map sheet names to category_id
+            $categoryMap = [];
+
+            foreach (array_keys($final_array) as $sheetName) {
+                $existing = DB::table('portioning_categories')
+                    ->where('category_name', $sheetName)
+                    ->first();
+
+                if ($existing) {
+                    $categoryMap[$sheetName] = $existing->category_id;
+                } else {
+                    $categoryId = DB::table('portioning_categories')->insertGetId([
+                        'category_name' => $sheetName,
+                        'created_at'    => now(),
+                        'updated_at'    => now(),
+                    ]);
+                    $categoryMap[$sheetName] = $categoryId;
+                }
+            }
+
+            // Collect all order details rows
+            $batch = [];
+
+            foreach ($final_array as $sheetName => $rows) {
+                $categoryId = $categoryMap[$sheetName];
+
+                foreach ($rows as $mappedRow) {
+                    $batch[] = [
+                        'order_head_id'          => $order_head_id,
+                        'portioning_category_id' => $categoryId,
+                        'scheduled_day'          => $mappedRow['scheduled_day'] ?? null,
+                        'letter'                 => $mappedRow['letter'] ?? null,
+                        'component_details'      => $mappedRow['component_details'] ?? null,
+                        'label'                  => $mappedRow['label'] ?? null,
+                        'weight'                 => $mappedRow['weight'] ?? null,
+                        'quantity'               => $mappedRow['quantity'] ?? null,
+                        'film_size'              => $mappedRow['film_size'] ?? null,
+                        'allergen'               => $mappedRow['allergen'] ?? null,
+                        'packaging'              => $mappedRow['packaging'] ?? null,
+                        '95_percent'             => $mappedRow['95_percent'] ?? null,
+                    ];
+                }
+            }
+
+            // Insert in order details
+            if (!empty($batch)) {
+                DB::table('portioning_order_details')->insert($batch);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status'        => 'success',
+                'message'       => 'Data uploaded successfully.',
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Database error: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function portioning_measure_delete($id)
+    {
+        DB::beginTransaction();
+        try {
+            $decrypted_id = Crypt::decrypt($id);
+            // Delete order head
+            DB::table('portioning_order_heads')->where('order_head_id', $decrypted_id)->delete();
+
+            // Delete order details
+            DB::table('portioning_order_details')->where('order_head_id', $decrypted_id)->delete();
+
+            DB::commit();
+
+            return redirect()->route('portioning_measure_data_upload')->with('success', 'Data deleted successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->route('portioning_measure_data_upload')->with('error', 'Error deleting sheet: ' . $e->getMessage());
+        }
     }
 }

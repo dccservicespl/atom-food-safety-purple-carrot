@@ -19,8 +19,8 @@
                 accounted for in the system.</p>
 
             <div class="d-flex flex-column align-items-center gap-2">
-                <input type="file" name="file" id="file-input" class="d-none" accept=".csv,.xls,.xlsx,.pdf">
-                
+                <input type="file" name="file" id="file-input" class="d-none" accept=".xls,.xlsx">
+
                 <div class="d-flex gap-2">
                     <button type="button" class="btn_1 fw-bold" onclick="document.getElementById('file-input').click()">
                         Upload Sheet
@@ -60,40 +60,30 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Row 1 -->
+                        @if($past_sheets->isEmpty())
                         <tr>
-                            <td class="date-cell ps-4">03/9/2026</td>
-                            <td>3.2</td>
-                            <td>9 Mar to 14 Mar 2026</td>
-                            <td>Jack Will</td>
+                            <td colspan="5" class="text-center">No past upload sheets found.</td>
+                        </tr>
+                        @else
+                        @foreach($past_sheets as $sheet)
+                        <tr>
+                            <td class="date-cell ps-4">{{ $sheet->created_at->format('m/d/Y') }}</td>
+                            <td>{{ $sheet->week }}</td>
+                            <td>{{ date('d M', strtotime($sheet->from_date)) }} to {{ date('d M Y', strtotime($sheet->to_date)) }}</td>
+                            <td>{{ $sheet->name }}</td>
                             <td>
                                 <div class="action-btns justify-content-center">
                                     <button class="btn-icon btn-download" title="Download">
                                         <i class="bi bi-download fw-bold fs-5"></i>
                                     </button>
-                                    <button class="btn-icon btn-delete" title="Delete">
+                                    <a class="btn-icon btn-delete" onclick="return confirm('Are you sure you want to delete this sheet data?')" title="Delete" href="{{ route('portioning_measure_delete', Crypt::encrypt($sheet->order_head_id)) }}">
                                         <i class="bi bi-trash fs-5"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
-                        <!-- Row 2 -->
-                        <tr>
-                            <td class="date-cell ps-4">03/2/2026</td>
-                            <td>3.1</td>
-                            <td>2 Mar to 7 Mar 2026</td>
-                            <td>Jack Will</td>
-                            <td>
-                                <div class="action-btns justify-content-center">
-                                    <button class="btn-icon btn-download" title="Download">
-                                        <i class="bi bi-download fs-5"></i>
-                                    </button>
-                                    <button class="btn-icon btn-delete" title="Delete">
-                                        <i class="bi bi-trash fs-5"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

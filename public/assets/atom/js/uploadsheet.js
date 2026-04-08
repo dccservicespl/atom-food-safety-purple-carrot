@@ -81,6 +81,9 @@ $('#submit-btn').on('click', function () {
                 btn.removeClass('btn-primary').addClass('btn-success');
                 showFlash('success', response.message);
                 resetForm();
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             }
         },
 
@@ -122,6 +125,7 @@ function showFlash(type, message) {
     setTimeout(() => {
         $('#flash-container .alert').alert('close');
     }, 5000);
+
 }
 
 function updateFileStatus(name) {

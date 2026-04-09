@@ -1,53 +1,62 @@
-      /* Responsive handling for smaller screens */
-      @media (max-width: 768px) {
-          .table-responsive-stack tr {
-              display: flex;
-              flex-direction: column;
-              border-bottom: 2px solid var(--border-color);
-              padding: 1rem 0;
-          }
+/* Responsive handling for smaller screens */
+@media (max-width: 768px) {
+    .table-responsive-stack tr {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 2px solid var(--border-color);
+        padding: 1rem 0;
+    }
 
-          .custom-table thead {
-              display: none;
-              /* Hide header on very small mobile if needed, or use standard scroll */
-          }
+    .custom-table thead {
+        display: none;
+        /* Hide header on very small mobile if needed, or use standard scroll */
+    }
 
-          .table-container {
-              border-radius: 8px;
-          }
+    .table-container {
+        border-radius: 8px;
+    }
 
-          section.past_sheets .custom-table tbody td {
-              padding: 1.25rem 1rem;
-              font-size: 12px;
-              vertical-align: middle;
-              color: #333;
-              border-bottom: 1px solid var(--border-color);
-          }
+    section.past_sheets .custom-table tbody td {
+        padding: 1.25rem 1rem;
+        font-size: 12px;
+        vertical-align: middle;
+        color: #333;
+        border-bottom: 1px solid var(--border-color);
+    }
 
+    .btn_1 {
+        padding: 16px 30px;
+    }
 
+    .app-header {
+        padding: 1rem;
+    }
 
-          .btn_1 {
-
-              padding: 16px 30px;
-          }
-
-
-
-          .app-header {
-              padding: 1rem;
-          }
-
-          /* .container {
+    /* .container {
               padding: 1rem;
           } */
+}
 
-
-      }
-
-
-        @media (max-width: 520px) {
-      .header-card   { padding: 14px 16px; gap: 12px; }
-      .hc-week-title { font-size: 1.2rem; }
-      .hc-qty-value  { font-size: 1.9rem; }
-      .hc-divider    { display: none; }
+@media (max-width: 620px) {
+    .table-title {  
+        font-size: 0.95rem;
+        padding: 1rem;
     }
+    .header-card {
+        padding: 14px 16px;
+        gap: 12px;
+        width: 355px !important;
+    }
+
+    .hc-week-title {
+        font-size: 1.2rem;
+    }
+
+    .hc-qty-value {
+        font-size: 1.9rem;
+    }
+
+    .hc-divider {
+        display: none;
+    }
+}

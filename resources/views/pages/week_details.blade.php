@@ -31,6 +31,7 @@
     
   <!-- ── Header Card ── -->
   <div class="header-card container present">
+    
     <div>
       <div class="hc-week-title">Week 2</div>
       <div class="hc-week-range">9 Mar to 14 Mar</div>
@@ -55,15 +56,14 @@
       <div class="hc-qty-value">42,129</div>
     </div>
   </div>
+
 </section>
 
-
-
-<div class="page-wrap px-lg-5 px-3">
+<section class="px-lg-5 px-3 pb-5">
  
  
   <!-- ── Section Title ── -->
-  <div class="section-title">Week Details for Order</div>
+  <div class="section-title">Weekly Work Details</div>
  
   <!-- ── Scrollable Table ── -->
   <div class="tbl-scroll mb-5">
@@ -71,8 +71,8 @@
  
       <thead>
         <tr>
-          <th class="th-active">Monday</th>
-          <th class="th-inactive">Tuesday</th>
+          <th class="th-inactive">Monday</th>
+          <th class="th-active">Tuesday</th>
           <th class="th-inactive">Wednesday</th>
           <th class="th-inactive">Thursday</th>
           <th class="th-inactive">Friday</th>
@@ -83,44 +83,44 @@
       <tbody>
         <tr>
           <!-- Monday – sidebar category chips -->
-          <td class="td-active">
+          <td class="td-inactive">
             <div class="cell-inner">
-              <span class="chip chip-blue">Piston 1200</span>
-              <span class="chip chip-green">Piston</span>
-              <span class="chip chip-yellow">Hand Allergen</span>
+              <a href="#" class="chip not_started">Piston 1200</a>
+              <a href="#" class="chip  completed">Piston</a>
+              <a href="#" class="chip in_process">Hand Allergen</a>
             </div>
           </td>
  
           <!-- Tuesday -->
-          <td class="td-day">
+          <td class="td-active">
             <div class="cell-inner">
-              <span class="order-tag">Piston</span>
-            </div>
+              <a href="#" class="chip not_started">Piston</a>
+            </div>          
           </td>
  
           <!-- Wednesday -->
           <td class="td-inactive">
             <div class="cell-inner">
-              <span class="order-tag">1200 Allergen</span>
-              <span class="order-tag">Granular</span>
+              <a href="#" class="chip in_active_work">1200 Allergen</a>
+              <a href="#" class="chip in_active_work">Granular</a>
             </div>
           </td>
  
           <!-- Thursday -->
           <td class="td-inactive">
             <div class="cell-inner">
-              <span class="order-tag">1200 Allergen</span>
-              <span class="order-tag">Sleek</span>
-              <span class="order-tag">Powder</span>
+              <a href="#" class="chip in_active_work">1200 Allergen</a>
+              <a href="#" class="chip in_active_work">Sleek</a>
+              <a href="#" class="chip in_active_work">Powder</a>
             </div>
           </td>
  
           <!-- Friday -->
           <td class="td-inactive">
             <div class="cell-inner">
-              <span class="order-tag">Granular</span>
-              <span class="order-tag">Powder</span>
-              <span class="order-tag">Sleek</span>
+              <a href="#" class="chip in_active_work">Granular</a>
+              <a href="#" class="chip in_active_work">Powder</a>
+              <a href="#" class="chip in_active_work">Sleek</a>
             </div>
           </td>
  
@@ -134,12 +134,12 @@
     </table>
   </div><!-- end tbl-scroll -->
  
+</section><!-- end page-wrap -->
+ 
 
 
-
-
-
-  <div class="d-flex gap-4 justify-content-center">
+<section>
+<div class="mb-5 d-flex gap-4 justify-content-center flex-wrap">
     <div class="d-flex align-items-center gap-2">
         <div style="background:#E8F8FF;border:1px solid #016B9D;width:30px;height:30px;border-radius:8px"></div>
         <p>Not Started</p>
@@ -156,11 +156,9 @@
 
 
 
-</div><!-- end page-wrap -->
- 
+</section>
 
-
-
+  
 
 
 

@@ -255,4 +255,9 @@ class PortioningMeasureController extends Controller
             return redirect()->route('portioning_measure_data_upload')->with('error', 'Error deleting sheet: ' . $e->getMessage());
         }
     }
+    
+    public function day_details(){
+        $get_route = route('work_type');
+        return view('pages.day_details', compact('get_route'));
+    }
 }

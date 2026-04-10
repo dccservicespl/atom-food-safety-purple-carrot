@@ -91,7 +91,7 @@ li {
 .btn_2 {
     border: 0;
     display: flex;
-    padding: 16px 20px;
+    padding: 13px 15px;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -102,7 +102,7 @@ li {
 .btn_3 {
     border: 0;
     display: flex;
-    padding: 16px 20px;
+    padding: 13px 15px;
     justify-content: center;
     align-items: center;
     gap: 10px;
@@ -343,7 +343,7 @@ section.past_sheets .btn-delete {
 
 section.month .month_box {
     border-radius: 9px;
-    border: 1px solid #e9e9e9;
+    border: 1.5px solid var(--primary-color);
     background: #fff;
     max-width: max-content;
     padding: 14px 30px;
@@ -351,14 +351,14 @@ section.month .month_box {
     gap: 10px;
     align-items: center;
     justify-content: center;
-    color: var(--grey-btn);
+    color: var(--primary-color);
     cursor: pointer;
 }
 
 section.month .month_box.active {
     border-radius: 9px;
     border: 1px solid transparent;
-    background: var(--accent-color);
+    background: var(--primary-color);
     max-width: max-content;
     padding: 16px 30px;
     display: flex;
@@ -634,19 +634,19 @@ section.month .month-scroll::-webkit-scrollbar {
 .chip:hover {
     transform: translateY(-2px);
 }
-.not_started {
+.week-table .not_started {
     background: #e8f8ff;
     border-color: #016b9d;
     color: #0a4d78;
     border-width: 0.5px;
 }
-.completed {
-    background: #caffb8;
+.week-table .completed {
+    background: #e7ffdf;
     border-color: #208200;
     color: #2d6a10;
     border-width: 0.5px;
 }
-.in_process {
+.week-table .in_process {
     background: #fff9bc;
     border-color: #7a7000;
     color: #7a5c00;
@@ -842,12 +842,40 @@ section.month .month-scroll::-webkit-scrollbar {
     height: 15px;
 }
 
- .component-table .completed {
+.component-table .completed {
     background: #e1ffd7;
     border: 0;
 }
 
- .component-table .process {
+.component-table .process {
     background-color: #fffde5;
     border: 0;
+}
+
+.card_total_quantity {
+    border: 2px solid #016b9d;
+}
+
+.card-box {
+    display: inline-flex;
+    padding: 16px 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 15px;
+    width: 100%;
+}
+
+.card_completed_quantity {
+    color: #208200;
+    border: 2px solid #208200;
+    background: #e1ffd7;
+}
+
+.card_pending_quantity {
+    border-radius: 15px;
+    border: 1px solid #7a7000;
+    background: #fff9bc;
+    color: #7a7000;
 }

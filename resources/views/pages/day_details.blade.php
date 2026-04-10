@@ -10,13 +10,13 @@
 
 
 
-<section class="mb-5">
+<section class="mb-4">
     <div class="container">
 
 
     <!-- Select item details, date & start time -->
 
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-4">
+      <div class="d-flex align-items-center justify-content-between gap-4">
 
         <!-- Production Schedule:name -->
          <div class="d-flex gap-1 align-items-center"><h4 class="fs-6">Production Schedule:</h4>  <p class="fw-bold color">Piston 1200</p></div>
@@ -24,23 +24,32 @@
 
          <!-- Date and Start Btn -->
 
-         <div class="d-flex align-items-center justify-content-between gap-3 w-100">
-             <div class="d-flex align-items-center gap-2 text-color">
-              <div class="color fw-bold fs-5"><span>Start Time:</span><span>05:41 am</span></div>
-              
-              <div class="color fw-bold fs-5"><span>End Time:</span><span>05:41 am</span></div>
-             </div>
-
+         <div class="d-flex align-items-center justify-content-between gap-3">
              <div class="d-flex gap-3">
                <div class="d-flex align-items-center gap-2 text-color"><span><i class="bi bi-calendar2-minus"></i></span> <p>Monday - 9 March</p></div>
               <button type="button" class="btn_2"> <span><i class="bi bi-clock"></i></span> Start Time</button>
-              <button type="button" class="btn_3 disable" disabled> <span><i class="bi bi-clock"></i></span> End Time</button>
+              {{-- <button type="button" class="btn_3 disable" disabled> <span><i class="bi bi-clock"></i></span> End Time</button> --}}
             </div>
 
          </div>
 
+
+         
+
       </div>
+
+
+      {{-- Start  --}}
+      <div class="d-flex align-items-center gap-3">
+          {{-- Start Time --}}
+          <div class="color fs-5 fw-medium"><span>Start Time:</span><span>05:41 am</span></div>
+          
+          <div class="vr"></div>
+
+          <div class="color fs-5 fw-medium"><span>Start Time:</span><span>05:41 am</span></div>
+          
       
+        </div>
 
 
     </div>
@@ -53,13 +62,13 @@
 <section class="mb-5">
     <div class="container">
 
-    <div class="" style="">
+   <div class="" style="">
   <div class="table-card">
  
     <div class="table-scroll-wrapper">
       <table class="component-table disabled">
         <thead>
-          <tr>
+          <tr >
             <th>Letter</th>
             <th>Component Details</th>
             <th>Label</th>
@@ -147,12 +156,57 @@
       </table>
     </div>
  
-  </div>
-</div>
-
+     </div>
+   </div>
 
 
     </div>
+</section>
+
+
+
+
+<section>
+  <div class="container">
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="row">
+
+          <div class="col-4">
+            <div class="card_total_quantity card-box">
+              <h4 class="color fw-bold fs-5">Total Quantity</h4>
+              <h2 class="fs-2 color fw-bold">7,879</h2>
+            </div>
+          </div>
+
+          <div class="col-4">
+              <div class="card_completed_quantity card-box">
+              <h4 class="fw-bold fs-5">Completed Quantity</h4>
+              <h2 class="fs-2 fw-bold">1,000</h2>
+            </div>
+          </div>
+
+          <div class="col-4">
+              <div class="card_pending_quantity card-box">
+              <h4 class="fw-bold fs-5">Pending Quantity</h4>
+              <h2 class="fs-2 fw-bold">6,879</h2>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+
+
+      <div class="col-lg-4"></div>
+
+
+    </div>
+    
+
+
+  </div>
 </section>
 
 

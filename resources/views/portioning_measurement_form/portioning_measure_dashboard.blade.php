@@ -29,51 +29,51 @@
         <div>
             <div class="month-scroll">
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                   <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">January</p>
                 </div>
                 <div class="month_box active">
-                    <i class="bi bi-calendar"></i>
+                  <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">February</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">March</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">April</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                   <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">May</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">June</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                   <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">July</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">August</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">September</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">October</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">November</p>
                 </div>
                 <div class="month_box">
-                    <i class="bi bi-calendar"></i>
+                    <i class="bi bi-calendar2-minus"></i>
                     <p class="fw-medium">December</p>
                 </div>
             </div>

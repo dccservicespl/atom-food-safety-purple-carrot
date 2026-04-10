@@ -150,6 +150,22 @@ class PortioningMeasureController extends Controller
             ], 422);
         }
 
+        // Store the file
+        $original_name = pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension     = $request->file('file')->getClientOriginalExtension();
+        $created_at    = now()->format('m_d_Y');
+        $file_name     = $original_name . '_' . $created_at . '.' . $extension;
+        $upload_path   = 'assets/portioning_excel';
+        $file_path     = 'assets/portioning_excel/' . $file_name;
+
+        // Create folder if it doesn't exist
+        if (!file_exists($upload_path)) {
+            mkdir($upload_path, 0755, true);
+        }
+
+        // Actually move the file to the folder
+        $request->file('file')->move($upload_path, $file_name);
+
         DB::beginTransaction();
 
         try {
@@ -158,6 +174,8 @@ class PortioningMeasureController extends Controller
             $order_head->week       = $week;
             $order_head->from_date  = $fromDate;
             $order_head->to_date    = $toDate;
+            $order_head->file_name   = $file_name;
+            $order_head->file_path   = $file_path;
             $order_head->updated_by = auth()->id();
             $order_head->save();
 
@@ -229,6 +247,12 @@ class PortioningMeasureController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
 
+            // Delete stored file if DB insert fails
+            $full_path = $file_path;
+            if (file_exists($full_path)) {
+                unlink($full_path);
+            }
+
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Database error: ' . $e->getMessage(),
@@ -255,9 +279,30 @@ class PortioningMeasureController extends Controller
             return redirect()->route('portioning_measure_data_upload')->with('error', 'Error deleting sheet: ' . $e->getMessage());
         }
     }
-    
-    public function day_details(){
+
+    public function day_details()
+    {
         $get_route = route('work_type');
         return view('pages.day_details', compact('get_route'));
+    }
+
+    public function download_portioning_excel(Request $request, $order_head_id)
+    {
+        $decrypted_id = Crypt::decrypt($order_head_id);
+        $order_head = DB::table('portioning_order_heads')
+            ->where('order_head_id', $decrypted_id)
+            ->first();
+
+        if (!$order_head) {
+            abort(404, 'Record not found.');
+        }
+
+        $full_path = $order_head->file_path;
+
+        if (!$order_head->file_path || !file_exists($full_path)) {
+            abort(404, 'File not found.');
+        }
+
+        return response()->download($full_path, $order_head->file_name);
     }
 }

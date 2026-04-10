@@ -73,9 +73,9 @@
                             <td>{{ $sheet->name }}</td>
                             <td>
                                 <div class="action-btns justify-content-center">
-                                    <button class="btn-icon btn-download" title="Download">
+                                    <a href="{{route('download_portioning_excel', Crypt::encrypt($sheet->order_head_id))}}" class="btn-icon btn-download" title="Download">
                                         <i class="bi bi-download fw-bold fs-5"></i>
-                                    </button>
+                                    </a>
                                     <a class="btn-icon btn-delete" onclick="return confirm('Are you sure you want to delete this sheet data?')" title="Delete" href="{{ route('portioning_measure_delete', Crypt::encrypt($sheet->order_head_id)) }}">
                                         <i class="bi bi-trash fs-5"></i>
                                     </a>

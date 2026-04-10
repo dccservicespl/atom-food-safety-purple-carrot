@@ -173,6 +173,7 @@ Route::group(['middleware' => 'auth'], function(){
  
     Route::post('admin/portioning_measure_data_upload_action', [PortioningMeasureController::class, 'portioning_measure_data_upload_action'])->name('portioning_measure_data_upload_action');
     Route::get('admin/portioning_measure_delete/{id}', [PortioningMeasureController::class, 'portioning_measure_delete'])->name('portioning_measure_delete');
+    Route::get('admin/download_portioning_excel/{id}', [PortioningMeasureController::class, 'download_portioning_excel'])->name('download_portioning_excel');
  });
 
 Route::group(['middleware' => 'guest'], function () {

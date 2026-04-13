@@ -166,11 +166,11 @@ Route::group(['middleware' => 'auth'], function(){
     // New Route
     Route::get('admin/portioning_measure_dashboard', [PortioningMeasureController::class, 'portioning_measure_dashboard'])->name('portioning_measure_dashboard');
     Route::get('admin/portioning_measure_data_upload', [PortioningMeasureController::class, 'portioning_measure_data_upload'])->name('portioning_measure_data_upload');
-    
-    Route::get('week_details', [PortioningMeasureController::class, 'week_details'])->name('week_details');
+
+    Route::get('week_details/{week_id}', [PortioningMeasureController::class, 'week_details'])->name('week_details');
 
     Route::get('day_details', [PortioningMeasureController::class, 'day_details'])->name('day_details');
- 
+
     Route::post('admin/portioning_measure_data_upload_action', [PortioningMeasureController::class, 'portioning_measure_data_upload_action'])->name('portioning_measure_data_upload_action');
     Route::get('admin/portioning_measure_delete/{id}', [PortioningMeasureController::class, 'portioning_measure_delete'])->name('portioning_measure_delete');
     Route::get('admin/download_portioning_excel/{id}', [PortioningMeasureController::class, 'download_portioning_excel'])->name('download_portioning_excel');

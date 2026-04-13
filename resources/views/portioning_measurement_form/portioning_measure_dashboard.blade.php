@@ -142,7 +142,7 @@
                             <h2 class="fw-bold fs-1">42,129</h2>
                         </div>
 
-                        <div class="text-end text-end d-flex justify-content-end"><a href="{{route('week_details')}}"
+                        <div class="text-end text-end d-flex justify-content-end"><a href="{{route('week_details','16')}}"
                                 class="btn_arrow present"><i class="bi bi-arrow-right"></i></a></div>
                     </div>
                 </div>

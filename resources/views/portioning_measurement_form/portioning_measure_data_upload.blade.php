@@ -1,6 +1,5 @@
 @extends('layouts.main')
 @section('content')
-
 <x-breadcrumb-component :get_route="$get_route" :back_route="$get_route" page_title="Upload Sheet" :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => 'Dashboard', 'route' => route('portioning_measure_dashboard')], ['name' => 'Upload Sheet', 'route' => '']]" />
 <div id="flash-container" style="padding-left: 65px; padding-right: 65px;">
     <x-flash />
@@ -13,11 +12,9 @@
             <div class="upload_icon mx-auto">
                 <i class="bi bi-cloud-upload fs-1"></i>
             </div>
-
             <h2 class="fs-4 mb-3">Upload Portioning Sheet</h2>
             <p class="col-8 mb-4 mx-auto text-muted ">Instantly sync material data, ensuring every unit is accurately
                 accounted for in the system.</p>
-
             <div class="d-flex flex-column align-items-center gap-2">
                 <input type="file" name="file" id="file-input" class="d-none" accept=".xls,.xlsx">
 
@@ -31,22 +28,16 @@
                     </button>
                 </div>
             </div>
-
             <div id="file-status" class="text-muted">No file selected</div>
-
         </div>
     </section>
 </form>
-
 <!-- upload  -->
 
-
 <!-- Past Upload Sheets -->
-
 <section class="past_sheets mb-5">
     <div class="container">
         <h2 class="color mb-4">Past Upload Sheets</h2>
-
         <div class="table-container">
             <div class="table-responsive">
                 <table class="table custom-table">
@@ -76,7 +67,9 @@
                                     <a href="{{route('download_portioning_excel', Crypt::encrypt($sheet->order_head_id))}}" class="btn-icon btn-download" title="Download">
                                         <i class="bi bi-download fw-bold fs-5"></i>
                                     </a>
-                                    <a class="btn-icon btn-delete" onclick="return confirm('Are you sure you want to delete this sheet data?')" title="Delete" href="{{ route('portioning_measure_delete', Crypt::encrypt($sheet->order_head_id)) }}">
+                                    <a class="btn-icon btn-delete"
+                                        onclick="return showDeleteModal('{{ route('portioning_measure_delete', Crypt::encrypt($sheet->order_head_id)) }}')"
+                                        title="Delete">
                                         <i class="bi bi-trash fs-5"></i>
                                     </a>
                                 </div>
@@ -90,8 +83,35 @@
         </div>
     </div>
 </section>
-
-
+<!-- Delete confirmation  modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this sheet data?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section('scripts')
+<script>
+    function showDeleteModal(url) {
+        const deleteModal = new bootstrap.Modal('#deleteModal');
+        deleteModal.show();
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        confirmDeleteBtn.addEventListener('click', function() {
+            window.location.href = url;
+        });
+        return false;
+    }
+</script>
 @endsection
 @endsection

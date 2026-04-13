@@ -88,6 +88,7 @@ li {
     color: var(--text-white);
     background: var(--primary-color, #016b9d);
 }
+
 .btn_2 {
     border: 0;
     display: flex;
@@ -99,6 +100,7 @@ li {
     color: var(--text-white);
     background: var(--primary-color, #016b9d);
 }
+
 .btn_3 {
     border: 0;
     display: flex;
@@ -377,6 +379,7 @@ section.month .month-scroll {
     padding-right: 20px;
     transition: all 0.6s ease;
 }
+
 section.month .month-scroll::-webkit-scrollbar {
     height: 0 !important;
 }
@@ -390,6 +393,7 @@ section.month .month-scroll::-webkit-scrollbar {
     justify-content: space-between;
     padding: 30px 20px 20px 20px;
 }
+
 .week_card.completed {
     border-radius: 20px;
     border: 1px solid var(--grey-btn);
@@ -401,6 +405,7 @@ section.month .month-scroll::-webkit-scrollbar {
     border: 1px solid var(--grey-btn);
     color: var(--text-dark);
 }
+
 .week_card.present {
     background-color: #f8faff;
     border-radius: 20px;
@@ -422,6 +427,7 @@ section.month .month-scroll::-webkit-scrollbar {
     right: 17px;
     top: -16px;
 }
+
 .week_card .badge.present {
     border-radius: 20px;
     background: #b3e7ff;
@@ -441,7 +447,7 @@ section.month .month-scroll::-webkit-scrollbar {
     border-radius: 53px;
 
     display: flex;
-    width: 53px;
+    width: 60px;
     height: 60px;
     /* padding: 16px 8px; */
     justify-content: center;
@@ -450,10 +456,12 @@ section.month .month-scroll::-webkit-scrollbar {
 
     font-size: 25px;
 }
+
 .week_process .btn_arrow.completed {
     background: #7a7a7a;
     color: var(--text-white);
 }
+
 .week_process .btn_arrow.present {
     background: #016b9d;
     color: var(--text-white);
@@ -492,36 +500,43 @@ section.month .month-scroll::-webkit-scrollbar {
     background: #d0dce8;
     flex-shrink: 0;
 }
+
 .hc-week-title {
     font-size: 1.55rem;
     font-weight: 500;
     line-height: 1.1;
 }
+
 .hc-week-range {
     font-size: 0.85rem;
     color: #6b7280;
     margin-top: 3px;
 }
+
 .hc-meta-label {
     font-size: 0.75rem;
     color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
 .hc-meta-value {
     font-size: 0.95rem;
     font-weight: 600;
     margin-top: 2px;
 }
+
 .hc-qty {
     margin-left: auto;
     text-align: right;
 }
+
 .hc-qty-label {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
 .hc-qty-value {
     font-size: 2.6rem;
     line-height: 1;
@@ -543,13 +558,16 @@ section.month .month-scroll::-webkit-scrollbar {
     border-radius: 14px;
     width: 100%;
 }
+
 .tbl-scroll::-webkit-scrollbar {
     height: 6px;
 }
+
 .tbl-scroll::-webkit-scrollbar-track {
     background: #1e2a38;
     border-radius: 10px;
 }
+
 .tbl-scroll::-webkit-scrollbar-thumb {
     background: #1a7abf;
     border-radius: 10px;
@@ -576,12 +594,14 @@ section.month .month-scroll::-webkit-scrollbar {
     white-space: nowrap;
     border: none;
 }
+
 /* Active day (Monday) */
 .week-table thead th.th-active {
     background: #0a4d78;
     color: #ffffff;
     width: max-content;
 }
+
 /* Other day headers */
 .week-table thead th.th-inactive {
     background: #f4f4f4;
@@ -596,10 +616,12 @@ section.month .month-scroll::-webkit-scrollbar {
     height: 260px;
     border: none;
 }
+
 /* Monday sidebar */
 .week-table tbody td.td-active {
     background: #f6fbff;
 }
+
 /* Regular day columns */
 .week-table tbody td.td-inactive {
     /* background: #0d1117; */
@@ -634,18 +656,21 @@ section.month .month-scroll::-webkit-scrollbar {
 .chip:hover {
     transform: translateY(-2px);
 }
+
 .week-table .not_started {
     background: #e8f8ff;
     border-color: #016b9d;
     color: #0a4d78;
     border-width: 0.5px;
 }
+
 .week-table .completed {
     background: #e7ffdf;
     border-color: #208200;
     color: #2d6a10;
     border-width: 0.5px;
 }
+
 .week-table .in_process {
     background: #fff9bc;
     border-color: #7a7000;
@@ -671,6 +696,7 @@ section.month .month-scroll::-webkit-scrollbar {
         box-shadow 0.15s,
         transform 0.15s;
 }
+
 .order-tag:hover {
     box-shadow: 0 4px 16px rgba(10, 77, 120, 0.28);
     transform: translateY(-2px);
@@ -680,7 +706,7 @@ section.month .month-scroll::-webkit-scrollbar {
     height: calc(100vh - 5rem);
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     float: left;
     padding-right: var(--bs-breadcrumb-item-padding-x);
     color: #fff !important;
@@ -709,16 +735,19 @@ section.month .month-scroll::-webkit-scrollbar {
 .table-scroll-wrapper {
     width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* smooth scroll on iOS */
 }
 
 /* Subtle scrollbar styling */
 .table-scroll-wrapper::-webkit-scrollbar {
     height: 6px;
 }
+
 .table-scroll-wrapper::-webkit-scrollbar-track {
     background: #f0f4f8;
 }
+
 .table-scroll-wrapper::-webkit-scrollbar-thumb {
     background: #cbd5e0;
     border-radius: 10px;
@@ -726,7 +755,8 @@ section.month .month-scroll::-webkit-scrollbar {
 
 .component-table {
     width: 100%;
-    min-width: 700px; /* forces horizontal scroll before this width */
+    min-width: 700px;
+    /* forces horizontal scroll before this width */
     border-collapse: collapse;
     /* border: 1px solid #ededed; */
     background-color: #fcfcfc;
@@ -737,10 +767,12 @@ section.month .month-scroll::-webkit-scrollbar {
     background: var(--accent-color);
     color: #fff;
 }
+
 .component-table.disabled {
     background: #e3e3e3;
     color: #000000;
 }
+
 .component-table.disabled thead tr {
     background: #8b8b8b;
     color: #e6e6e6;

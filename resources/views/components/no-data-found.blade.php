@@ -1,6 +1,5 @@
 <div>
     <div class="d-flex flex-column align-items-center gap-3 mt-5">
-        {{-- <img src="{{ asset('assets/images/no_data.png') }}" alt="No Data" class="no_data_img"> --}}
         <svg class="mb-4" style="width:160px" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Shadow -->
             <ellipse cx="100" cy="168" rx="55" ry="8" fill="#e2e8f0" />

@@ -54,6 +54,10 @@ class PortioningMeasureController extends Controller
     public function week_details($week_id = null)
     {
         $get_route = route('work_type');
+        $current_iso_week = now()->isoWeek();
+        $today            = now()->toDateString();
+        $today_day_name   = now()->format('l');
+        // dd($current_iso_week, $today, $today_day_name);
         return view('pages.week_details', compact('get_route', 'week_id'));
     }
 

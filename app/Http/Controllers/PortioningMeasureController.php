@@ -51,14 +51,10 @@ class PortioningMeasureController extends Controller
         return view('portioning_measurement_form.portioning_measure_dashboard', compact('get_route'));
     }
 
-    public function week_details($week_id = null)
+    public function week_details($week_id = null, $order_head_id = null)
     {
         $get_route = route('work_type');
-        $current_iso_week = now()->isoWeek();
-        $today            = now()->toDateString();
-        $today_day_name   = now()->format('l');
-        // dd($current_iso_week, $today, $today_day_name);
-        return view('pages.week_details', compact('get_route', 'week_id'));
+        return view('pages.week_details', compact('get_route', 'week_id', 'order_head_id'));
     }
 
     public function portioning_measure_data_upload_action(Request $request)
@@ -181,6 +177,7 @@ class PortioningMeasureController extends Controller
             $order_head->file_name   = $file_name;
             $order_head->file_path   = $file_path;
             $order_head->week_number = Carbon::parse($fromDate)->weekOfYear;
+            $order_head->status = 'Not Started';
             $order_head->updated_by = auth()->id();
             $order_head->save();
 
@@ -226,6 +223,7 @@ class PortioningMeasureController extends Controller
                         'allergen'               => $mappedRow['allergen'] ?? null,
                         'packaging'              => $mappedRow['packaging'] ?? null,
                         '95_percent'             => $mappedRow['95_percent'] ?? null,
+                        'status' => 'Not Started',
                     ];
                 }
             }

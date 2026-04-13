@@ -1,117 +1,96 @@
 <div>
+    <!-- Header Card -->
     <section>
-        <!-- ── Header Card ── -->
         <div class="header-card container present">
             <div>
-                <div class="hc-week-title">Week 2</div>
-                <div class="hc-week-range">9 Mar to 14 Mar</div>
+                <div class="hc-week-title">Week {{ $order_head->week }}</div>
+                <div class="hc-week-range">
+                    {{ \Carbon\Carbon::parse($order_head->from_date)->format('j M') }}
+                    to
+                    {{ \Carbon\Carbon::parse($order_head->to_date)->format('j M') }}
+                </div>
             </div>
 
             <div class="hc-divider"></div>
 
             <div>
                 <div class="hc-meta-label">Present Day</div>
-                <div class="hc-meta-value">Monday – 9 Mar</div>
+                <div class="hc-meta-value">
+                    {{ now()->format('l') }} – {{ now()->format('j M') }}
+                </div>
             </div>
 
             <div class="hc-divider"></div>
 
             <div>
                 <div class="hc-meta-label">Upload Date</div>
-                <div class="hc-meta-value">8 March – Sunday</div>
+                <div class="hc-meta-value">
+                    {{ \Carbon\Carbon::parse($order_head->created_at)->format('j F – l') }}
+                </div>
             </div>
 
             <div class="hc-qty">
                 <div class="hc-qty-label">Total Quantity</div>
-                <div class="hc-qty-value">42,129</div>
+                <div class="hc-qty-value">{{ number_format($order_head->total_qty) }}</div>
             </div>
         </div>
     </section>
 
+    <!-- Weekly Table -->
     <section class="px-lg-5 px-3 pb-5">
-        <!-- ── Section Title ── -->
         <div class="section-title">Weekly Work Details</div>
-        <!-- ── Scrollable Table ── -->
+
         <div class="tbl-scroll mb-5">
             <table class="week-table">
                 <thead>
                     <tr>
-                        <th class="th-inactive">Monday</th>
-                        <th class="th-active">Tuesday</th>
-                        <th class="th-inactive">Wednesday</th>
-                        <th class="th-inactive">Thursday</th>
-                        <th class="th-inactive">Friday</th>
-                        <th class="th-inactive">Saturday</th>
+                        @foreach ($week_days as $day)
+                            <th
+                                wire:click="selectDay('{{ $day }}')"
+                                class="{{ $selected_day === $day ? 'th-active' : 'th-inactive' }}"
+                                style="cursor: pointer;"
+                            >
+                                {{ \Carbon\Carbon::parse($day)->format('l') }}
+                            </th>
+                        @endforeach
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
-                        <!-- Monday – sidebar category chips -->
-                        <td class="td-inactive">
-                            <div class="cell-inner">
-                                <a href="#" class="chip not_started">Piston 1200</a>
-                                <a href="#" class="chip  completed">Piston</a>
-                                <a href="#" class="chip in_process">Hand Allergen</a>
-                            </div>
-                        </td>
-
-                        <!-- Tuesday -->
-                        <td class="td-active">
-                            <div class="cell-inner">
-                                <a href="#" class="chip not_started">Piston</a>
-                            </div>
-                        </td>
-
-                        <!-- Wednesday -->
-                        <td class="td-inactive">
-                            <div class="cell-inner">
-                                <a href="#" class="chip in_active_work">1200 Allergen</a>
-                                <a href="#" class="chip in_active_work">Granular</a>
-                            </div>
-                        </td>
-
-                        <!-- Thursday -->
-                        <td class="td-inactive">
-                            <div class="cell-inner">
-                                <a href="#" class="chip in_active_work">1200 Allergen</a>
-                                <a href="#" class="chip in_active_work">Sleek</a>
-                                <a href="#" class="chip in_active_work">Powder</a>
-                            </div>
-                        </td>
-
-                        <!-- Friday -->
-                        <td class="td-inactive">
-                            <div class="cell-inner">
-                                <a href="#" class="chip in_active_work">Granular</a>
-                                <a href="#" class="chip in_active_work">Powder</a>
-                                <a href="#" class="chip in_active_work">Sleek</a>
-                            </div>
-                        </td>
-
-                        <!-- Saturday – empty -->
-                        <td class="td-inactive">
-                            <div class="cell-inner"></div>
-                        </td>
+                        @foreach ($week_days as $day)
+                            <td class="{{ $selected_day === $day ? 'td-active' : 'td-inactive' }}">
+                                <div class="cell-inner">
+                                    @forelse ($days_with_categories[$day] ?? [] as $category)
+                                        <a href="#" class="chip {{ $category['status'] }}">
+                                            {{ $category['category_name'] }}
+                                        </a>
+                                    @empty
+                                        <span class="text-muted text-center small">No work</span>
+                                    @endforelse
+                                </div>
+                            </td>
+                        @endforeach
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
+    <!-- Legend -->
     <section>
         <div class="mb-5 d-flex gap-4 justify-content-center flex-wrap">
             <div class="d-flex align-items-center gap-2">
                 <div style="background:#E8F8FF;border:1px solid #016B9D;width:30px;height:30px;border-radius:8px"></div>
-                <p>Not Started</p>
+                <p class="mb-0">Not Started</p>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <div style="background:#FFF9BC;border:1px solid #7A7000;width:30px;height:30px;border-radius:8px"></div>
-                <p>In Process</p>
+                <p class="mb-0">In Process</p>
             </div>
             <div class="d-flex align-items-center gap-2">
                 <div style="background:#CAFFB8;border:1px solid #208200;width:30px;height:30px;border-radius:8px"></div>
-                <p>Completed</p>
+                <p class="mb-0">Completed</p>
             </div>
         </div>
     </section>

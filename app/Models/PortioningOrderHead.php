@@ -13,6 +13,10 @@ class PortioningOrderHead extends Model
         'week',
         'from_date',
         'to_date',
+        'file_name',
+        'file_path',
+        'status',
+        'total_qty',
         'updated_by',
     ];
 }

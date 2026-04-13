@@ -32,13 +32,25 @@
         padding: 1rem;
     }
 
+    .progress-card {
+        --circ: 219.91;
+        --offset: calc(var(--circ) - (var(--progress) / 100) * var(--circ));
+        /* background: #1a1a0e; */
+        display: inline-flex;
+        align-items: center;
+        gap: 18px;
+        /* padding: 18px 28px 18px 18px; */
+        border-radius: 50px;
+        padding-top: 19px;
+    }
+
     /* .container {
               padding: 1rem;
           } */
 }
 
 @media (max-width: 620px) {
-    .table-title {  
+    .table-title {
         font-size: 0.95rem;
         padding: 1rem;
     }

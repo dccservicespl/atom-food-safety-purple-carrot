@@ -176,6 +176,7 @@ class PortioningMeasureController extends Controller
             $order_head->to_date    = $toDate;
             $order_head->file_name   = $file_name;
             $order_head->file_path   = $file_path;
+            $order_head->week_number = Carbon::parse($fromDate)->weekOfYear;
             $order_head->updated_by = auth()->id();
             $order_head->save();
 

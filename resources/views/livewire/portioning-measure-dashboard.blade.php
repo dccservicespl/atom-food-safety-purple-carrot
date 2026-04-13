@@ -84,9 +84,15 @@
                     </div>
                 </div> --}}
 
-                <x-week-of-month :weeks_of_month="$weeks_of_month" :current_week="$current_week" />
                 {{--
             </div> --}}
+            {{--
+            <x-week-card :order_header="$order_header" :current_week="$current_week" /> --}}
+            <x-week-of-month :order_header="$order_headers" :weeks_of_month="$weeks_of_month"
+                :current_week="$current_week" />
+
+            {{--
+            <x-week-of-month :weeks_of_month="$weeks_of_month" :current_week="$current_week" /> --}}
         </div>
     </main>
 </div>

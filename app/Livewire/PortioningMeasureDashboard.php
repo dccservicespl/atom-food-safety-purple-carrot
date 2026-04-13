@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Models\PortioningMeasureHead;
+use App\Models\PortioningOrderHead;
 use Livewire\Component;
 
 class PortioningMeasureDashboard extends Component
@@ -67,7 +69,12 @@ class PortioningMeasureDashboard extends Component
 
     public function render()
     {
-        // dd($this->selected_month, $this->selected_year, $this->current_week, $this->weeks_of_month);
-        return view('livewire.portioning-measure-dashboard');
+        $get_order_header_data = PortioningOrderHead::whereYear('created_at', $this->selected_year)
+            ->whereMonth('from_date', $this->selected_month)
+            ->get();
+        // dd($get_order_header_data, $this->selected_month, $this->selected_year, $this->current_week, $this->weeks_of_month);
+        return view('livewire.portioning-measure-dashboard', [
+            'order_headers' => $get_order_header_data,
+        ]);
     }
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('portioning_order_heads', function (Blueprint $table) {
             $table->string('file_name')->nullable()->after('total_qty');
+            $table->string('file_path')->nullable()->after('file_name');
         });
     }
 

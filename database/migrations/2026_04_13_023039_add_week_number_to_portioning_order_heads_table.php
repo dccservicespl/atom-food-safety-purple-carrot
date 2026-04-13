@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('portioning_order_heads', function (Blueprint $table) {
-            $table->string('file_path')->nullable()->after('file_name');
+            $table->integer('week_number')->nullable()->after('week');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('portioning_order_heads', function (Blueprint $table) {
-            $table->dropColumn('file_path');
+            //
         });
     }
 };

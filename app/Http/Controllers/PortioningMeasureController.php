@@ -92,15 +92,16 @@ class PortioningMeasureController extends Controller
         }
 
         // Strip version suffix and match to target base names
-        $resolved_sheets = [];
+        $resolved_sheets    = [];
         $matched_base_names = [];
 
         foreach ($all_sheet_names as $sheet_name) {
             $base_name = trim(preg_replace('/\s+[\d.]+$/', '', $sheet_name));
 
-            if (in_array($base_name, $target_base_names)) {
+            // Only take the FIRST occurrence of each base name — skip duplicates
+            if (in_array($base_name, $target_base_names) && !in_array($base_name, $matched_base_names)) {
                 $resolved_sheets[$sheet_name] = $base_name;
-                $matched_base_names[] = $base_name;
+                $matched_base_names[]         = $base_name;
             }
         }
 

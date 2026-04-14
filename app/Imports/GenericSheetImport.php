@@ -99,6 +99,11 @@ class GenericSheetImport implements ToArray, WithStartRow
                 continue;
             }
 
+            // Skip if scheduled_day is null — row is unusable
+            if (empty($mapped['scheduled_day'])) {
+                continue;
+            }
+
             // Convert scheduled_day name to actual date
             if (!empty($mapped['scheduled_day'])) {
                 $dayName = strtoupper(trim($mapped['scheduled_day']));
@@ -114,8 +119,11 @@ class GenericSheetImport implements ToArray, WithStartRow
                 ];
 
                 if (isset($dayMap[$dayName])) {
-                    $fromDate = \Carbon\Carbon::parse($weekInfo['from_date']);
+                    $fromDate                = \Carbon\Carbon::parse($weekInfo['from_date']);
                     $mapped['scheduled_day'] = $fromDate->copy()->addDays($dayMap[$dayName])->toDateString();
+                } else {
+                    // Not a valid day name, skip this row
+                    continue;
                 }
             }
 
@@ -143,7 +151,7 @@ class GenericSheetImport implements ToArray, WithStartRow
                 $toDate   = $fromDate->copy()->addDays(6);
 
                 return [
-                    'week'      => $week,                   
+                    'week'      => $week,
                     'from_date' => $fromDate->toDateString(),
                     'to_date'   => $toDate->toDateString(),
                 ];

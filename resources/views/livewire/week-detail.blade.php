@@ -76,7 +76,7 @@
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
                                 @if ($is_selected)
-                                <a href="{{ route('day_details') }}" class="chip"
+                                <a href="{{ route('order_measure_details') }}" class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
                                     {{ $category['category_name'] }}
                                 </a>

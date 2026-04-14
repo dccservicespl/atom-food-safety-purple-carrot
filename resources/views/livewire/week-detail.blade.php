@@ -50,10 +50,8 @@
                         $is_selected = $selected_day === $day;
                         @endphp
 
-                        <th
-                            wire:click="selectDay('{{ $day }}')"
-                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}"
-                            style="cursor:pointer;">
+                        <th wire:click="selectDay('{{ $day }}')"
+                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}" style="cursor:pointer;">
                             {{ \Carbon\Carbon::parse($day)->format('l') }}
                             @if ($is_today)
                             <br><small class="today-badge">Today</small>
@@ -78,15 +76,12 @@
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
                                 @if ($is_selected)
-                                <a
-                                    href="#"
-                                    class="chip"
+                                <a href="{{ route('day_details') }}" class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
                                     {{ $category['category_name'] }}
                                 </a>
                                 @else
-                                <span
-                                    class="chip"
+                                <span class="chip"
                                     style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:default;opacity:0.6;">
                                     {{ $category['category_name'] }}
                                 </span>

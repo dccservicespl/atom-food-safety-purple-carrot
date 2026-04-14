@@ -169,7 +169,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::get('week_details/{week_id}/{order_head_id}', [PortioningMeasureController::class, 'week_details'])->name('week_details');
 
-    Route::get('day_details', [PortioningMeasureController::class, 'day_details'])->name('day_details');
+    Route::get('admin/day_details', [PortioningMeasureController::class, 'day_details'])->name('day_details');
 
     Route::post('admin/portioning_measure_data_upload_action', [PortioningMeasureController::class, 'portioning_measure_data_upload_action'])->name('portioning_measure_data_upload_action');
     Route::get('admin/portioning_measure_delete/{id}', [PortioningMeasureController::class, 'portioning_measure_delete'])->name('portioning_measure_delete');

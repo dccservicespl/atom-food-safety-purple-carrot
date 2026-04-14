@@ -39,36 +39,31 @@
     <!-- Weekly Table -->
     <section class="px-lg-5 px-3 pb-5">
         <div class="section-title">Weekly Work Details</div>
-
         <div class="tbl-scroll mb-5">
             <table class="week-table">
                 <thead>
                     <tr>
                         @foreach ($week_days as $day)
                         @php
-                        $is_today = $day === $today;
+                        $is_today = \Carbon\Carbon::parse($day)->format('l') === now()->format('l');
                         $is_selected = $selected_day === $day;
                         @endphp
 
-                        <th wire:click="selectDay('{{ $day }}')"
-                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}" style="cursor:pointer;">
+                        <th
+                            wire:click="selectDay('{{ $day }}')"
+                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}"
+                            style="cursor:pointer;">
                             {{ \Carbon\Carbon::parse($day)->format('l') }}
-                            @if ($is_today)
-                            <br><small class="today-badge">Today</small>
-                            @endif
                         </th>
                         @endforeach
                     </tr>
                 </thead>
-
                 <tbody>
                     <tr>
                         @foreach ($week_days as $day)
                         @php
-                        $is_today = $day === $today;
                         $is_selected = $selected_day === $day;
                         @endphp
-
                         <td class="{{ $is_selected ? 'td-active' : 'td-inactive' }}">
                             <div class="cell-inner">
                                 @forelse ($days_with_categories[$day] ?? [] as $category)
@@ -76,12 +71,16 @@
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
                                 @if ($is_selected)
-                                <a href="{{ route('order_measure_details') }}" class="chip"
-                                    style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
-                                    {{ $category['category_name'] }}
+                                <a
+                                href="{{ route('order_measure_details',['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
+                                class="chip"
+                                style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};"
+                                >
+                                {{ $category['category_name'] }}
                                 </a>
                                 @else
-                                <span class="chip"
+                                <span
+                                    class="chip"
                                     style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:default;opacity:0.6;">
                                     {{ $category['category_name'] }}
                                 </span>

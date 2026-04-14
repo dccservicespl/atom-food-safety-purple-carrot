@@ -310,9 +310,9 @@ class PortioningMeasureController extends Controller
         return response()->download($full_path, $order_head->file_name);
     }
 
-    public function order_measure_details()
+    public function order_measure_details($order_head_id, $portioning_category_id)
     {
         $get_route = route('work_type');
-        return view('pages.day_details', compact('get_route'));
+        return view('pages.day_details', compact('get_route', 'order_head_id', 'portioning_category_id'));
     }
 }

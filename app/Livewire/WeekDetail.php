@@ -24,7 +24,6 @@ class WeekDetail extends Component
 
         $this->order_head_id = $order_head_id;
         $this->order_head    = PortioningOrderHead::where('order_head_id', $order_head_id)->firstOrFail();
-        $this->today         = now()->toDateString();
 
         // Generate full week days from from_date to to_date
         $from    = Carbon::parse($this->order_head->from_date);
@@ -39,11 +38,20 @@ class WeekDetail extends Component
 
         $this->week_days = $days;
 
-        // Default selected day = today if in range, else first day
-        $this->selected_day = in_array($this->today, $this->week_days)
-            ? $this->today
-            : $this->week_days[0];
+        // Match today's day name to the same day in the week range
+        $today_day_name = now()->format('l');
+        $this->today    = $today_day_name;
 
+        $matched_day = null;
+        foreach ($this->week_days as $day) {
+            if (Carbon::parse($day)->format('l') === $today_day_name) {
+                $matched_day = $day;
+                break;
+            }
+        }
+
+        // Set selected day to matched day, else first day of the week
+        $this->selected_day = $matched_day ?? $this->week_days[0];
         $this->loadDaysWithCategories();
     }
 
@@ -59,6 +67,7 @@ class WeekDetail extends Component
             ->select(
                 'portioning_order_details.scheduled_day',
                 'portioning_order_details.status',
+                'portioning_categories.category_id',
                 'portioning_categories.category_name',
             )
             ->orderBy('scheduled_day')
@@ -79,6 +88,7 @@ class WeekDetail extends Component
             if (!in_array($catName, $existing)) {
                 $data[$day][] = [
                     'category_name' => $catName,
+                    'category_id'   => $row->category_id,
                     'status'        => $row->status ?? 'not_started',
                 ];
             }

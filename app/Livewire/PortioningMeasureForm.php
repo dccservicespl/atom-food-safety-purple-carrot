@@ -2,6 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Models\PortioningCategory;
+use App\Models\PortioningMeasureHead;
+use App\Models\PortioningOrderDetail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -14,12 +18,15 @@ class PortioningMeasureForm extends Component
     public ?int $people_qty = null;
     public ?string $scale = null;
     public bool $showStartTimeModal = false;
+    public $portioning_order_data = [];
+    public $order_head_id;
+    public $portioning_category_id;
 
     protected function rules(): array
     {
         return [
             'table'      => 'required|integer|between:1,8',
-            'preop'      => 'required|in:yes,no',
+            'preop'      => 'required',
             'people_qty' => 'required|integer|min:1',
             'scale'      => 'required|string|max:50',
         ];
@@ -44,35 +51,53 @@ class PortioningMeasureForm extends Component
     public function startMeasurement()
     {
         $this->validate();
-        try{
-            dd($this->table, $this->preop, $this->people_qty, $this->scale);
-            // আপনার logic এখানে — save to DB, dispatch event, etc.
-            // উদাহরণ:
-            // Measurement::create([
-            //     'table'      => $this->table,
-            //     'preop'      => $this->preop,
-            //     'people_qty' => $this->people_qty,
-            //     'scale'      => $this->scale,
-            // ]);
+        try {
+            PortioningMeasureHead::updateOrCreate(
+                [
+                    'portioning_order_head_id' => $this->order_head_id,
+                    'portioning_category_id'   => $this->portioning_category_id,
+                    'scheduled_day'            => date('Y-m-d'),
+                ],
+                [
+                    'start_time'      => date('H:i:s'),
+                    'measure_by'      => Auth::user()->id,
+                    'table_name'      => $this->table,
+                    'people_qty'      => $this->people_qty,
+                    'scale'           => $this->scale,
+                    'pre_op_complete' => $this->preop,
+                ]
+            );
 
-            $this->dispatch('measurementStarted', [
-                'table'      => $this->table,
-                'preop'      => $this->preop,
-                'people_qty' => $this->people_qty,
-                'scale'      => $this->scale,
-            ]);
+            $this->reset(['table', 'preop', 'people_qty', 'scale']);
 
-            $this->reset();
-            $this->dispatch('closeModal');
-        }catch (\Throwable $th) {
+            $this->mode = 'edit_mode';
+            $this->closeStartTimePopup();
+            session()->flash('success', 'Measurement time has been started.');
+
+        } catch (\Throwable $th) {
             session()->flash('error', $th->getMessage());
-            Log::info('message'. $th->getMessage());
+            Log::error('startMeasurement error: ' . $th->getMessage());
         }
     }
 
-
     public function render()
     {
-        return view('livewire.portioning-measure-form');
+        $check_start_time = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
+            ->where('portioning_category_id', $this->portioning_category_id)
+            ->where('scheduled_day', date('Y-m-d'))
+            ->first();
+        if ($check_start_time && $check_start_time->start_time) {
+            $this->mode = 'edit_mode';
+        }
+
+         $data = PortioningOrderDetail::with('category')
+            ->where('order_head_id', $this->order_head_id)
+            ->where('portioning_category_id', $this->portioning_category_id)
+            // ->where('scheduled_day', date('Y-m-d'))
+            ->get();
+
+        $this->portioning_order_data = $data;
+        $portioning_category_name = PortioningCategory::where('category_id',  $this->portioning_category_id)->value('category_name');
+        return view('livewire.portioning-measure-form', compact('check_start_time', 'portioning_category_name'));
     }
 }

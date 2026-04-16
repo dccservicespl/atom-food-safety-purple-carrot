@@ -5,7 +5,7 @@
     :breadcrumb_links="[['name' => 'Home', 'route' => $get_route], ['name' => '3.2 Week', 'route' => route('portioning_measure_dashboard')], ['name' => 'Day Details', 'route' =>'']]" />
 
 
-<livewire:portioning-measure-form />
+<livewire:portioning-measure-form :order_head_id="$order_head_id" :portioning_category_id="$portioning_category_id"/>
 {{--
 <section class="mb-4">
     <div class="container">

@@ -1,32 +1,53 @@
 <div>
     <?php echo flashMessage()?>
+
     <section class="mb-4">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-md-4 gap-2 mb-3">
                 <div class="d-flex gap-1 align-items-center">
                     <h4 class="fs-6">Production Schedule:</h4>
-                    <p class="fw-bold color">Piston 1200</p>
+                    <p class="fw-bold color">{{ $portioning_category_name}}</p>
                 </div>
                 <div class="d-flex align-items-center justify-content-between gap-3">
                     <div class="d-flex gap-3">
                         <div class="d-flex align-items-center gap-2 text-color"><span><i
                                     class="bi bi-calendar2-minus"></i></span>
-                            <p>Monday - 9 March</p>
+                            <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
                         </div>
                         {{-- <button type="button" class="btn_2" wire:click='openStartTimePopup'>
                             <span><i class="bi bi-clock"></i></span> Start Time</button> --}}
+                        @if ($mode === 'read_only')
                         <button type="button" class="btn_2" wire:click="openStartTimePopup">
                             <span><i class="bi bi-clock"></i></span> Start Time
                         </button>
+                        @endif
+                        @if ($mode === 'edit_mode')
                         <button type="button" class="btn_3 "> <span><i class="bi bi-clock"></i></span>
                             End Time</button>
+                        @endif
+
+
                     </div>
                 </div>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <div class="color fs-6 fw-medium"><span>Start Time:</span><span>05:41 am</span></div>
+                <div class="color fs-6 fw-medium">
+                    <span>Start Time: </span>
+                    <span>
+                        {{ $check_start_time && $check_start_time->start_time
+                        ? date('h:i a', strtotime($check_start_time->start_time))
+                        : "N/A" }}
+                    </span>
+                </div>
                 <div class="vr"></div>
-                <div class="color fs-6 fw-medium"><span>End Time:</span><span>05:41 am</span></div>
+                <div class="color fs-6 fw-medium">
+                    <span>End Time: </span>
+                    <span>
+                        {{ $check_start_time && $check_start_time->end_time
+                        ? date('h:i a', strtotime($check_start_time->end_time))
+                        : "N/A" }}
+                    </span>
+                </div>
             </div>
         </div>
     </section>
@@ -49,107 +70,26 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($portioning_order_data as $read_only_data)
                                 <tr>
-                                    <td><span class="letter-badge">DC/DD/DH/DL</span></td>
-                                    <td>Vegan Mayo bulk</td>
-                                    <td>Vegan Mayo</td>
-                                    <td><span class="weight-chip">2 oz</span></td>
-                                    <td><span class="qty-value">1678</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn">
+                                    <td><span class="letter-badge">{{ $read_only_data->letter }}</span></td>
+                                    <td>{{ $read_only_data->component_details }}</td>
+                                    <td>{{ $read_only_data->label }}</td>
+                                    <td><span class="weight-chip border border-secondary">{{ $read_only_data->weight
+                                            }}</span></td>
+                                    <td><span class="qty-value">{{ $read_only_data->quantity }}</span></td>
+                                    <td class="text-center">
+                                        <a href="#" class="action-btn" @disabled(true)>
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2.5">
                                                 <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a>
+                                            </svg>
+                                        </a>
                                     </td>
                                 </tr>
-                                <tr class="">
-                                    <td><span class="letter-badge">DJ</span></td>
-                                    <td>Coconut milk, bulk portioned, 6 fl oz</td>
-                                    <td>Coconut milk Allergen tree nuts (coconut)</td>
-                                    <td><span class="weight-chip">6 fl oz</span></td>
-                                    <td><span class="qty-value">1203</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DQ</span></td>
-                                    <td>Coconut milk, bulk portioned, 6 fl oz</td>
-                                    <td>Coconut milk Allergen tree nuts (coconut)</td>
-                                    <td><span class="weight-chip">6 fl oz</span></td>
-                                    <td><span class="qty-value">1073</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DC</span></td>
-                                    <td>Bbq sauce, bulk portioned, 0.25 cup</td>
-                                    <td>BBQ sauce</td>
-                                    <td><span class="weight-chip">68 g</span></td>
-                                    <td><span class="qty-value">334</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">LB</span></td>
-                                    <td>Bbq sauce, bulk portioned, 0.25 cup</td>
-                                    <td>BBQ sauce</td>
-                                    <td><span class="weight-chip">68 g</span></td>
-                                    <td><span class="qty-value">94</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DN</span></td>
-                                    <td>Chili garlic sauce, bulk portioned, 2 tbsp</td>
-                                    <td>Chili garlic sauce</td>
-                                    <td><span class="weight-chip">36 g</span></td>
-                                    <td><span class="qty-value">2759</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">LD</span></td>
-                                    <td>Chili garlic sauce, bulk portioned, 1 tbsp</td>
-                                    <td>Chili garlic sauce</td>
-                                    <td><span class="weight-chip">18 g</span></td>
-                                    <td><span class="qty-value">158</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DR</span></td>
-                                    <td>Chutney, tomato, bulk portioned, 1/4 cup</td>
-                                    <td>Tomato chutney</td>
-                                    <td><span class="weight-chip">2 oz</span></td>
-                                    <td><span class="qty-value">431</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">BB</span></td>
-                                    <td>Preserve, apricot, bulk portioned, 1/4 cup</td>
-                                    <td>Apricot preserves</td>
-                                    <td><span class="weight-chip">72 g</span></td>
-                                    <td><span class="qty-value">149</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
+                                @empty
+                                <x-no-data-found />
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -166,7 +106,8 @@
                         <div class="col-4">
                             <div class="card_total_quantity card-box">
                                 <h4 class="color fw-bold fs-6">Total Quantity</h4>
-                                <h2 class="fs-2 color fw-bold">7,879</h2>
+                                <h2 class="fs-2 color fw-bold">{{ number_format($read_only_data->sum('quantity'))
+                                    }}</h2>
                             </div>
                         </div>
                     </div>
@@ -182,7 +123,7 @@
             <div class="" style="">
                 <div class="table-card">
                     <div class="table-scroll-wrapper">
-                        <table class="component-table disabled">
+                        <table class="component-table">
                             <thead>
                                 <tr>
                                     <th>Letter</th>
@@ -194,107 +135,26 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($portioning_order_data as $data)
                                 <tr>
-                                    <td><span class="letter-badge">DC/DD/DH/DL</span></td>
-                                    <td>Vegan Mayo bulk</td>
-                                    <td>Vegan Mayo</td>
-                                    <td><span class="weight-chip">2 oz</span></td>
-                                    <td><span class="qty-value">1678</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn">
+                                    <td><span class="letter-badge">{{ $data->letter }}</span></td>
+                                    <td>{{ $data->component_details }}</td>
+                                    <td>{{ $data->label }}</td>
+                                    <td><span class="weight-chip">{{ $data->weight }}</span></td>
+                                    <td><span class="qty-value">{{ $data->quantity }}</span></td>
+                                    <td class="text-center">
+                                        <a href="#" class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2.5">
                                                 <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a>
+                                            </svg>
+                                        </a>
                                     </td>
                                 </tr>
-                                <tr class="">
-                                    <td><span class="letter-badge">DJ</span></td>
-                                    <td>Coconut milk, bulk portioned, 6 fl oz</td>
-                                    <td>Coconut milk Allergen tree nuts (coconut)</td>
-                                    <td><span class="weight-chip">6 fl oz</span></td>
-                                    <td><span class="qty-value">1203</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DQ</span></td>
-                                    <td>Coconut milk, bulk portioned, 6 fl oz</td>
-                                    <td>Coconut milk Allergen tree nuts (coconut)</td>
-                                    <td><span class="weight-chip">6 fl oz</span></td>
-                                    <td><span class="qty-value">1073</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DC</span></td>
-                                    <td>Bbq sauce, bulk portioned, 0.25 cup</td>
-                                    <td>BBQ sauce</td>
-                                    <td><span class="weight-chip">68 g</span></td>
-                                    <td><span class="qty-value">334</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">LB</span></td>
-                                    <td>Bbq sauce, bulk portioned, 0.25 cup</td>
-                                    <td>BBQ sauce</td>
-                                    <td><span class="weight-chip">68 g</span></td>
-                                    <td><span class="qty-value">94</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DN</span></td>
-                                    <td>Chili garlic sauce, bulk portioned, 2 tbsp</td>
-                                    <td>Chili garlic sauce</td>
-                                    <td><span class="weight-chip">36 g</span></td>
-                                    <td><span class="qty-value">2759</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">LD</span></td>
-                                    <td>Chili garlic sauce, bulk portioned, 1 tbsp</td>
-                                    <td>Chili garlic sauce</td>
-                                    <td><span class="weight-chip">18 g</span></td>
-                                    <td><span class="qty-value">158</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">DR</span></td>
-                                    <td>Chutney, tomato, bulk portioned, 1/4 cup</td>
-                                    <td>Tomato chutney</td>
-                                    <td><span class="weight-chip">2 oz</span></td>
-                                    <td><span class="qty-value">431</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
-                                <tr>
-                                    <td><span class="letter-badge">BB</span></td>
-                                    <td>Preserve, apricot, bulk portioned, 1/4 cup</td>
-                                    <td>Apricot preserves</td>
-                                    <td><span class="weight-chip">72 g</span></td>
-                                    <td><span class="qty-value">149</span></td>
-                                    <td class="text-center"><a href="#" class="action-btn"><svg viewBox="0 0 24 24"
-                                                fill="none" stroke="currentColor" stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg></a></td>
-                                </tr>
+                                @empty
+                                <x-no-data-found />
+                                @endforelse
+
                             </tbody>
                         </table>
                     </div>
@@ -311,19 +171,23 @@
                         <div class="col-4">
                             <div class="card_total_quantity card-box">
                                 <h4 class="color fw-bold fs-6">Total Quantity</h4>
-                                <h2 class="fs-2 color fw-bold">7,879</h2>
+                                <h2 class="fs-2 color fw-bold">{{ number_format($portioning_order_data->sum('quantity'))
+                                    }}</h2>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="card_completed_quantity card-box">
                                 <h4 class="fw-bold fs-6">Completed Quantity</h4>
-                                <h2 class="fs-2 fw-bold">1,000</h2>
+                                <h2 class="fs-2 fw-bold">{{
+                                    number_format($portioning_order_data->where('status','Completed')->sum('quantity'))
+                                    }}</h2>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="card_pending_quantity card-box">
                                 <h4 class="fw-bold fs-6">Pending Quantity</h4>
-                                <h2 class="fs-2 fw-bold">6,879</h2>
+                                <h2 class="fs-2 fw-bold">{{ number_format($portioning_order_data->where('status', '!=',
+                                    'Completed')->sum('quantity')) }}</h2>
                             </div>
                         </div>
                     </div>
@@ -386,13 +250,13 @@
                         <div class="section-label">Pre-Op Complete</div>
                         <div class="d-flex gap-3 mb-2">
                             <div class="radio-pill">
-                                <input type="radio" name="preop" id="preop_yes" value="yes" wire:model="preop">
+                                <input type="radio" name="preop" id="preop_yes" value="1" wire:model="preop">
                                 <label for="preop_yes">
                                     <span class="radio-circle"><span></span></span>Yes
                                 </label>
                             </div>
                             <div class="radio-pill">
-                                <input type="radio" name="preop" id="preop_no" value="no" wire:model="preop">
+                                <input type="radio" name="preop" id="preop_no" value="0" wire:model="preop">
                                 <label for="preop_no">
                                     <span class="radio-circle"><span></span></span>No
                                 </label>

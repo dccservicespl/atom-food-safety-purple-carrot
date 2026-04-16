@@ -19,6 +19,9 @@ class PortioningMeasureHead extends Model
         'scale',
         'pre_op_complete',
         'status',
+        'portioning_order_head_id',
+        'portioning_category_id',
+        'scheduled_day'
     ];
 
     protected $casts = [

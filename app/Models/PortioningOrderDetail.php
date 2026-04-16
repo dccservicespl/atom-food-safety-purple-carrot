@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PortioningCategory;
 
 class PortioningOrderDetail extends Model
 {
@@ -26,4 +27,8 @@ class PortioningOrderDetail extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function category(){
+        return $this->belongsTo(PortioningCategory::class, 'portioning_category_id', 'category_id');
+    }
 }

@@ -89,4 +89,8 @@ class AdminAuthController extends Controller
         $value = session()->all();
         dd($value);
     }
+
+    public function portioning_measurement_form_new(){
+        return view('pages.portioning-measurement-form');
+    }
 }

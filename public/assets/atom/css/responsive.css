@@ -72,3 +72,20 @@
         display: none;
     }
 }
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+    .form-card {
+        padding: 20px 16px 24px;
+    }
+    .form-card .form-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .form-card .form-header .date-block {
+        text-align: left;
+    }
+    .form-card .simple-item {
+        max-width: 100%;
+    }
+}

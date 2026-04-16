@@ -998,154 +998,646 @@ section.month .month-scroll::-webkit-scrollbar {
     line-height: 1.3;
 }
 
+/* Modal header */
+.modal-header {
+    background: #0e6b8c;
+    border-radius: 12px 12px 0 0;
+    padding: 18px 24px;
+}
+.modal-title {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.btn-close-custom {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.9;
+}
+.btn-close-custom:hover {
+    opacity: 1;
+}
 
+/* Modal body */
+.modal-body {
+    padding: 28px 28px 10px;
+}
 
-    /* Modal header */
-    .modal-header {
-      background: #0e6b8c;
-      border-radius: 12px 12px 0 0;
-      padding: 18px 24px;
+/* Section label */
+.section-label {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 16px;
+}
+
+/* Radio pill buttons */
+.radio-pill input[type="radio"] {
+    display: none;
+}
+.radio-pill label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px 8px 10px;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 50px;
+    background: #f5f5f5;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #111;
+    cursor: pointer;
+    transition:
+        border-color 0.15s,
+        background 0.15s;
+    user-select: none;
+}
+.radio-pill label .radio-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #bbb;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s;
+}
+.radio-pill label .radio-circle::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background 0.15s;
+}
+.radio-pill input[type="radio"]:checked + label {
+    border-color: #0e6b8c;
+    background: #eaf4f8;
+}
+.radio-pill input[type="radio"]:checked + label .radio-circle {
+    border-color: #0e6b8c;
+}
+.radio-pill input[type="radio"]:checked + label .radio-circle::after {
+    background: #0e6b8c;
+}
+
+/* Divider */
+.section-divider {
+    border: none;
+    border-top: 1.5px solid #e5e5e5;
+    margin: 22px 0;
+}
+
+/* Text inputs */
+.form-control {
+    border-radius: 10px;
+    border: 1.5px solid #d0d0d0;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    color: #555;
+}
+.form-control:focus {
+    border-color: #0e6b8c;
+    box-shadow: 0 0 0 3px rgba(14, 107, 140, 0.12);
+}
+.form-label {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #111;
+    margin-bottom: 8px;
+}
+
+/* Footer */
+.modal-footer {
+    border-top: none;
+    padding: 16px 28px 28px;
+    gap: 12px;
+}
+.btn-cancel {
+    border: 1.5px solid #0e6b8c;
+    color: #0e6b8c;
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 36px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.15s;
+}
+.btn-cancel:hover {
+    background: #eaf4f8;
+}
+
+.btn-start {
+    background: #2a9d3c;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    flex: 1;
+    transition: background 0.15s;
+}
+.btn-start:hover {
+    background: #228c32;
+}
+
+/* Modal content rounded */
+.modal-content {
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+}
+.modal-dialog {
+    max-width: 560px;
+}
+
+.form-card {
+    margin: 0 auto;
+    margin-top: 50px;
+    animation: fadeUp 0.35s ease both;
+}
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
     }
-    .modal-title {
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    .btn-close-custom {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1.3rem;
-      line-height: 1;
-      cursor: pointer;
-      padding: 0;
-      opacity: 0.9;
+}
+
+/* ── Header banner ── */
+.form-card .form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: linear-gradient(135deg, #e8f4fc 0%, #d6eaf8 100%);
+    border: 1.5px solid #b8d9ef;
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 28px;
+}
+.form-card .form-header .item-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a6fa3;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+.form-card .form-header .date-block {
+    text-align: right;
+    flex-shrink: 0;
+}
+.form-card .form-header .date-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    color: #8899aa;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.form-card .form-header .form-card .date-value {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a6fa3;
+    font-family: "DM Mono", monospace;
+}
+
+/* ── Section gap ── */
+.form-card .section-gap {
+    margin-bottom: 24px;
+}
+
+/* ── Labels ── */
+.form-card .form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1c2a3a;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+}
+
+/* ── Inputs ── */
+.form-card .form-control {
+    border: 1.5px solid #dde3eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #1c2a3a;
+    background: #fafbfc;
+    padding: 9px 14px;
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s,
+        background 0.18s;
+    height: auto;
+}
+.form-card .form-control::placeholder {
+    color: #8899aa;
+    font-size: 0.825rem;
+}
+.form-card .form-control:focus {
+    border-color: #1a6fa3;
+    box-shadow: 0 0 0 3px rgba(26, 111, 163, 0.12);
+    background: #ffffff;
+    outline: none;
+}
+.form-card textarea.form-control {
+    resize: vertical;
+    min-height: 110px;
+}
+
+/* ── Allergen Result radio group ── */
+.form-card .allergen-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+.form-card .allergen-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #fafbfc;
+    border: 1.5px solid #dde3eb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition:
+        border-color 0.18s,
+        background 0.18s;
+    user-select: none;
+}
+.form-card .allergen-option input[type="radio"] {
+    display: none;
+}
+.form-card .allergen-option .radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #dde3eb;
+    background: #ffffff;
+    display: grid;
+    place-items: center;
+    transition: border-color 0.18s;
+    flex-shrink: 0;
+}
+.form-card .allergen-option .radio-dot::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1a6fa3;
+    opacity: 0;
+    transition:
+        opacity 0.15s,
+        transform 0.15s;
+    transform: scale(0.4);
+}
+.form-card .allergen-option input[type="radio"]:checked ~ .radio-dot {
+    border-color: #1a6fa3;
+}
+.form-card .allergen-option input[type="radio"]:checked ~ .radio-dot::after {
+    opacity: 1;
+    transform: scale(1);
+}
+.form-card .allergen-option:has(input:checked) {
+    border-color: #1a6fa3;
+    background: #e8f4fc;
+}
+.form-card .allergen-option span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* ── Simple section panel ── */
+.form-card .simple-panel {
+    border: 1.5px solid #dde3eb;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+.form-card .simple-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #fafbfc;
+    border-bottom: 1.5px solid #dde3eb;
+}
+.form-card .simple-panel-header .panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1c2a3a;
+    margin: 0;
+}
+.form-card .btn-add-simple {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1a6fa3;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.18s,
+        transform 0.12s;
+    font-family: "DM Sans", sans-serif;
+}
+.form-card .btn-add-simple:hover {
+    background: #145882;
+    transform: translateY(-1px);
+}
+.form-card .btn-add-simple:active {
+    transform: translateY(0);
+}
+.form-card .btn-add-simple i {
+    font-size: 0.95rem;
+}
+
+.form-card .simple-panel-body {
+    padding: 16px 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ── Simple item row ── */
+.form-card .simple-item {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #dde3eb;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    /* flex: 1 1 200px; */
+    min-width: 180px;
+    max-width: 320px;
+    transition: border-color 0.18s;
+    animation: itemIn 0.25s ease both;
+}
+@keyframes itemIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
     }
-    .btn-close-custom:hover { opacity: 1; }
- 
-    /* Modal body */
-    .modal-body { padding: 28px 28px 10px; }
- 
-    /* Section label */
-    .section-label {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #111;
-      margin-bottom: 16px;
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
- 
-    /* Radio pill buttons */
-    .radio-pill input[type="radio"] { display: none; }
-    .radio-pill label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 18px 8px 10px;
-      border: 1.5px solid #d0d0d0;
-      border-radius: 50px;
-      background: #f5f5f5;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #111;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      user-select: none;
-    }
-    .radio-pill label .radio-circle {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid #bbb;
-      background: #fff;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: border-color 0.15s;
-    }
-    .radio-pill label .radio-circle::after {
-      content: '';
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: transparent;
-      transition: background 0.15s;
-    }
-    .radio-pill input[type="radio"]:checked + label {
-      border-color: #0e6b8c;
-      background: #eaf4f8;
-    }
-    .radio-pill input[type="radio"]:checked + label .radio-circle {
-      border-color: #0e6b8c;
-    }
-    .radio-pill input[type="radio"]:checked + label .radio-circle::after {
-      background: #0e6b8c;
-    }
- 
-    /* Divider */
-    .section-divider {
-      border: none;
-      border-top: 1.5px solid #e5e5e5;
-      margin: 22px 0;
-    }
- 
-    /* Text inputs */
-    .form-control {
-      border-radius: 10px;
-      border: 1.5px solid #d0d0d0;
-      padding: 14px 16px;
-      font-size: 0.95rem;
-      color: #555;
-    }
-    .form-control:focus {
-      border-color: #0e6b8c;
-      box-shadow: 0 0 0 3px rgba(14,107,140,0.12);
-    }
-    .form-label {
-      font-weight: 700;
-      font-size: 1rem;
-      color: #111;
-      margin-bottom: 8px;
-    }
- 
-    /* Footer */
-    .modal-footer {
-      border-top: none;
-      padding: 16px 28px 28px;
-      gap: 12px;
-    }
-    .btn-cancel {
-      border: 1.5px solid #0e6b8c;
-      color: #0e6b8c;
-      background: #fff;
-      border-radius: 10px;
-      padding: 12px 36px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: background 0.15s;
-    }
-    .btn-cancel:hover { background: #eaf4f8; }
- 
-    .btn-start {
-      background: #2a9d3c;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 0;
-      font-weight: 600;
-      font-size: 0.95rem;
-      flex: 1;
-      transition: background 0.15s;
-    }
-    .btn-start:hover { background: #228c32; }
- 
-    /* Modal content rounded */
-    .modal-content {
-      border-radius: 14px;
-      border: none;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-    }
-    .modal-dialog { max-width: 560px; }
+}
+.form-card .simple-item:focus-within {
+    border-color: #1a6fa3;
+}
+
+.form-card .simple-item .form-card .item-badge {
+    width: 34px;
+    min-height: 40px;
+    background: #e8f4fc;
+    color: #1a6fa3;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-family: "DM Mono", monospace;
+    border-right: 1.5px solid #dde3eb;
+    align-self: stretch;
+}
+.form-card .simple-item input[type="text"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 9px 10px;
+    font-size: 0.85rem;
+    color: #1c2a3a;
+    outline: none;
+    font-family: "DM Sans", sans-serif;
+}
+.form-card .simple-item input[type="text"]::placeholder {
+    color: #8899aa;
+}
+.form-card .simple-item .btn-delete {
+    background: transparent;
+    border: none;
+    color: #ef5350;
+    padding: 9px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: grid;
+    place-items: center;
+}
+.form-card .simple-item .form-card .btn-delete:hover {
+    background: #fdecea;
+}
+.form-card .simple-item .btn-delete i {
+    font-size: 1rem;
+}
+
+/* ── Upload zone ── */
+.form-card .upload-zone {
+    border: 2px dashed #dde3eb;
+    border-radius: 12px;
+    padding: 28px 20px 22px;
+    text-align: center;
+    background: #fafbfc;
+    cursor: pointer;
+    width: 300px;
+    transition:
+        border-color 0.2s,
+        background 0.2s;
+}
+.form-card .upload-zone:hover {
+    border-color: #1a6fa3;
+    background: #e8f4fc;
+}
+.form-card .upload-zone .upload-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #e8f4fc;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 12px;
+    color: #1a6fa3;
+    font-size: 1.4rem;
+}
+.form-card .upload-zone h6 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1c2a3a;
+    margin-bottom: 4px;
+}
+.form-card .upload-zone p {
+    font-size: 0.78rem;
+    color: #8899aa;
+    margin-bottom: 16px;
+}
+.form-card .upload-zone input[type="file"] {
+    display: none;
+}
+
+.form-card .btn-camera {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a6fa3;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background 0.18s,
+        transform 0.12s;
+    font-family: "DM Sans", sans-serif;
+}
+.form-card .btn-camera:hover {
+    background: #145882;
+    transform: translateY(-1px);
+}
+.form-card .btn-camera:active {
+    transform: translateY(0);
+}
+
+/* ── Image preview ── */
+.form-card .image-preview-wrap {
+    position: relative;
+    display: inline-block;
+}
+.form-card .image-preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 8px;
+    border: 1.5px solid #dde3eb;
+    background: #eef2f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #8899aa;
+    font-size: 0.72rem;
+    font-weight: 500;
+    overflow: hidden;
+}
+.form-card .image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.form-card .image-preview span {
+    line-height: 1.3;
+    text-align: center;
+    padding: 0 8px;
+}
+
+.form-card .btn-img-delete {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fdecea;
+    border: 1.5px solid #ef5350;
+    color: #ef5350;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition:
+        background 0.15s,
+        color 0.15s;
+    z-index: 2;
+}
+.form-card .btn-img-delete:hover {
+    background: #ef5350;
+    color: #ffffff;
+}
+
+/* ── Footer actions ── */
+.form-card .form-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.form-card .btn-cancel {
+    padding: 11px 28px;
+    border-radius: 50px;
+    border: 1.5px solid #dde3eb;
+    background: #ffffff;
+    color: #8899aa;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        border-color 0.18s,
+        color 0.18s;
+    font-family: "DM Sans", sans-serif;
+}
+.form-card .btn-cancel:hover {
+    border-color: #1a6fa3;
+    color: #1a6fa3;
+}
+
+.form-card .btn-save {
+    padding: 11px 36px;
+    border-radius: 50px;
+    border: none;
+    background: #1a6fa3;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.18s,
+        transform 0.12s,
+        box-shadow 0.18s;
+    font-family: "DM Sans", sans-serif;
+    box-shadow: 0 4px 12px rgba(26, 111, 163, 0.25);
+}
+.form-card .btn-save:hover {
+    background: #145882;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(26, 111, 163, 0.3);
+}
+.form-card .btn-save:active {
+    transform: translateY(0);
+}
+
+/* ── Page footer ── */
+.form-card .site-footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 0.78rem;
+    color: #1a6fa3;
+    font-weight: 600;
+}
+
+.form-card .item-badge {
+    padding: 10px 14px;
+    background: #e9f8ff;
+    font-weight: 400;
+    color: var(--primary-color);
+}

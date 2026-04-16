@@ -315,4 +315,8 @@ class PortioningMeasureController extends Controller
         $get_route = route('work_type');
         return view('pages.day_details', compact('get_route', 'order_head_id', 'portioning_category_id'));
     }
+
+    public function portioning_measurement_form_new(){
+        return view('pages.portioning-measurement-form');
+    }
 }

@@ -143,7 +143,7 @@
                                     <td><span class="weight-chip">{{ $data->weight }}</span></td>
                                     <td><span class="qty-value">{{ $data->quantity }}</span></td>
                                     <td class="text-center">
-                                        <a href="#" class="action-btn">
+                                        <a href="{{ route('portioning_measurement_form_new') }}" class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2.5">
                                                 <path d="M5 12h14M12 5l7 7-7 7" />

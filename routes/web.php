@@ -171,7 +171,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::get('admin/order_measure_details/{order_head_id}/{portioning_category_id}', [PortioningMeasureController::class, 'order_measure_details'])->name('order_measure_details');
     Route::get('day_details', [PortioningMeasureController::class, 'day_details'])->name('day_details');
-    Route::get('portioning_measurement_form_new', [AdminAuthController::class, 'portioning_measurement_form_new'])->name('portioning_measurement_form_new');
+    Route::get('portioning_measurement_form_new', [PortioningMeasureController::class, 'portioning_measurement_form_new'])->name('portioning_measurement_form_new');
 
     Route::post('admin/portioning_measure_data_upload_action', [PortioningMeasureController::class, 'portioning_measure_data_upload_action'])->name('portioning_measure_data_upload_action');
     Route::get('admin/portioning_measure_delete/{id}', [PortioningMeasureController::class, 'portioning_measure_delete'])->name('portioning_measure_delete');

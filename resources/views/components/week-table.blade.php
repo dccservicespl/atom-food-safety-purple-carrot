@@ -1,16 +1,16 @@
 @props([
-    'week_days'            => [],
-    'days_with_categories' => [],
-    'selected_day'         => null,
-    'order_head'           => null,
-    'route_name'           => 'order_measure_details',
+'week_days' => [],
+'days_with_categories' => [],
+'selected_day' => null,
+'order_head' => null,
+'route_name' => 'order_measure_details',
 ])
-<style>
+{{-- <style>
     .th-inactive {
         pointer-events: none;
         opacity: 0.8;
     }
-</style>
+</style> --}}
 <div>
     <section class="px-lg-5 px-3 pb-5">
         <div class="section-title">Weekly Work Details</div>
@@ -25,10 +25,8 @@
                         $is_selected = $selected_day === $day;
                         @endphp
 
-                        <th
-                            wire:click="selectDay('{{ $day }}')"
-                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}"
-                            style="cursor:pointer;">
+                        <th wire:click="selectDay('{{ $day }}')"
+                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}" style="cursor:pointer;">
                             {{ \Carbon\Carbon::parse($day)->format('l') }}
                         </th>
                         @endforeach
@@ -49,20 +47,18 @@
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
 
-                                @if ($is_selected)
+                                {{-- @if ($is_selected) --}}
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
-                                class="chip"
-                                style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};"
-                                >
-                                {{ $category['category_name'] }}
-                                </a>
-                                @else
-                                <span
                                     class="chip"
+                                    style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
+                                    {{ $category['category_name'] }}
+                                </a>
+                                {{-- @else
+                                <span class="chip"
                                     style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:default;opacity:0.6;">
                                     {{ $category['category_name'] }}
                                 </span>
-                                @endif
+                                @endif --}}
                                 @empty
                                 {{-- No categories for this day --}}
                                 @endforelse

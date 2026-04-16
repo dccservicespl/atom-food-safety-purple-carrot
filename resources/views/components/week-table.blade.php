@@ -5,12 +5,18 @@
     'order_head'           => null,
     'route_name'           => 'order_measure_details',
 ])
+<style>
+    .th-inactive {
+        pointer-events: none;
+        opacity: 0.8;
+    }
+</style>
 <div>
     <section class="px-lg-5 px-3 pb-5">
         <div class="section-title">Weekly Work Details</div>
 
         <div class="tbl-scroll mb-5">
-            <table class="week-table">
+            <table class="week-table disabled-click">
                 <thead>
                     <tr>
                         @foreach ($week_days as $day)
@@ -85,3 +91,11 @@
         </div>
     </section>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var th_elements = document.querySelectorAll('.th-inactive');
+        th_elements.forEach(function(th) {
+            th.style.pointerEvents = 'none';
+        });
+    });
+</script>

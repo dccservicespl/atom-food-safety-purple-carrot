@@ -130,6 +130,7 @@
                                     <th>Component Details</th>
                                     <th>Label</th>
                                     <th>Weight</th>
+                                    <th>Status</th>
                                     <th>QTY</th>
                                     <th class="text-center">Action</th>
                                 </tr>
@@ -140,8 +141,14 @@
                                     <td><span class="letter-badge">{{ $data->letter }}</span></td>
                                     <td>{{ $data->component_details }}</td>
                                     <td>{{ $data->label }}</td>
-                                    <td><span class="weight-chip">{{ $data->weight }}</span></td>
+                                    <td><span class="weight-chip border border-secondary">{{ $data->weight }}</span>
+                                    </td>
+                                    <td>
+                                        <x-status-badge :label="$data->status" />
+                                    </td>
                                     <td><span class="qty-value">{{ $data->quantity }}</span></td>
+
+
                                     <td class="text-center">
                                         <a href="{{ route('portioning_measurement_form_new') }}" class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"

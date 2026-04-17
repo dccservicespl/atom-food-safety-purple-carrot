@@ -47,18 +47,18 @@
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
 
-                                {{-- @if ($is_selected) --}}
+                                @if ($is_selected)
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
                                     class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
                                     {{ $category['category_name'] }}
                                 </a>
-                                {{-- @else
+                                @else
                                 <span class="chip"
                                     style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:default;opacity:0.6;">
                                     {{ $category['category_name'] }}
                                 </span>
-                                @endif --}}
+                                @endif
                                 @empty
                                 {{-- No categories for this day --}}
                                 @endforelse

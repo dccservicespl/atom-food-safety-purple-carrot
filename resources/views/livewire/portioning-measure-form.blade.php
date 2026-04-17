@@ -202,30 +202,7 @@
 
                 <div class="col-lg-4">
                     <div class="text-end">
-                        <div class="progress-card" style="--progress: 80">
-                            <div class="circle-wrap red">
-                                <svg viewBox="0 0 80 80" >
-                                    <circle class="track" cx="40" cy="40" r="35" />
-                                    <circle class="progress-ring" cx="40" cy="40" r="35" />
-                                </svg>
-                                <div class="circle-inner"></div>
-                            </div>
-                            <div class="circle-wrap yellow">
-                                <svg viewBox="0 0 80 80">
-                                    <circle class="track" cx="40" cy="40" r="35" />
-                                    <circle class="progress-ring" cx="40" cy="40" r="35" />
-                                </svg>
-                                <div class="circle-inner"></div>
-                            </div>
-                            <div class="circle-wrap green">
-                                <svg viewBox="0 0 80 80">
-                                    <circle class="track" cx="40" cy="40" r="35" />
-                                    <circle class="progress-ring" cx="40" cy="40" r="35" />
-                                </svg>
-                                <div class="circle-inner"></div>
-                            </div>
-                            <div class="progress-label">Production<br>Completed</div>
-                        </div>
+                        <x-progress-card  :percentage="30"/>
                     </div>
                 </div>
             </div>

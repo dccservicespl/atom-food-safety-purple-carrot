@@ -2,7 +2,7 @@
 @section('content')
     <!-- HTML CONTENT -->
 
-    <div class="form-card container">
+    <div class="form-card container bg-light p-sm-4 p-3 rounded-3">
         {{-- ── Header ── --}}
         <div class="form-header">
             <h5 class="item-name">Cornstarch, bulk portioned, 1/4 cup</h5>
@@ -220,7 +220,7 @@
             </div>
 
             {{-- ── Footer buttons ── --}}
-            <div class="form-footer mb-5 pb-5">
+            <div class="form-footer  pb-5 justify-content-end">
                 <button type="button" class="btn-cancel" wire:click="cancel">Cancel</button>
                 <button type="submit" class="btn-save">Save</button>
             </div>

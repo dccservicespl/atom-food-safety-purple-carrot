@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class PortioningMeasureForm extends Component
 {
-    public $mode = 'read_only';
+    public string $mode = 'read_only';
 
     public ?int $table = null;
     public ?string $preop = null;
@@ -21,6 +21,7 @@ class PortioningMeasureForm extends Component
     public $portioning_order_data = [];
     public $order_head_id;
     public $portioning_category_id;
+    public $item_id = null;
 
     protected function rules(): array
     {
@@ -80,13 +81,19 @@ class PortioningMeasureForm extends Component
         }
     }
 
+    public function measurementFormOpen($item_id = null)
+    {
+        $this->mode = 'measure_form_open';
+    }
+
     public function render()
     {
         $check_start_time = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
             ->where('scheduled_day', date('Y-m-d'))
             ->first();
-        if ($check_start_time && $check_start_time->start_time) {
+        // Only override mode if currently in read_only (don't override measure_form_open)
+        if ($this->mode === 'read_only' && $check_start_time && $check_start_time->start_time) {
             $this->mode = 'edit_mode';
         }
 
@@ -100,4 +107,6 @@ class PortioningMeasureForm extends Component
         $portioning_category_name = PortioningCategory::where('category_id',  $this->portioning_category_id)->value('category_name');
         return view('livewire.portioning-measure-form', compact('check_start_time', 'portioning_category_name'));
     }
+
+
 }

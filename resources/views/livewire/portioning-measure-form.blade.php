@@ -3,7 +3,7 @@
     <section class="mb-4">
         <div class="container">
 
-            <?php echo flashMessage()?>
+            <?php echo flashMessage() ?>
 
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-md-4 gap-2 mb-3">
                 <div class="d-flex gap-1 align-items-center">
@@ -150,18 +150,18 @@
                                     <td><span class="qty-value">{{ $data->quantity }}</span></td>
 
                                     <td class="text-center">
-                                        <button wire:click="measurementFormOpen({{ $data->id }})" class="action-btn">
+                                        <button wire:click="measurementFormOpen({{ $data->order_detail_id }})" class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2.5">
                                                 <path d="M5 12h14M12 5l7 7-7 7" />
                                             </svg>
                                         </button>
                                         {{-- <a href="{{ route('portioning_measurement_form_new') }}"
-                                            class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg>
+                                        class="action-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2.5">
+                                            <path d="M5 12h14M12 5l7 7-7 7" />
+                                        </svg>
                                         </a> --}}
                                     </td>
                                 </tr>
@@ -211,8 +211,12 @@
 
                 <div class="col-lg-4">
                     <div class="text-end">
-                        <x-progress-card
-                            :percentage="$complete_quantity > 0 ? ($total_quantity / $complete_quantity) / 100 : 0" />
+                        @php
+                        $total = $portioning_order_data->sum('quantity');
+                        $complete = $portioning_order_data->where('status', 'Completed')->sum('quantity');
+                        $percentage = $total > 0 ? round(($complete / $total) * 100) : 0;
+                        @endphp
+                        <x-progress-card :percentage="$percentage" />
                     </div>
                 </div>
             </div>
@@ -234,7 +238,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <?php echo flashMessage()?>
+                    <?php echo flashMessage() ?>
                     <form wire:submit.prevent="startMeasurement">
                         <div class="section-label">Table</div>
                         <div class="d-flex flex-wrap gap-2 mb-2">
@@ -329,12 +333,12 @@
     <div class="form-card container bg-light p-sm-4 p-3 rounded-3">
         {{-- ── Header ── --}}
         <div class="form-header">
-            <h5 class="item-name">Cornstarch, bulk portioned, 1/4 cup</h5>
+            <h5 class="item-name">{{ $selected_item_name }}</h5>
             <div class="date-block">
                 <div class="date-label">
                     <i class="bi bi-clock"></i> Measurement Date
                 </div>
-                <div class="date-value">03/09/2026</div>
+                <div class="date-value">{{ $measure_date }}</div>
             </div>
         </div>
 
@@ -432,28 +436,26 @@
                         <i class="bi bi-plus-square-fill"></i> Add Simple
                     </button>
                 </div>
-                <div class="simple-panel-body" id="simpleItems">
+                <div class="simple-panel-body">
+                    @foreach($simple as $index => $value)
+                    <div class="simple-item">
+                        <div class="item-badge">{{ $loop->iteration }}</div>
+                        <input type="text" wire:model.blur="simple.{{ $index }}" placeholder="Enter Value">
+                        <button type="button" class="btn-delete"
+                            wire:click="removeSample({{ $index }})"
+                            {{ count($simple) <= 1 ? 'disabled' : '' }}>
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    </div>
+                    @endforeach
 
-                    {{-- this will add when add simple btn will click add this div in loop --}}
+                    {{-- Show one input if empty --}}
+                    @if(empty($simple))
                     <div class="simple-item">
                         <div class="item-badge">1</div>
-                        <input type="text" name="simple[]" placeholder="Enter Value">
-                        <button type="button" class="btn-delete" title="Remove">
-                            <i class="bi bi-trash3-fill"></i>
-                        </button>
+                        <input type="text" wire:model.blur="simple.0" placeholder="Enter Value">
                     </div>
-                    {{-- this will add when add simple btn will click --}}
-                    <div class="simple-item">
-                        <div class="item-badge">2</div>
-                        <input type="text" name="simple[]" placeholder="Enter Value">
-                        <button type="button" class="btn-delete" title="Remove">
-                            <i class="bi bi-trash3-fill"></i>
-                        </button>
-                    </div>
-
-                    <div class="col-12">
-                        <p class="text-muted">No samples added yet</p>
-                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -493,10 +495,6 @@
                     @enderror
                 </div>
             </div>
-
-
-
-
             <div class="section-gap">
                 <label class="form-label">Upload Attachment</label>
                 <div class="d-flex flex-wrap gap-3 align-items-start">
@@ -526,11 +524,6 @@
                 <span class="text-danger d-block mt-2">{{ $message }}</span>
                 @enderror
             </div>
-
-
-
-
-
             {{-- ── Description ── --}}
             <div class="section-gap">
                 <label class="form-label" for="description">Description</label>
@@ -548,7 +541,6 @@
                 <button type="button" class="btn-cancel" wire:click="cancel">Cancel</button>
                 <button type="submit" class="btn-save">Save</button>
             </div>
-
         </form>
     </div>
     @endif

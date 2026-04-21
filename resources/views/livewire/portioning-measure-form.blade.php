@@ -23,8 +23,10 @@
                         <!-- DEBUG: {{ $showStartTimeModal ? 'TRUE' : 'FALSE' }} -->
                         @endif
                         @if ($mode === 'edit_mode')
+                        @if($check_start_time->end_time == null)
                         <button type="button" class="btn_3 "> <span><i class="bi bi-clock"></i></span>
                             End Time</button>
+                        @endif
                         @endif
                     </div>
                 </div>
@@ -119,12 +121,15 @@
     @endif
 
     @if ($mode === 'edit_mode')
+    @php
+    $is_ended = $check_start_time && $check_start_time->end_time !== null;
+    @endphp
     <section class="mb-5">
         <div class="container">
             <div class="" style="">
                 <div class="table-card">
                     <div class="table-scroll-wrapper">
-                        <table class="component-table">
+                        <table class="{{ $is_ended ? 'component-table disabled' : 'component-table' }}">
                             <thead>
                                 <tr>
                                     <th>Letter</th>
@@ -148,7 +153,6 @@
                                         <x-status-badge :label="$data->status" />
                                     </td>
                                     <td><span class="qty-value">{{ $data->quantity }}</span></td>
-
                                     <td class="text-center">
                                         <button wire:click="measurementFormOpen({{ $data->order_detail_id }})"
                                             class="action-btn">

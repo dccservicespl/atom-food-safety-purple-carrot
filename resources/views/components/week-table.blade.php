@@ -5,6 +5,15 @@
 'order_head' => null,
 'route_name' => 'order_measure_details',
 ])
+
+@php
+// Check if this week is current or past
+$week_from = \Carbon\Carbon::parse($order_head->from_date);
+$week_to = \Carbon\Carbon::parse($order_head->to_date);
+$today = now()->startOfDay();
+$is_past_week = $week_to->lt($today);
+$is_current_week = $today->between($week_from, $week_to);
+@endphp
 {{-- <style>
     .th-inactive {
         pointer-events: none;
@@ -16,7 +25,7 @@
         <div class="section-title">Weekly Work Details</div>
 
         <div class="tbl-scroll mb-5">
-            <table class="week-table disabled-click">
+            <table class="week-table {{ $is_past_week ? 'disabled-click' : '' }}">
                 <thead>
                     <tr>
                         @foreach ($week_days as $day)
@@ -47,10 +56,16 @@
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
 
-                                @if ($is_selected)
+                                @if ($is_selected && !$is_past_week)
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
                                     class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
+                                    {{ $category['category_name'] }}
+                                </a>
+                                @elseif ($is_past_week)
+                                <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
+                                    class="chip"
+                                    style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:pointer;opacity:0.6;">
                                     {{ $category['category_name'] }}
                                 </a>
                                 @else

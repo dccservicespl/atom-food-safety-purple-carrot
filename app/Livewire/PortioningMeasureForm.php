@@ -5,14 +5,18 @@ namespace App\Livewire;
 use App\Models\PortioningCategory;
 use App\Models\PortioningMeasureHead;
 use App\Models\PortioningMeasurement;
+use App\Models\PortioningMeasurementSample;
 use App\Models\PortioningOrderDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Throwable;
 
 class PortioningMeasureForm extends Component
 {
+    use WithFileUploads;
+
     public string $mode = 'read_only';
 
     public ?int $table = null;
@@ -36,6 +40,9 @@ class PortioningMeasureForm extends Component
     public $kit_letter = '';
     public $qty_produces_final = '';
     public $fs_initial = '';
+    public $attachment = null;
+    public $attachmentPreview = null;
+    public $existingAttachment = null;
     public $description = '';
 
     public $selected_item_name = '';
@@ -62,6 +69,24 @@ class PortioningMeasureForm extends Component
     public function mount()
     {
         $this->simple = [''];
+    }
+
+    public function updatedAttachment()
+    {
+        if ($this->attachment) {
+            $this->attachmentPreview = $this->attachment->temporaryUrl();
+        }
+    }
+
+    public function removeAttachment()
+    {
+        $this->attachment = null;
+        $this->attachmentPreview = null;
+    }
+
+    public function removeExistingAttachment()
+    {
+        $this->existingAttachment = null;
     }
 
     public function openStartTimePopup()
@@ -142,12 +167,22 @@ class PortioningMeasureForm extends Component
             $this->allergen_result = $existing->allergen_result;
             $this->allergen = $existing->allergen;
             $this->pack_size = $existing->pack_size;
-            $this->simple = $existing->simple_samples ? json_decode($existing->simple_samples, true) : [''];
             $this->kit_letter = $existing->kit_letter;
             $this->qty_produces_final = $existing->qty_produces_final;
             $this->fs_initial = $existing->fs_initial;
             $this->description = $existing->description;
-            $this->simple = $existing->simple_samples ? (array) json_decode($existing->simple_samples, true) : [''];
+            $this->existingAttachment = $existing->attachment;
+
+            // Load samples from portioning_measurement_samples table
+            $samples = PortioningMeasurementSample::where('measure_id', $existing->id)
+                ->orderBy('sample_number')
+                ->get();
+
+            if ($samples->isNotEmpty()) {
+                $this->simple = $samples->pluck('sample_value')->toArray();
+            } else {
+                $this->simple = $existing->simple_samples ? (array) json_decode($existing->simple_samples, true) : [''];
+            }
         } else {
             $this->resetFormProperties();
         }
@@ -205,13 +240,38 @@ class PortioningMeasureForm extends Component
                 'description' => $this->description ?: null,
             ];
 
+            // Handle attachment upload
+            $attachmentPath = null;
+            if ($this->attachment) {
+                $attachmentPath = $this->attachment->store('portioning-attachments', 'public');
+            } elseif ($this->existingAttachment) {
+                $attachmentPath = $this->existingAttachment;
+            }
+            $data['attachment'] = $attachmentPath;
+
             // Update or Create
+            $measurement = null;
             if ($this->measurement_id) {
-                PortioningMeasurement::find($this->measurement_id)->update($data);
+                $measurement = PortioningMeasurement::find($this->measurement_id);
+                $measurement->update($data);
+                // Delete old samples and recreate
+                PortioningMeasurementSample::where('measure_id', $measurement->id)->delete();
                 session()->flash('success', 'Measurement updated successfully.');
             } else {
-                PortioningMeasurement::create($data);
+                $measurement = PortioningMeasurement::create($data);
                 session()->flash('success', 'Measurement saved successfully.');
+            }
+
+            // Save samples to portioning_measurement_samples table
+            foreach ($this->simple as $index => $sampleValue) {
+                if (!empty($sampleValue)) {
+                    PortioningMeasurementSample::create([
+                        'measure_id' => $measurement->id,
+                        'item_id' => $this->item_id,
+                        'sample_number' => $index + 1,
+                        'sample_value' => $sampleValue,
+                    ]);
+                }
             }
 
             PortioningOrderDetail::where('order_detail_id', $this->item_id)->update(['status' => 'Completed']);
@@ -243,6 +303,9 @@ class PortioningMeasureForm extends Component
             'kit_letter',
             'qty_produces_final',
             'fs_initial',
+            'attachment',
+            'attachmentPreview',
+            'existingAttachment',
             'description'
         ]);
         $this->simple = [''];

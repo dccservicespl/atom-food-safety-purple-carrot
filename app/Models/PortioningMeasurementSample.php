@@ -11,6 +11,7 @@ class PortioningMeasurementSample extends Model
 
     protected $fillable = [
         'measure_id',
+        'item_id',
         'sample_number',
         'sample_value',
     ];

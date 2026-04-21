@@ -150,18 +150,19 @@
                                     <td><span class="qty-value">{{ $data->quantity }}</span></td>
 
                                     <td class="text-center">
-                                        <button wire:click="measurementFormOpen({{ $data->order_detail_id }})" class="action-btn">
+                                        <button wire:click="measurementFormOpen({{ $data->order_detail_id }})"
+                                            class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2.5">
                                                 <path d="M5 12h14M12 5l7 7-7 7" />
                                             </svg>
                                         </button>
                                         {{-- <a href="{{ route('portioning_measurement_form_new') }}"
-                                        class="action-btn">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                            stroke-width="2.5">
-                                            <path d="M5 12h14M12 5l7 7-7 7" />
-                                        </svg>
+                                            class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2.5">
+                                                <path d="M5 12h14M12 5l7 7-7 7" />
+                                            </svg>
                                         </a> --}}
                                     </td>
                                 </tr>
@@ -441,9 +442,8 @@
                     <div class="simple-item">
                         <div class="item-badge">{{ $loop->iteration }}</div>
                         <input type="text" wire:model.blur="simple.{{ $index }}" placeholder="Enter Value">
-                        <button type="button" class="btn-delete"
-                            wire:click="removeSample({{ $index }})"
-                            {{ count($simple) <= 1 ? 'disabled' : '' }}>
+                        <button type="button" class="btn-delete" wire:click="removeSample({{ $index }})" {{
+                            count($simple) <=1 ? 'disabled' : '' }}>
                             <i class="bi bi-trash3-fill"></i>
                         </button>
                     </div>
@@ -500,22 +500,47 @@
                 <div class="d-flex flex-wrap gap-3 align-items-start">
 
                     {{-- Upload zone --}}
-                    <div class="upload-zone">
-                        <input type="file" id="attachment" class="d-none" accept="image/*" capture="environment">
+                    <div class="upload-zone" onclick="$('#attachmentInput').trigger('click')">
                         <div class="upload-icon">
                             <i class="bi bi-camera"></i>
                         </div>
                         <h6>Upload Attachment</h6>
                         <p>Click to Open Camera</p>
-                        <button type="button" onclick="document.getElementById('attachment').click()" class="btn-camera"
-                            title="Click to upload image">
+                        <button type="button" class="btn-camera" title="Click to upload image">
                             <i class="bi bi-camera-fill"></i> Open Camera
                         </button>
                     </div>
 
+                    <input type="file" id="attachmentInput" class="d-none" accept="image/*" capture="environment"
+                        wire:model="attachment">
+
                     {{-- Preview grid --}}
                     <div class="d-flex flex-wrap gap-3" id="previewGrid">
-                        {{-- JS will inject previews here --}}
+                        {{-- New attachment preview --}}
+                        @if($attachmentPreview)
+                        <div class="image-preview-wrap">
+                            <div class="image-preview">
+                                <img src="{{ $attachmentPreview }}" alt="preview" class="img-fluid">
+                            </div>
+                            <button type="button" class="btn-img-delete" title="Remove" wire:click="removeAttachment">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                        @endif
+
+                        {{-- Existing attachment preview --}}
+                        @if($existingAttachment)
+                        <div class="image-preview-wrap">
+                            <div class="image-preview">
+                                <img src="{{ asset('storage/' . $existingAttachment) }}" alt="existing"
+                                    class="img-fluid">
+                            </div>
+                            <button type="button" class="btn-img-delete" title="Remove"
+                                wire:click="removeExistingAttachment">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                        @endif
                     </div>
 
                 </div>

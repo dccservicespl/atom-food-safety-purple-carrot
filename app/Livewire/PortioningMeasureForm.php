@@ -7,7 +7,9 @@ use App\Models\PortioningMeasureHead;
 use App\Models\PortioningMeasurement;
 use App\Models\PortioningMeasurementSample;
 use App\Models\PortioningOrderDetail;
+use App\Models\PortioningOrderHead;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -17,13 +19,14 @@ class PortioningMeasureForm extends Component
 {
     use WithFileUploads;
 
-    public string $mode = 'read_only';
+    public $mode = 'read_only';
 
     public ?int $table = null;
     public ?string $preop = null;
     public ?int $people_qty = null;
     public ?string $scale = null;
     public bool $showStartTimeModal = false;
+    public bool $showEndTimeModal = false;
     public $portioning_order_data = [];
     public $order_head_id;
     public $portioning_category_id;
@@ -97,6 +100,62 @@ class PortioningMeasureForm extends Component
     public function closeStartTimePopup()
     {
         $this->showStartTimeModal = false;
+    }
+
+    public function openEndTimePopup()
+    {
+        $this->showEndTimeModal = true;
+    }
+
+    public function closeEndTimePopup()
+    {
+        $this->showEndTimeModal = false;
+    }
+
+    public function endMeasurement()
+    {
+        try {
+            DB::beginTransaction();
+            $today = date('Y-m-d');
+
+            // Check if all items are completed
+            $pendingItems = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
+                ->where('portioning_category_id', $this->portioning_category_id)
+                ->where('scheduled_day', $today)
+                ->where('status', '!=', 'Completed')
+                ->count();
+
+            // dd($pendingItems, $this->order_head_id, $this->portioning_category_id, $today);
+
+            if ($pendingItems>0) {
+                session()->flash('error', "Cannot end measurement. $pendingItems item(s) are still pending.");
+                $this->showEndTimeModal = false;
+                return;
+            }
+            // dd($pendingItems);
+
+            // Update end_time in portioning_measure_heads
+            $measureHead = PortioningMeasureHead::where([
+                'portioning_order_head_id' => $this->order_head_id,
+                'portioning_category_id' => $this->portioning_category_id,
+            ])->first();
+
+            if ($measureHead) {
+                $measureHead->update(['end_time' => now()->format('H:i:s'), 'status' => 'Completed']);
+            }
+
+            // Update status to completed in portioning_order_heads
+            // PortioningOrderHead::where('order_head_id', $this->order_head_id)->update(['status' => 'Completed']);
+            DB::commit();
+            $this->showEndTimeModal = false;
+            $this->mode = 'read_only';
+            session()->flash('success', 'Measurement ended successfully.');
+        } catch (Throwable $th) {
+            DB::rollback();
+            Log::error('End measurement error: ' . $th->getMessage());
+            session()->flash('error', 'Error ending measurement: ' . $th->getMessage());
+            $this->showEndTimeModal = false;
+        }
     }
 
     public function startMeasurement()
@@ -216,6 +275,7 @@ class PortioningMeasureForm extends Component
         ]);
 
         try {
+            DB::beginTransaction();
             $measureHead = PortioningMeasureHead::where([
                 'portioning_order_head_id' => $this->order_head_id,
                 'portioning_category_id' => $this->portioning_category_id,
@@ -254,8 +314,7 @@ class PortioningMeasureForm extends Component
             if ($this->measurement_id) {
                 $measurement = PortioningMeasurement::find($this->measurement_id);
                 $measurement->update($data);
-                // Delete old samples and recreate
-                PortioningMeasurementSample::where('measure_id', $measurement->id)->delete();
+                PortioningMeasurementSample::where('measure_id', $measurement->id)->where('item_id', $this->item_id)->delete();
                 session()->flash('success', 'Measurement updated successfully.');
             } else {
                 $measurement = PortioningMeasurement::create($data);
@@ -275,10 +334,11 @@ class PortioningMeasureForm extends Component
             }
 
             PortioningOrderDetail::where('order_detail_id', $this->item_id)->update(['status' => 'Completed']);
-
+            DB::commit();
             $this->resetFormProperties();
             $this->mode = 'edit_mode';
         } catch (Throwable $th) {
+            DB::rollback();
             Log::error('Save error: ' . $th->getMessage());
             $this->addError('lot_number', $th->getMessage());
         }

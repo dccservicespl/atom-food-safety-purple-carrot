@@ -16,7 +16,7 @@
                                     class="bi bi-calendar2-minus"></i></span>
                             <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
                         </div>
-                        @if ($mode === 'read_only')
+                        @if (!$check_start_time || !$check_start_time->start_time)
                         <button type="button" class="btn_2" wire:click="openStartTimePopup">
                             <span><i class="bi bi-clock"></i></span> Start Time
                         </button>
@@ -328,6 +328,64 @@
                         </div>
 
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if ($showEndTimeModal)
+    <div class="modal show d-block" style="background:rgba(0,0,0,0.5); z-index: 9999;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <div class="modal-title">
+                        <i class="bi bi-clock"></i> End Measurement
+                    </div>
+                    <button wire:click='closeEndTimePopup' class="btn-close-custom" data-bs-dismiss="modal"
+                        aria-label="Close">&#x2715;</button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="mb-3">Are you sure you want to end this measurement?</p>
+
+                    @php
+                    $today = date('Y-m-d');
+                    $pendingCount = \App\Models\PortioningOrderDetail::where('order_head_id', $order_head_id)
+                    ->where('portioning_category_id', $portioning_category_id)
+                    ->where('scheduled_day', $today)
+                    ->where('status', '!=', 'Completed')
+                    ->count();
+                    @endphp
+
+                    @if($pendingCount > 0)
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Warning:</strong> {{ $pendingCount }} item(s) are still pending completion.
+                    </div>
+                    @else
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i>
+                        All items are completed. You can end the measurement.
+                    </div>
+                    @endif
+
+                    <div class="modal-footer d-flex">
+                        <button wire:click='closeEndTimePopup' type="button" class="btn-cancel"
+                            data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn-start" wire:click="endMeasurement" wire:loading.attr="disabled"
+                            wire:target="endMeasurement">
+                            <span wire:loading.remove wire:target="endMeasurement">
+                                Yes, End Measurement
+                            </span>
+                            <span wire:loading wire:target="endMeasurement" style="display:none;">
+                                <span class="spinner-border spinner-border-sm me-1"></span>
+                                Ending...
+                            </span>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

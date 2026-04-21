@@ -14,12 +14,18 @@ $today = now()->startOfDay();
 $is_past_week = $week_to->lt($today);
 $is_current_week = $today->between($week_from, $week_to);
 @endphp
-{{-- <style>
-    .th-inactive {
+<style>
+    /* .th-inactive {
         pointer-events: none;
         opacity: 0.8;
+    } */
+
+     .week-table thead th.th-active {
+        background: #0a4d78;
+        color: #ffffff;
+        width: auto;
     }
-</style> --}}
+</style>
 <div>
     <section class="px-lg-5 px-3 pb-5">
         <div class="section-title">Weekly Work Details</div>

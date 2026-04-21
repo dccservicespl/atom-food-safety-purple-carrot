@@ -53,6 +53,7 @@ $is_current_week = $today->between($week_from, $week_to);
                         @foreach ($week_days as $day)
                         @php
                         $is_selected = $selected_day === $day;
+                        // dd($days_with_categories[$day])
                         @endphp
 
                         <td class="{{ $is_selected ? 'td-active' : 'td-inactive' }}">

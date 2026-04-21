@@ -24,7 +24,8 @@
                         @endif
                         @if ($mode === 'edit_mode')
                         @if($check_start_time->end_time == null)
-                        <button type="button" class="btn_3 "> <span><i class="bi bi-clock"></i></span>
+                        <button type="button" wire:click="openEndTimePopup" class="btn_3 "> <span><i
+                                    class="bi bi-clock"></i></span>
                             End Time</button>
                         @endif
                         @endif
@@ -626,7 +627,10 @@
             {{-- ── Footer buttons ── --}}
             <div class="form-footer  pb-5 justify-content-end">
                 <button type="button" class="btn-cancel" wire:click="cancel">Cancel</button>
-                <button type="submit" class="btn-save">Save</button>
+                <button type="submit" class="btn-save" wire:loading.attr="disabled"
+                    wire:loading.class="opacity-50 cursor-not-allowed">
+                    <span wire:loading>Submit</span>
+                </button>
             </div>
         </form>
     </div>

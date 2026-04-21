@@ -127,7 +127,7 @@ class PortioningMeasureForm extends Component
 
             // dd($pendingItems, $this->order_head_id, $this->portioning_category_id, $today);
 
-            if ($pendingItems>0) {
+            if ($pendingItems > 0) {
                 session()->flash('error', "Cannot end measurement. $pendingItems item(s) are still pending.");
                 $this->showEndTimeModal = false;
                 return;
@@ -138,6 +138,7 @@ class PortioningMeasureForm extends Component
             $measureHead = PortioningMeasureHead::where([
                 'portioning_order_head_id' => $this->order_head_id,
                 'portioning_category_id' => $this->portioning_category_id,
+                'scheduled_day' => $today
             ])->first();
 
             if ($measureHead) {
@@ -265,13 +266,13 @@ class PortioningMeasureForm extends Component
             'temperature' => 'required|numeric',
             'allergen_result' => 'required|in:Yes,No,N/A',
             'allergen' => 'nullable|string|max:255',
-            'pack_size' => 'nullable|numeric',
-            'kit_letter' => 'nullable|string|max:50',
+            'pack_size' => 'required|numeric',
+            'kit_letter' => 'required|string|max:50',
             'qty_produces_final' => 'nullable|numeric',
             'fs_initial' => 'nullable|string|max:50',
             'description' => 'nullable|string',
             'simple' => 'array|min:1',
-            'simple.*' => 'nullable|string|max:255',
+            'simple.*' => 'required|string|max:255',
         ]);
 
         try {
@@ -386,7 +387,7 @@ class PortioningMeasureForm extends Component
         $data = PortioningOrderDetail::with('category')
             ->where('order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
-            // ->where('scheduled_day', date('Y-m-d'))
+            ->where('scheduled_day', date('Y-m-d'))
             ->get();
 
         $this->portioning_order_data = $data;

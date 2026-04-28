@@ -24,11 +24,28 @@
                         @endif
                         @if ($mode === 'edit_mode')
                         @if($check_start_time->end_time == null)
-                        <button type="button" wire:click="openEndTimePopup" class="btn_3 "> <span><i
-                                    class="bi bi-clock"></i></span>
-                            End Time</button>
+                        <button type="button" wire:click="openEndTimePopup" class="btn_3 ">
+                            <span><i class="bi bi-clock"></i></span>
+                            End Time
+                        </button>
                         @endif
                         @endif
+                        <button wire:click="downloadReport" wire:loading.attr="disabled"
+                            wire:loading.class="opacity-50 cursor-not-allowed" wire:target="downloadReport"
+                            class="btn btn-outline-warning">
+                            <i class="bi bi-cloud-download"></i>
+
+                            <!-- Default Text -->
+                            <span wire:loading.remove wire:target="downloadReport">
+                                Download report
+                            </span>
+
+                            <!-- Loading Text -->
+                            <span wire:loading wire:target="downloadReport">
+                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                Downloading...
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -54,7 +71,6 @@
         </div>
     </section>
     @endif
-
 
     @if ($mode === "read_only")
     <section class="mb-5">
@@ -92,7 +108,11 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <x-no-data-found />
+                                <tr>
+                                    <td colspan="6">
+                                        <x-no-data-found />
+                                    </td>
+                                </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -110,7 +130,7 @@
                         <div class="col-4">
                             <div class="card_total_quantity card-box">
                                 <h4 class="color fw-bold fs-6">Total Quantity</h4>
-                                <h2 class="fs-2 color fw-bold">{{ number_format($read_only_data->sum('quantity'))
+                                <h2 class="fs-2 color fw-bold">{{ number_format($portioning_order_data->sum('quantity'))
                                     }}</h2>
                             </div>
                         </div>
@@ -327,7 +347,6 @@
                                 </span>
                             </button>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -386,7 +405,6 @@
                             </span>
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -627,10 +645,31 @@
             {{-- ── Footer buttons ── --}}
             <div class="form-footer  pb-5 justify-content-end">
                 <button type="button" class="btn-cancel" wire:click="cancel">Cancel</button>
-                <button type="submit" class="btn-save" wire:loading.attr="disabled"
+                {{-- <button type="submit" class="btn-save" wire:loading.attr="disabled"
                     wire:loading.class="opacity-50 cursor-not-allowed">
                     <span wire:loading>Submit</span>
-                </button>
+
+                </button> --}}
+
+                <button
+    type="submit"
+    class="btn-save"
+    wire:loading.attr="disabled"
+    wire:loading.class="opacity-50 cursor-not-allowed"
+>
+
+    <!-- Default Text -->
+    <span wire:loading.remove>
+        Submit
+    </span>
+
+    <!-- Loading Text -->
+    <span wire:loading>
+        <span class="spinner-border spinner-border-sm me-1"></span>
+        Submitting...
+    </span>
+
+</button>
             </div>
         </form>
     </div>

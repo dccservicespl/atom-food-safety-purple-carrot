@@ -21,6 +21,12 @@ $user_details = User::where('id', Auth::user()->id)->first();
 
     <!-- Lucide Icons (similar to the ones in your image) -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        [wire\:cloak] {
+            display: none !important;
+        }
+    </style>
+    @livewireStyles
 </head>
 
 <body>

@@ -176,7 +176,10 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('admin/portioning_measure_data_upload_action', [PortioningMeasureController::class, 'portioning_measure_data_upload_action'])->name('portioning_measure_data_upload_action');
     Route::get('admin/portioning_measure_delete/{id}', [PortioningMeasureController::class, 'portioning_measure_delete'])->name('portioning_measure_delete');
     Route::get('admin/download_portioning_excel/{id}', [PortioningMeasureController::class, 'download_portioning_excel'])->name('download_portioning_excel');
- });
+
+    Route::get('admin/portioning_report/{order_head_id}/{portioning_category_id}', [PortioningMeasureController::class, 'portioning_report'])->name('portioning_report');
+
+  });
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', [AdminAuthController::class, 'admin_login'])->name('login');

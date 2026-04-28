@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Imports\PortioningMultiSheetImport;
+use App\Models\PortioningMeasureHead;
+use App\Models\PortioningMeasurement;
 use App\Models\PortioningOrderHead;
 use App\Models\PurpleCarrotItemMst;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -272,8 +275,16 @@ class PortioningMeasureController extends Controller
             // Delete order head
             DB::table('portioning_order_heads')->where('order_head_id', $decrypted_id)->delete();
 
+            $get_portioning_measure_head_ids = DB::table('portioning_measure_heads')->where('portioning_order_head_id', $decrypted_id)->pluck('id')->toArray();
+
             // Delete order details
             DB::table('portioning_order_details')->where('order_head_id', $decrypted_id)->delete();
+
+            //  DB::table('portioning_measure_heads')->where('portioning_order_head_id', $decrypted_id)->delete();
+
+            // DB::table('portioning_measurements')->where('measure_id', $get_portioning_measure_head_ids)->delete();
+
+            // DB::table('portioning_measurement_samples')->where('measure_id', $get_portioning_measure_head_ids)->delete();
 
             DB::commit();
 
@@ -319,4 +330,130 @@ class PortioningMeasureController extends Controller
     public function portioning_measurement_form_new(){
         return view('pages.portioning-measurement-form');
     }
+
+    public function portioning_report($order_head_id, $portioning_category_id)
+    {
+        $portioningHeads = PortioningMeasureHead::where('portioning_order_head_id', $order_head_id)
+                ->where('portioning_category_id', $portioning_category_id)
+                ->with('measure_by')
+                ->orderBy('created_at', 'asc')
+                ->first();
+
+        // dd($portioningHeads,"Report for Order Head ID: {$order_head_id}, Portioning Category ID: {$portioning_category_id}");
+
+        // if ($portioningHeads->isEmpty()) {
+        //     return redirect()->back()->with('error', 'No data found for this date.');
+        // }
+
+        $dataset = $this->prepareDataset($portioningHeads);
+        // dd($dataset, $portioningHeads);
+        // dd($portioningHeads, $dataset);
+        $date = $portioningHeads->scheduled_day;
+        $pdf = Pdf::loadView('pdfs.portioning-measurement-report', [
+            'dataset' => $dataset,
+            'reportDate' => Carbon::parse($date)->format('m/d/Y'),
+            'generatedDate' => Carbon::now()->format('m/d/Y')
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'Ingredient_Portioning_Form_' . $date . '.pdf');
+
+    }
+
+    private function prepareDataset($portioningHeads)
+    {
+        $reportLineItems = [];
+        $get_portioning_measurement_data = PortioningMeasurement::where('measure_id', $portioningHeads->id)
+            ->with(['samples', 'item_details'])
+            ->orderBy('created_at', 'asc')
+            ->get();
+        // dd($portioningHeads, $get_portioning_measurement_data);
+        foreach ($get_portioning_measurement_data as $measurement) {
+            $samples = $measurement->samples;
+            $item = $measurement->item_details;
+
+            $reportLineItems[] = [
+                'time' => Carbon::parse($measurement->created_at)->format('g:i A'),
+                'product_description' => $item->component_details ?? 'N/A',
+                'lot_number' => $measurement->lot_number ?? 'N/A',
+                'temp' => $measurement->temperature ?? '',
+                'allergen' => $measurement->allergen ?? 'WHEAT',
+                'allergen_test_result' => $measurement->allergen_test_result ?? 'N/A',
+                'pack_size' => $measurement->pack_size ?? '2ea',
+                'sample_1' => $samples[0]->sample_value ?? 'N/A',
+                'sample_2' => $samples[1]->sample_value ?? 'N/A',
+                'sample_3' => $samples[2]->sample_value ?? 'N/A',
+                'kit_letter' => $measurement->kit_letter ?? 'DM',
+                'qty_produced' => $measurement->qty_produced ?? 'N/A',
+                'fs_initial' => $measurement->fs_initial ?? 'LA',
+            ];
+        }
+
+        $dataset[] = [
+            'report_head' => [
+                'start_time' => Carbon::parse($portioningHeads->start_time)->format('g:i A'),
+                'end_time' => Carbon::parse($portioningHeads->end_time)->format('g:i A'),
+                'measure_by' => $portioningHeads->measure_by->name ?? 'N/A',
+                'equipment' => $portioningHeads->equipment,
+                'table_name' => $portioningHeads->table_name,
+                'people_qty' => $portioningHeads->people_qty,
+                'scale' => $portioningHeads->scale,
+                'pre_op_complete' => ($portioningHeads->pre_op_complete==1?"Yes":"No"),
+            ],
+            'report_line_items' => $reportLineItems
+        ];
+        return $dataset;
+    }
+
+// private function prepareDataset2($portioningHeads){
+//         $dataset = [];
+
+//         foreach ($portioningHeads as $head) {
+//             $reportLineItems = [];
+
+//             foreach ($head->portioningMeasurements as $measurement) {
+//                 $samples = $measurement->samples;
+//                 $item = $measurement->item;
+
+//                 $reportLineItems[] = [
+//                     'time' => Carbon::parse($measurement->created_at)->format('g:i A'),
+//                     'product_description' => $item->component_details ?? 'N/A',
+//                     'lot_number' => $measurement->lot_number ?? 'N/A',
+//                     'temp' => $measurement->temperature ?? '',
+//                     'allergen' => $measurement->allergen ?? 'WHEAT',
+//                     'allergen_test_result' => $measurement->allergen_test_result ?? 'N/A',
+//                     'pack_size' => $measurement->pack_size ?? '2ea',
+//                     'sample_1' => $samples[0]->sample_value ?? 'N/A',
+//                     'sample_2' => $samples[1]->sample_value ?? 'N/A',
+//                     'sample_3' => $samples[2]->sample_value ?? 'N/A',
+//                     'kit_letter' => $measurement->kit_letter ?? 'DM',
+//                     'qty_produced' => $measurement->qty_produced ?? 'N/A',
+//                     'fs_initial' => $measurement->fs_initial ?? 'LA',
+//                 ];
+//             }
+
+//             $dataset[] = [
+//                 'report_head' => [
+//                     'start_time' => Carbon::parse($head->start_time)->format('g:i A'),
+//                     'end_time' => Carbon::parse($head->end_time)->format('g:i A'),
+//                     'measure_by' => User::where('id', $head->measure_by)->value('name'),
+//                     'equipment' => $head->equipment,
+//                     'table_name' => $head->table_name,
+//                     'people_qty' => $head->people_qty,
+//                     'scale' => $head->scale,
+//                     'pre_op_complete' => ($head->pre_op_complete==1?"Yes":"No"),
+//                 ],
+//                 'report_line_items' => $reportLineItems
+//             ];
+//         }
+
+//         return $dataset;
+//     }
+
+
+
+
+
 }

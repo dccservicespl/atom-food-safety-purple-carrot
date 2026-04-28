@@ -394,4 +394,14 @@ class PortioningMeasureForm extends Component
         $portioning_category_name = PortioningCategory::where('category_id',  $this->portioning_category_id)->value('category_name');
         return view('livewire.portioning-measure-form', compact('check_start_time', 'portioning_category_name'));
     }
+
+    public function downloadReport()
+    {
+        $reportUrl = route('portioning_report', [
+            'order_head_id' => $this->order_head_id,
+            'portioning_category_id' => $this->portioning_category_id,
+        ]);
+
+        return redirect($reportUrl);
+    }
 }

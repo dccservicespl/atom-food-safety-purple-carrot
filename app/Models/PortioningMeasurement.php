@@ -61,4 +61,9 @@ class PortioningMeasurement extends Model
     {
         return $this->belongsTo(User::class, 'reviewed_by');
     }
+
+    public function item_details()
+    {
+        return $this->belongsTo(PortioningOrderDetail::class, 'item_id');
+    }
 }

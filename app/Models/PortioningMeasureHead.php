@@ -34,4 +34,8 @@ class PortioningMeasureHead extends Model
     {
         return $this->belongsTo(User::class, 'measure_by');
     }
+    public function measure_by()
+    {
+        return $this->belongsTo(User::class, 'measure_by');
+    }
 }

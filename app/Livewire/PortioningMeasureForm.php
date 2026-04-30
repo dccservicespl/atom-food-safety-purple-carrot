@@ -258,7 +258,7 @@ class PortioningMeasureForm extends Component
             $this->item_id = $measure_item_id;
             $orderDetail = PortioningOrderDetail::findOrFail($this->item_id);
         }
-        $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
+         $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
 
         // $this->selected_item_data = $orderDetail;
         $this->measure_date = now()->format('m/d/Y');

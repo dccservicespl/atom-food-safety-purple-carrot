@@ -216,22 +216,24 @@ class PortioningMeasureForm extends Component
         }
     }
 
-    public function measurementFormOpen($item_id)
+    public function measurementFormOpen($measure_item_id)
     {
-        $this->item_id = $item_id;
+        // dd('open measure form for item_id: ' . $measure_item_id);
+        $get_the_measure_item = PortioningMeasurement::findOrFail($measure_item_id);
+        $this->item_id = $get_the_measure_item->item_id;
 
-        $orderDetail = PortioningOrderDetail::findOrFail($item_id);
+        $orderDetail = PortioningOrderDetail::findOrFail($get_the_measure_item->item_id);
         $this->selected_item_data = $orderDetail;
         $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
         $this->measure_date = now()->format('m/d/Y');
 
         if($this->listing_table_type === 'item_measure_log'){
-            $this->loadExistingMeasurement($item_id);
+            $this->loadExistingMeasurement($measure_item_id);
         }
         $this->mode = 'measure_form_open';
     }
 
-    private function loadExistingMeasurement($item_id)
+    private function loadExistingMeasurement($measure_item_id)
     {
         $today = date('Y-m-d');
         $measureHead = PortioningMeasureHead::where([
@@ -242,11 +244,7 @@ class PortioningMeasureForm extends Component
 
         if (!$measureHead) return;
 
-        $existing = PortioningMeasurement::where([
-            'item_id' => $item_id,
-            'measure_id' => $measureHead->id,
-        ])->orderBy('created_at', 'desc')
-            ->first();
+        $existing = PortioningMeasurement::findOrFail($measure_item_id);
 
         if ($existing) {
             $this->measurement_id = $existing->id;

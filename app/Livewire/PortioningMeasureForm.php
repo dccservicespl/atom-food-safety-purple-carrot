@@ -250,20 +250,20 @@ class PortioningMeasureForm extends Component
     public function measurementFormOpen($measure_item_id)
     {
         // dd('open measure form for item_id: ' . $measure_item_id . ' - listing_table_type: ' . $this->listing_table_type);
-        if($this->listing_table_type === 'item_measure_log'){
+        if ($this->listing_table_type === 'item_measure_log') {
             $get_the_measure_item = PortioningMeasurement::findOrFail($measure_item_id);
             $this->item_id = $get_the_measure_item->item_id;
             $orderDetail = PortioningOrderDetail::findOrFail($get_the_measure_item->item_id);
-        }else{
+        } else {
             $this->item_id = $measure_item_id;
             $orderDetail = PortioningOrderDetail::findOrFail($this->item_id);
-            $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
         }
+        $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
 
         // $this->selected_item_data = $orderDetail;
         $this->measure_date = now()->format('m/d/Y');
 
-        if($this->listing_table_type === 'item_measure_log'){
+        if ($this->listing_table_type === 'item_measure_log') {
             // dd('loading existing measurement for item_id33333: ' . $measure_item_id);
             $this->loadExistingMeasurement($measure_item_id);
         }
@@ -282,7 +282,7 @@ class PortioningMeasureForm extends Component
         if (!$measureHead) return;
 
         $existing = PortioningMeasurement::findOrFail($measure_item_id);
-    // dd($existing);
+        // dd($existing);
         if ($existing) {
             $this->measurement_id = $existing->id;
             $this->lot_number = $existing->lot_number;
@@ -341,11 +341,11 @@ class PortioningMeasureForm extends Component
         try {
             DB::beginTransaction();
             // if($this->listing_table_type === 'item_measure_log'){
-                $measureHead = PortioningMeasureHead::where([
-                    'portioning_order_head_id' => $this->order_head_id,
-                    'portioning_category_id' => $this->portioning_category_id,
-                    'scheduled_day' => date('Y-m-d')
-                ])->firstOrFail();
+            $measureHead = PortioningMeasureHead::where([
+                'portioning_order_head_id' => $this->order_head_id,
+                'portioning_category_id' => $this->portioning_category_id,
+                'scheduled_day' => date('Y-m-d')
+            ])->firstOrFail();
             // }
 
 
@@ -380,9 +380,9 @@ class PortioningMeasureForm extends Component
             $measurement = null;
             if ($this->measurement_id) {
                 $measurement = PortioningMeasurement::find($this->measurement_id);
-                if($this->listing_table_type === 'item_measure_log'){
+                if ($this->listing_table_type === 'item_measure_log') {
                     $measurement->update($data);
-                }elseif($this->listing_table_type === 'item_list'){
+                } elseif ($this->listing_table_type === 'item_list') {
                     $measurement = PortioningMeasurement::create($data);
                 }
                 // $measurement->update($data);
@@ -455,7 +455,7 @@ class PortioningMeasureForm extends Component
         if ($this->mode === 'read_only' && $check_start_time && $check_start_time->start_time) {
             $this->mode = 'edit_mode';
         }
-        if($check_start_time && $check_start_time->start_time){
+        if ($check_start_time && $check_start_time->start_time) {
             $this->measure_form_mode = 'edit_mode';
         }
 
@@ -483,7 +483,7 @@ class PortioningMeasureForm extends Component
                 ->whereDate('pmh.scheduled_day', now())
                 ->select('portioning_measurements.*') // duplicate column conflict avoid
                 ->get();
-                // dd($data);
+            // dd($data);
         }
 
         $this->portioning_order_data = $data;

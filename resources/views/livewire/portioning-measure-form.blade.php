@@ -587,10 +587,12 @@ $is_ended = $check_start_time && $check_start_time->end_time !== null;
 @if ($mode === 'measure_form_open')
 <div class="form-card container bg-light p-sm-4 p-3 rounded-3">
     <div class="d-flex gap-3 mb-3">
+        @if($this->listing_table_type === 'item_list')
         @if (!$check_start_time || !$check_start_time->start_time)
         <button type="button" class="btn_2" wire:click="openStartTimePopup">
             <span><i class="bi bi-clock"></i></span> Start Time
         </button>
+        @endif
         @endif
         {{-- @if($check_start_time && $check_start_time->end_time == null)
             <button type="button" wire:click="openEndTimePopup" class="btn_3 ">

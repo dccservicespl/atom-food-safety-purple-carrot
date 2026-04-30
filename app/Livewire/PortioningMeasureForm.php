@@ -19,12 +19,14 @@ class PortioningMeasureForm extends Component
 {
     use WithFileUploads;
 
-    public $mode = 'read_only';
+    public $mode = 'edit_mode';
+    public $measure_form_mode = 'read_only';
+    public $listing_table_type = 'item_list';
 
-    public ?int $table = null;
-    public ?string $preop = null;
-    public ?int $people_qty = null;
-    public ?string $scale = null;
+    public $table = null;
+    public $preop = null;
+    public $people_qty = null;
+    public $scale = null;
     public bool $showStartTimeModal = false;
     public bool $showEndTimeModal = false;
     public $portioning_order_data = [];
@@ -50,6 +52,7 @@ class PortioningMeasureForm extends Component
 
     public $selected_item_name = '';
     public $measure_date = '';
+    public $selected_item_data = null;
 
     protected function rules(): array
     {
@@ -94,6 +97,27 @@ class PortioningMeasureForm extends Component
 
     public function openStartTimePopup()
     {
+        // dd('open start time popup'. $this->order_head_id . ' - ' . $this->portioning_category_id);
+        // $get_start_time_data = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
+        //     ->where('portioning_category_id', $this->portioning_category_id)
+        //     ->where('scheduled_day', date('Y-m-d'))
+        //     ->first();
+
+        $get_start_time_data = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
+            ->where('portioning_category_id', $this->portioning_category_id)
+            ->where('scheduled_day', date('Y-m-d'))
+            ->first();
+
+        if ($get_start_time_data) {
+            $this->table = $get_start_time_data->table_name;
+            $this->preop = (string) $get_start_time_data->pre_op_complete;
+            $this->people_qty = $get_start_time_data->people_qty;
+            $this->scale = $get_start_time_data->scale;
+        } else {
+            $this->reset(['table', 'preop', 'people_qty', 'scale']);
+        }
+
+
         $this->showStartTimeModal = true;
     }
 
@@ -176,12 +200,14 @@ class PortioningMeasureForm extends Component
                     'people_qty'      => $this->people_qty,
                     'scale'           => $this->scale,
                     'pre_op_complete' => $this->preop,
+                    'order_details_id' => $this->item_id
                 ]
             );
 
             $this->reset(['table', 'preop', 'people_qty', 'scale']);
 
-            $this->mode = 'edit_mode';
+            // $this->mode = 'edit_mode';
+            $this->measure_form_mode = 'edit_mode';
             $this->closeStartTimePopup();
             session()->flash('success', 'Measurement time has been started.');
         } catch (\Throwable $th) {
@@ -195,11 +221,13 @@ class PortioningMeasureForm extends Component
         $this->item_id = $item_id;
 
         $orderDetail = PortioningOrderDetail::findOrFail($item_id);
+        $this->selected_item_data = $orderDetail;
         $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
         $this->measure_date = now()->format('m/d/Y');
 
-        $this->loadExistingMeasurement($item_id);
-
+        if($this->listing_table_type === 'item_measure_log'){
+            $this->loadExistingMeasurement($item_id);
+        }
         $this->mode = 'measure_form_open';
     }
 
@@ -277,11 +305,14 @@ class PortioningMeasureForm extends Component
 
         try {
             DB::beginTransaction();
-            $measureHead = PortioningMeasureHead::where([
-                'portioning_order_head_id' => $this->order_head_id,
-                'portioning_category_id' => $this->portioning_category_id,
-                'scheduled_day' => date('Y-m-d')
-            ])->firstOrFail();
+            // if($this->listing_table_type === 'item_measure_log'){
+                $measureHead = PortioningMeasureHead::where([
+                    'portioning_order_head_id' => $this->order_head_id,
+                    'portioning_category_id' => $this->portioning_category_id,
+                    'scheduled_day' => date('Y-m-d')
+                ])->firstOrFail();
+            // }
+
 
             $data = [
                 'item_id' => $this->item_id,
@@ -314,7 +345,12 @@ class PortioningMeasureForm extends Component
             $measurement = null;
             if ($this->measurement_id) {
                 $measurement = PortioningMeasurement::find($this->measurement_id);
-                $measurement->update($data);
+                if($this->listing_table_type === 'item_measure_log'){
+                    $measurement->update($data);
+                }elseif($this->listing_table_type === 'item_list'){
+                    $measurement = PortioningMeasurement::create($data);
+                }
+                // $measurement->update($data);
                 PortioningMeasurementSample::where('measure_id', $measurement->id)->where('item_id', $this->item_id)->delete();
                 session()->flash('success', 'Measurement updated successfully.');
             } else {
@@ -334,7 +370,7 @@ class PortioningMeasureForm extends Component
                 }
             }
 
-            PortioningOrderDetail::where('order_detail_id', $this->item_id)->update(['status' => 'Completed']);
+            PortioningOrderDetail::where('order_detail_id', $this->item_id)->update(['status' => 'In Process']);
             DB::commit();
             $this->resetFormProperties();
             $this->mode = 'edit_mode';
@@ -378,17 +414,42 @@ class PortioningMeasureForm extends Component
         $check_start_time = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
             ->where('scheduled_day', date('Y-m-d'))
+            ->where('order_details_id', $this->item_id)
             ->first();
         // Only override mode if currently in read_only (don't override measure_form_open)
         if ($this->mode === 'read_only' && $check_start_time && $check_start_time->start_time) {
             $this->mode = 'edit_mode';
         }
+        if($check_start_time && $check_start_time->start_time){
+            $this->measure_form_mode = 'edit_mode';
+        }
 
-        $data = PortioningOrderDetail::with('category')
-            ->where('order_head_id', $this->order_head_id)
-            ->where('portioning_category_id', $this->portioning_category_id)
-            ->where('scheduled_day', date('Y-m-d'))
-            ->get();
+        $data = [];
+        if ($this->listing_table_type === 'item_list') {
+            $data = PortioningOrderDetail::with('category')
+                ->where('order_head_id', $this->order_head_id)
+                ->where('portioning_category_id', $this->portioning_category_id)
+                ->where('scheduled_day', date('Y-m-d'))
+                ->get();
+        }
+
+        if ($this->listing_table_type === 'item_measure_log') {
+            // $data = PortioningOrderDetail::with('category')
+            //     ->where('order_head_id', $this->order_head_id)
+            //     ->where('portioning_category_id', $this->portioning_category_id)
+            //     ->where('scheduled_day', date('Y-m-d'))
+            //     ->get();
+
+            $data = PortioningMeasurement::query()
+                ->with('orderDetail')
+                ->join('portioning_measure_heads as pmh', 'pmh.id', '=', 'portioning_measurements.measure_id')
+                ->where('pmh.portioning_order_head_id', $this->order_head_id)
+                ->where('pmh.portioning_category_id', $this->portioning_category_id)
+                ->whereDate('pmh.scheduled_day', now())
+                ->select('portioning_measurements.*') // duplicate column conflict avoid
+                ->get();
+                // dd($data);
+        }
 
         $this->portioning_order_data = $data;
         $portioning_category_name = PortioningCategory::where('category_id',  $this->portioning_category_id)->value('category_name');
@@ -403,5 +464,10 @@ class PortioningMeasureForm extends Component
         ]);
 
         return redirect($reportUrl);
+    }
+
+    public function switchTableType($type)
+    {
+        $this->listing_table_type = $type;
     }
 }

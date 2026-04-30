@@ -5,51 +5,20 @@
 
             <?php echo flashMessage() ?>
 
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-md-4 gap-2 mb-3">
-                <div class="d-flex gap-1 align-items-center">
-                    <h4 class="fs-6">Production Schedule:</h4>
-                    <p class="fw-bold color">{{ $portioning_category_name}}</p>
-                </div>
-                <div class="d-flex align-items-center justify-content-between gap-3">
-                    <div class="d-flex gap-3">
-                        <div class="d-flex align-items-center gap-2 text-color"><span><i
-                                    class="bi bi-calendar2-minus"></i></span>
-                            <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
-                        </div>
-                        @if (!$check_start_time || !$check_start_time->start_time)
-                        <button type="button" class="btn_2" wire:click="openStartTimePopup">
-                            <span><i class="bi bi-clock"></i></span> Start Time
-                        </button>
-                        <!-- DEBUG: {{ $showStartTimeModal ? 'TRUE' : 'FALSE' }} -->
-                        @endif
-                        @if ($mode === 'edit_mode')
-                        @if($check_start_time->end_time == null)
-                        <button type="button" wire:click="openEndTimePopup" class="btn_3 ">
-                            <span><i class="bi bi-clock"></i></span>
-                            End Time
-                        </button>
-                        @endif
-                        @endif
-                        <button wire:click="downloadReport" wire:loading.attr="disabled"
-                            wire:loading.class="opacity-50 cursor-not-allowed" wire:target="downloadReport"
-                            class="btn btn-outline-warning">
-                            <i class="bi bi-cloud-download"></i>
-
-                            <!-- Default Text -->
-                            <span wire:loading.remove wire:target="downloadReport">
-                                Download report
-                            </span>
-
-                            <!-- Loading Text -->
-                            <span wire:loading wire:target="downloadReport">
-                                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
-                                Downloading...
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex align-items-center gap-3">
+            <ul class="nav nav-underline bg-primary-subtle p-2 rounded mb-3">
+                <li class="nav-item">
+                    <a wire:click="switchTableType('item_list')"
+                        class="nav-link fw-bold color {{ $listing_table_type === 'item_list' ? 'active' : '' }}"
+                        aria-current="page" href="#">Item List</a>
+                </li>
+                <li class="nav-item">
+                    <a wire:click="switchTableType('item_measure_log')"
+                        class="nav-link fw-bold color {{ $listing_table_type === 'item_measure_log' ? 'active' : '' }}"
+                        href="#">Item
+                        Measure Log</a>
+                </li>
+            </ul>
+            {{-- <div class="d-flex align-items-center gap-3">
                 <div class="color fs-6 fw-medium">
                     <span>Start Time: </span>
                     <span>
@@ -67,7 +36,7 @@
                         : "N/A" }}
                     </span>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </section>
     @endif
@@ -145,6 +114,39 @@
     @php
     $is_ended = $check_start_time && $check_start_time->end_time !== null;
     @endphp
+
+    @if ($listing_table_type === 'item_list')
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-md-4 gap-2 mb-3">
+            <div class="d-flex gap-1 align-items-center">
+                <h4 class="fs-6">Production Schedule:</h4>
+                <p class="fw-bold color">{{ $portioning_category_name}}</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex gap-3">
+                    <div class="d-flex align-items-center gap-2 text-color"><span><i
+                                class="bi bi-calendar2-minus"></i></span>
+                        <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
+                    </div>
+                    {{-- @if (!$check_start_time || !$check_start_time->start_time)
+                    <button type="button" class="btn_2" wire:click="openStartTimePopup">
+                        <span><i class="bi bi-clock"></i></span> Start Time
+                    </button>
+                    <!-- DEBUG: {{ $showStartTimeModal ? 'TRUE' : 'FALSE' }} -->
+                    @endif
+                    @if ($mode === 'edit_mode')
+                    @if($check_start_time->end_time == null)
+                    <button type="button" wire:click="openEndTimePopup" class="btn_3 ">
+                        <span><i class="bi bi-clock"></i></span>
+                        End Time
+                    </button>
+                    @endif
+                    @endif --}}
+
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="mb-5">
         <div class="container">
             <div class="" style="">
@@ -250,6 +252,100 @@
     </section>
     @endif
 
+    @if ($listing_table_type === 'item_measure_log')
+
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-md-4 gap-2 mb-3">
+            <div class="d-flex gap-1 align-items-center">
+                <h4 class="fs-6">Production Schedule:</h4>
+                <p class="fw-bold color">{{ $portioning_category_name}}</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between gap-3">
+                <div class="d-flex gap-3">
+                    <div class="d-flex align-items-center gap-2 text-color"><span><i
+                                class="bi bi-calendar2-minus"></i></span>
+                        <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
+                    </div>
+
+                    <button wire:click="downloadReport" wire:loading.attr="disabled"
+                        wire:loading.class="opacity-50 cursor-not-allowed" wire:target="downloadReport"
+                        class="btn btn-outline-warning">
+                        <i class="bi bi-cloud-download"></i>
+
+                        <span wire:loading.remove wire:target="downloadReport">
+                            Download report
+                        </span>
+
+                        <span wire:loading wire:target="downloadReport">
+                            <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                            Downloading...
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="mb-5">
+        <div class="container">
+            <div class="" style="">
+                <div class="table-card">
+                    <div class="table-scroll-wrapper">
+                        <table class="{{ $is_ended ? 'component-table disabled' : 'component-table' }}">
+                            <thead>
+                                <tr>
+                                    <th>Letter</th>
+                                    <th>Component Details</th>
+                                    <th>Label</th>
+                                    <th>Weight</th>
+                                    <th>Time</th>
+                                    <th>QTY</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($portioning_order_data as $data)
+                                <tr>
+                                    <td><span class="letter-badge">{{ $data->orderDetail->letter }}</span></td>
+                                    <td>{{ $data->orderDetail->component_details }}</td>
+                                    <td>{{ $data->orderDetail->label }}</td>
+                                    <td><span class="weight-chip border border-secondary">{{ $data->orderDetail->weight
+                                            }}</span>
+                                    </td>
+                                    <td>
+                                        <x-status-badge :label="$data->orderDetail->status" />
+                                    </td>
+                                    <td><span class="qty-value">{{ $data->orderDetail->quantity }}</span></td>
+                                    <td class="text-center">
+                                        <button wire:click="measurementFormOpen({{ $data->id }})" class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2.5">
+                                                <path d="M5 12h14M12 5l7 7-7 7" />
+                                            </svg>
+                                        </button>
+                                        {{-- <a href="{{ route('portioning_measurement_form_new') }}"
+                                            class="action-btn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2.5">
+                                                <path d="M5 12h14M12 5l7 7-7 7" />
+                                            </svg>
+                                        </a> --}}
+                                    </td>
+                                </tr>
+                                @empty
+                                <x-no-data-found />
+                                @endforelse
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+    @endif
+
     @if ($showStartTimeModal)
     <div class="modal show d-block" style="background:rgba(0,0,0,0.5); z-index: 9999;" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -266,11 +362,24 @@
                 <div class="modal-body">
                     <?php echo flashMessage() ?>
                     <form wire:submit.prevent="startMeasurement">
-                        <div class="section-label">Table</div>
+                        <div class="section-label">Table
+                        </div>
                         <div class="d-flex flex-wrap gap-2 mb-2">
-                            @foreach(range(1, 8) as $num)
+                            {{-- @foreach(range(1, 8) as $num)
                             <div class="radio-pill">
-                                <input type="radio" name="table" id="t{{ $num }}" value="{{ $num }}" wire:model="table">
+                                <input type="radio" name="table" id="t{{ $num }}" value="{{ $num }}"
+                                    wire:model.live="table" wire:key="table-{{ $num }}">
+                                <label for="t{{ $num }}">
+                                    <span class="radio-circle"><span></span></span>
+                                    {{ $num }}
+                                </label>
+                            </div>
+                            @endforeach --}}
+                            @foreach(range(1, 8) as $num)
+                            <div class="radio-pill" wire:key="table-{{ $num }}">
+                                <input type="radio" name="table" id="t{{ $num }}" value="{{ (string) $num }}"
+                                    wire:model.live="table">
+
                                 <label for="t{{ $num }}">
                                     <span class="radio-circle"><span></span></span>
                                     {{ $num }}
@@ -286,7 +395,7 @@
 
                         <div class="section-label">Pre-Op Complete</div>
                         <div class="d-flex gap-3 mb-2">
-                            <div class="radio-pill">
+                            {{-- <div class="radio-pill">
                                 <input type="radio" name="preop" id="preop_yes" value="1" wire:model="preop">
                                 <label for="preop_yes">
                                     <span class="radio-circle"><span></span></span>Yes
@@ -294,6 +403,20 @@
                             </div>
                             <div class="radio-pill">
                                 <input type="radio" name="preop" id="preop_no" value="0" wire:model="preop">
+                                <label for="preop_no">
+                                    <span class="radio-circle"><span></span></span>No
+                                </label>
+                            </div> --}}
+
+                            <div class="radio-pill">
+                                <input type="radio" name="preop" id="preop_yes" value="1" wire:model.live="preop">
+                                <label for="preop_yes">
+                                    <span class="radio-circle"><span></span></span>Yes
+                                </label>
+                            </div>
+
+                            <div class="radio-pill">
+                                <input type="radio" name="preop" id="preop_no" value="0" wire:model.live="preop">
                                 <label for="preop_no">
                                     <span class="radio-circle"><span></span></span>No
                                 </label>
@@ -413,6 +536,20 @@
 
     @if ($mode === 'measure_form_open')
     <div class="form-card container bg-light p-sm-4 p-3 rounded-3">
+        <div class="d-flex gap-3 mb-3">
+            @if (!$check_start_time || !$check_start_time->start_time)
+            <button type="button" class="btn_2" wire:click="openStartTimePopup">
+                <span><i class="bi bi-clock"></i></span> Start Time
+            </button>
+            @endif
+            {{-- @if($check_start_time && $check_start_time->end_time == null)
+            <button type="button" wire:click="openEndTimePopup" class="btn_3 ">
+                <span><i class="bi bi-clock"></i></span>
+                End Time
+            </button>
+            @endif --}}
+        </div>
+
         {{-- ── Header ── --}}
         <div class="form-header">
             <h5 class="item-name">{{ $selected_item_name }}</h5>
@@ -424,6 +561,10 @@
             </div>
         </div>
 
+        @php
+        $isReadOnly = $measure_form_mode === 'read_only';
+        @endphp
+
         <form wire:submit.prevent="save">
             {{-- @if ($measurement_id)
             <input type="hidden" wire:model="measurement_id" name="measurement_id">
@@ -432,7 +573,7 @@
             <div class="row section-gap g-3">
                 <div class="col-12 col-md-6">
                     <label class="form-label" for="lot_number">Lot number</label>
-                    <input type="text" wire:model.blur="lot_number"
+                    <input type="text" wire:model.blur="lot_number" {{ $isReadOnly ? 'disabled' : '' }}
                         class="form-control border @error('lot_number') is-invalid border-danger @enderror"
                         id="lot_number" name="lot_number" placeholder="Enter Lot number" value="">
                     @error('lot_number')
@@ -442,7 +583,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <label class="form-label" for="temperature">Temperature (°F)</label>
-                    <input type="text" step="0.01" wire:model.blur="temperature"
+                    <input type="text" step="0.01" wire:model.blur="temperature" {{ $isReadOnly ? 'disabled' : '' }}
                         class="form-control border  @error('temperature') is-invalid border-danger @enderror"
                         id="temperature" placeholder="Enter Temperature">
                     @error('temperature')
@@ -459,20 +600,20 @@
                     <div class="allergen-group">
 
                         <label class="allergen-option">
-                            <input type="radio" name="allergen-option" wire:model="allergen_result" id="aller_yes"
-                                value="Yes">
+                            <input type="radio" {{ $isReadOnly ? 'disabled' : '' }} name="allergen-option"
+                                wire:model="allergen_result" id="aller_yes" value="Yes">
                             <span class="radio-dot"></span>
                             <span>Yes</span>
                         </label>
                         <label class="allergen-option">
-                            <input type="radio" name="allergen-option" wire:model="allergen_result" id="aller_no"
-                                value="No">
+                            <input type="radio" {{ $isReadOnly ? 'disabled' : '' }} name="allergen-option"
+                                wire:model="allergen_result" id="aller_no" value="No">
                             <span class="radio-dot"></span>
                             <span>No</span>
                         </label>
                         <label class="allergen-option">
-                            <input type="radio" name="allergen-option" wire:model="allergen_result" id="aller_na"
-                                value="N/A">
+                            <input type="radio" {{ $isReadOnly ? 'disabled' : '' }} name="allergen-option"
+                                wire:model="allergen_result" id="aller_na" value="N/A">
                             <span class="radio-dot"></span>
                             <span>N/A</span>
                         </label>
@@ -487,7 +628,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="allergen">Allergen (if applicable)</label>
-                    <input type="text" step="0.01" wire:model.blur="allergen"
+                    <input type="text" step="0.01" wire:model.blur="allergen" {{ $isReadOnly ? 'disabled' : '' }}
                         class="form-control border  @error('allergen') is-invalid border-danger @enderror" id="allergen"
                         placeholder="Enter Allergen">
 
@@ -498,7 +639,7 @@
                 </div>
                 <div class="col-12">
                     <label class="form-label" for="pack_size">Pack Size</label>
-                    <input type="text" step="0.01" wire:model.blur="pack_size"
+                    <input type="text" step="0.01" wire:model.blur="pack_size" {{ $isReadOnly ? 'disabled' : '' }}
                         class="form-control border @error('pack_size') is-invalid border-danger @enderror"
                         id="pack_size" placeholder="Enter Pack size">
 
@@ -522,7 +663,8 @@
                     @foreach($simple as $index => $value)
                     <div class="simple-item">
                         <div class="item-badge">{{ $loop->iteration }}</div>
-                        <input type="text" wire:model.blur="simple.{{ $index }}" placeholder="Enter Value">
+                        <input type="text" wire:model.blur="simple.{{ $index }}" placeholder="Enter Value" {{
+                            $isReadOnly ? 'disabled' : '' }}>
                         <button type="button" class="btn-delete" wire:click="removeSample({{ $index }})" {{
                             count($simple) <=1 ? 'disabled' : '' }}>
                             <i class="bi bi-trash3-fill"></i>
@@ -544,7 +686,7 @@
             <div class="row section-gap g-3">
                 <div class="col-12 col-md-4">
                     <label class="form-label" for="kit_letter">Kit Letter</label>
-                    <input type="text" wire:model.blur="kit_letter"
+                    <input type="text" {{ $isReadOnly ? 'disabled' : '' }} wire:model.blur="kit_letter"
                         class="form-control border @error('kit_letter') is-invalid border-danger @enderror"
                         id="kit_letter" placeholder="Enter Kit letter">
 
@@ -556,7 +698,7 @@
 
                 <div class="col-12 col-md-4">
                     <label class="form-label" for="qty_produces_final">QTY produces (Final)</label>
-                    <input type="text" wire:model.blur="qty_produces_final"
+                    <input type="text" {{ $isReadOnly ? 'disabled' : '' }} wire:model.blur="qty_produces_final"
                         class="form-control  border @error('qty_produces_final') is-invalid border-danger @enderror"
                         id="qty_produces_final" placeholder="Enter Qty produces final">
                     @error('qty_produces_final')
@@ -566,7 +708,8 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <label class="form-label" for="fs_initial">Fs Initial</label>
-                    <input type="text" class="form-control" wire:model.blur="fs_initial"
+                    <input type="text" {{ $isReadOnly ? 'disabled' : '' }} class="form-control"
+                        wire:model.blur="fs_initial"
                         class="form-control  @error('fs_initial') is-invalid border-danger @enderror" id="fs_initial"
                         placeholder="Enter Fs Initial">
 
@@ -633,7 +776,7 @@
             {{-- ── Description ── --}}
             <div class="section-gap">
                 <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" wire:model.blur="description"
+                <textarea class="form-control" {{ $isReadOnly ? 'disabled' : '' }} wire:model.blur="description"
                     class="form-control border @error('description') is-invalid border-danger @enderror"
                     id="description" rows="3" placeholder="Enter description…"></textarea>
                 @error('description')
@@ -645,72 +788,25 @@
             {{-- ── Footer buttons ── --}}
             <div class="form-footer  pb-5 justify-content-end">
                 <button type="button" class="btn-cancel" wire:click="cancel">Cancel</button>
-                {{-- <button type="submit" class="btn-save" wire:loading.attr="disabled"
+
+                <button type="submit" class="btn-save" wire:loading.attr="disabled"
                     wire:loading.class="opacity-50 cursor-not-allowed">
-                    <span wire:loading>Submit</span>
 
-                </button> --}}
+                    <!-- Default Text -->
+                    <span wire:loading.remove>
+                        Submit
+                    </span>
 
-                <button
-    type="submit"
-    class="btn-save"
-    wire:loading.attr="disabled"
-    wire:loading.class="opacity-50 cursor-not-allowed"
->
+                    <!-- Loading Text -->
+                    <span wire:loading>
+                        <span class="spinner-border spinner-border-sm me-1"></span>
+                        Submitting...
+                    </span>
 
-    <!-- Default Text -->
-    <span wire:loading.remove>
-        Submit
-    </span>
-
-    <!-- Loading Text -->
-    <span wire:loading>
-        <span class="spinner-border spinner-border-sm me-1"></span>
-        Submitting...
-    </span>
-
-</button>
+                </button>
             </div>
         </form>
     </div>
     @endif
-
-
-    {{-- <script>
-        document.getElementById('attachment').addEventListener('change', function () {
-        const file = this.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const grid = document.getElementById('previewGrid');
-
-            const existing = grid.querySelector('.image-preview img');
-            if (existing) {
-                existing.src = e.target.result;
-                return;
-            }
-
-            const wrap = document.createElement('div');
-            wrap.className = 'image-preview-wrap';
-            wrap.innerHTML = `
-                <div class="image-preview">
-                    <img src="${e.target.result}" alt="preview" class="img-fluid">
-                </div>
-                <button type="button" class="btn-img-delete" title="Remove">
-                    <i class="bi bi-x"></i>
-                </button>
-            `;
-
-            wrap.querySelector('.btn-img-delete').addEventListener('click', function () {
-                wrap.remove();
-                document.getElementById('attachment').value = '';
-            });
-
-            grid.appendChild(wrap);
-        };
-        reader.readAsDataURL(file);
-    });
-    </script> --}}
 
 </div>

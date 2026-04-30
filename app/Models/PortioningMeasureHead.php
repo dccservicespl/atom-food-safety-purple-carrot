@@ -21,7 +21,8 @@ class PortioningMeasureHead extends Model
         'status',
         'portioning_order_head_id',
         'portioning_category_id',
-        'scheduled_day'
+        'scheduled_day',
+        'order_details_id',
     ];
 
     protected $casts = [

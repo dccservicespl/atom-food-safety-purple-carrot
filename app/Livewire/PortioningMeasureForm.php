@@ -23,6 +23,8 @@ class PortioningMeasureForm extends Component
     public $measure_form_mode = 'read_only';
     public $listing_table_type = 'item_list';
 
+    public bool $showDownloadModal = false;
+
     public $table = null;
     public $preop = null;
     public $people_qty = null;
@@ -134,6 +136,35 @@ class PortioningMeasureForm extends Component
     public function closeEndTimePopup()
     {
         $this->showEndTimeModal = false;
+    }
+
+    public function openDownloadModal()
+    {
+        $this->showDownloadModal = true;
+    }
+
+    public function closeDownloadModal()
+    {
+        $this->showDownloadModal = false;
+    }
+
+    public function downloadReport($type = 'pdf')
+    {
+        $this->showDownloadModal = false;
+
+        if ($type === 'excel') {
+            $reportUrl = route('portioning_report_excel', [
+                'order_head_id' => $this->order_head_id,
+                'portioning_category_id' => $this->portioning_category_id,
+            ]);
+        } else {
+            $reportUrl = route('portioning_report', [
+                'order_head_id' => $this->order_head_id,
+                'portioning_category_id' => $this->portioning_category_id,
+            ]);
+        }
+
+        return redirect()->to($reportUrl);
     }
 
     public function endMeasurement()
@@ -458,16 +489,6 @@ class PortioningMeasureForm extends Component
         $this->portioning_order_data = $data;
         $portioning_category_name = PortioningCategory::where('category_id',  $this->portioning_category_id)->value('category_name');
         return view('livewire.portioning-measure-form', compact('check_start_time', 'portioning_category_name'));
-    }
-
-    public function downloadReport()
-    {
-        $reportUrl = route('portioning_report', [
-            'order_head_id' => $this->order_head_id,
-            'portioning_category_id' => $this->portioning_category_id,
-        ]);
-
-        return redirect($reportUrl);
     }
 
     public function switchTableType($type)

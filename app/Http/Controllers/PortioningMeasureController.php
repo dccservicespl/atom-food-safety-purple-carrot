@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PortioningReportExport;
 use App\Imports\PortioningMultiSheetImport;
 use App\Models\PortioningMeasureHead;
 use App\Models\PortioningMeasurement;
@@ -362,11 +363,30 @@ class PortioningMeasureController extends Controller
 
     }
 
+    public function portioning_report_excel($order_head_id, $portioning_category_id)
+    {
+        $portioningHeads = PortioningMeasureHead::where('portioning_order_head_id', $order_head_id)
+                ->where('portioning_category_id', $portioning_category_id)
+                ->with('measure_by')
+                ->orderBy('created_at', 'asc')
+                ->first();
+
+        if (!$portioningHeads) {
+            return redirect()->back()->with('error', 'No data found for this date.');
+        }
+
+        $dataset = $this->prepareDataset($portioningHeads);
+        $date = $portioningHeads->scheduled_day;
+        $formatted_date = Carbon::parse($date)->format('Ymd');
+
+        return Excel::download(new PortioningReportExport($dataset, Carbon::parse($date)->format('m/d/Y')), 'Ingredient_Portioning_Form_' . $formatted_date . '.xlsx');
+    }
+
     private function prepareDataset($portioningHeads)
     {
         $reportLineItems = [];
         $get_portioning_measurement_data = PortioningMeasurement::where('measure_id', $portioningHeads->id)
-            ->with(['samples', 'item_details'])
+            ->with(['samples', 'item_details', 'measuredBy'])
             ->orderBy('created_at', 'asc')
             ->get();
         // dd($portioningHeads, $get_portioning_measurement_data);
@@ -376,6 +396,8 @@ class PortioningMeasureController extends Controller
 
             $reportLineItems[] = [
                 'time' => Carbon::parse($measurement->created_at)->format('g:i A'),
+                'end_time' => Carbon::parse($measurement->created_at)->format('g:i A'),
+                'measured_by' => $measurement->measuredBy->name ?? 'N/A',
                 'product_description' => $item->component_details ?? 'N/A',
                 'lot_number' => $measurement->lot_number ?? 'N/A',
                 'temp' => $measurement->temperature ?? '',

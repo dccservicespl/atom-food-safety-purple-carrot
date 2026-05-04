@@ -110,7 +110,7 @@ class PortioningMeasureForm extends Component
 
         $get_start_time_data = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
-            ->where('scheduled_day', date('Y-m-d'))
+            ->where('scheduled_day', date('Y-m-d', strtotime($this->measure_date)))
             ->first();
 
         if ($get_start_time_data) {
@@ -174,7 +174,7 @@ class PortioningMeasureForm extends Component
     {
         try {
             DB::beginTransaction();
-            $today = date('Y-m-d');
+            $today = date('Y-m-d', strtotime($this->measure_date));
 
             // Check if all items are completed
             $pendingItems = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
@@ -225,7 +225,7 @@ class PortioningMeasureForm extends Component
                 [
                     'portioning_order_head_id' => $this->order_head_id,
                     'portioning_category_id'   => $this->portioning_category_id,
-                    'scheduled_day'            => date('Y-m-d'),
+                    'scheduled_day'            => date('Y-m-d', strtotime($this->measure_date)),
                 ],
                 [
                     'start_time'      => date('H:i:s'),
@@ -259,14 +259,15 @@ class PortioningMeasureForm extends Component
             $orderDetail = PortioningOrderDetail::findOrFail($get_the_measure_item->item_id);
             $this->item_process_start_time = $get_the_measure_item->start_time;
             $this->item_process_end_time = $get_the_measure_item->end_time;
+            $this->measure_date = date('m/d/Y', strtotime($get_the_measure_item->measure_date));
         } else {
             $this->item_id = $measure_item_id;
             $orderDetail = PortioningOrderDetail::findOrFail($this->item_id);
+            $this->measure_date = date('m/d/Y', strtotime($orderDetail->scheduled_day));
         }
          $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
 
         // $this->selected_item_data = $orderDetail;
-        $this->measure_date = now()->format('m/d/Y');
 
         if ($this->listing_table_type === 'item_measure_log') {
             // dd('loading existing measurement for item_id33333: ' . $measure_item_id);
@@ -277,7 +278,7 @@ class PortioningMeasureForm extends Component
 
     private function loadExistingMeasurement($measure_item_id)
     {
-        $today = date('Y-m-d');
+        $today = date('Y-m-d', strtotime($this->measure_date));
         $measureHead = PortioningMeasureHead::where([
             'portioning_order_head_id' => $this->order_head_id,
             'portioning_category_id' => $this->portioning_category_id,
@@ -347,18 +348,27 @@ class PortioningMeasureForm extends Component
         try {
             DB::beginTransaction();
             // if($this->listing_table_type === 'item_measure_log'){
+            $measureDateFormatted = date('Y-m-d', strtotime($this->measure_date));
             $measureHead = PortioningMeasureHead::where([
                 'portioning_order_head_id' => $this->order_head_id,
                 'portioning_category_id' => $this->portioning_category_id,
-                'scheduled_day' => date('Y-m-d')
-            ])->firstOrFail();
-            // }
+                'scheduled_day' => $measureDateFormatted
+            ])->first();
 
+            if (!$measureHead) {
+                $measureHead = PortioningMeasureHead::create([
+                    'portioning_order_head_id' => $this->order_head_id,
+                    'portioning_category_id' => $this->portioning_category_id,
+                    'scheduled_day' => $measureDateFormatted,
+                    'start_time' => now()->format('H:i:s'),
+                ]);
+            }
+            // }
 
             $data = [
                 'item_id' => $this->item_id,
                 'measure_id' => $measureHead->id,
-                'measure_date' => date('Y-m-d'),
+                'measure_date' => $measureDateFormatted,
                 'measure_time' => now()->format('H:i:s'),
                 'measure_by' => Auth::id(),
                 'lot_number' => $this->lot_number,
@@ -458,7 +468,7 @@ class PortioningMeasureForm extends Component
     {
         $check_start_time = PortioningMeasureHead::where('portioning_order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
-            ->where('scheduled_day', date('Y-m-d'))
+            ->where('scheduled_day', date('Y-m-d', strtotime($this->measure_date)))
             ->where('order_details_id', $this->item_id)
             ->first();
         // Only override mode if currently in read_only (don't override measure_form_open)
@@ -474,7 +484,7 @@ class PortioningMeasureForm extends Component
             $data = PortioningOrderDetail::with('category')
                 ->where('order_head_id', $this->order_head_id)
                 ->where('portioning_category_id', $this->portioning_category_id)
-                ->where('scheduled_day', date('Y-m-d'))
+                //->where('scheduled_day', date('Y-m-d'))
                 ->get();
         }
 
@@ -490,7 +500,7 @@ class PortioningMeasureForm extends Component
                 ->join('portioning_measure_heads as pmh', 'pmh.id', '=', 'portioning_measurements.measure_id')
                 ->where('pmh.portioning_order_head_id', $this->order_head_id)
                 ->where('pmh.portioning_category_id', $this->portioning_category_id)
-                ->whereDate('pmh.scheduled_day', now())
+                //->whereDate('pmh.scheduled_day', now())
                 ->select('portioning_measurements.*') // duplicate column conflict avoid
                 ->get();
             // dd($data);

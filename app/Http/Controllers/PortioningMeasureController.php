@@ -273,19 +273,33 @@ class PortioningMeasureController extends Controller
         DB::beginTransaction();
         try {
             $decrypted_id = Crypt::decrypt($id);
-            // Delete order head
-            DB::table('portioning_order_heads')->where('order_head_id', $decrypted_id)->delete();
 
-            $get_portioning_measure_head_ids = DB::table('portioning_measure_heads')->where('portioning_order_head_id', $decrypted_id)->pluck('id')->toArray();
+            $measure_head_ids = DB::table('portioning_measure_heads')
+                ->where('portioning_order_head_id', $decrypted_id)
+                ->pluck('id')
+                ->toArray();
 
-            // Delete order details
-            DB::table('portioning_order_details')->where('order_head_id', $decrypted_id)->delete();
+            if (!empty($measure_head_ids)) {
+                DB::table('portioning_measurement_samples')
+                    ->whereIn('measure_id', $measure_head_ids)
+                    ->delete();
 
-            //  DB::table('portioning_measure_heads')->where('portioning_order_head_id', $decrypted_id)->delete();
+                DB::table('portioning_measurements')
+                    ->whereIn('measure_id', $measure_head_ids)
+                    ->delete();
+            }
 
-            // DB::table('portioning_measurements')->where('measure_id', $get_portioning_measure_head_ids)->delete();
+            DB::table('portioning_measure_heads')
+                ->where('portioning_order_head_id', $decrypted_id)
+                ->delete();
 
-            // DB::table('portioning_measurement_samples')->where('measure_id', $get_portioning_measure_head_ids)->delete();
+            DB::table('portioning_order_details')
+                ->where('order_head_id', $decrypted_id)
+                ->delete();
+
+            DB::table('portioning_order_heads')
+                ->where('order_head_id', $decrypted_id)
+                ->delete();
 
             DB::commit();
 

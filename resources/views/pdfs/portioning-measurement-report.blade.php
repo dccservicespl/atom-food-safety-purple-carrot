@@ -63,7 +63,7 @@
             background: #fff;
         }
 
-        .equipment-section>div {
+        .equipment-section > div {
             display: table-cell;
             vertical-align: middle;
             padding: 3px;
@@ -102,6 +102,19 @@
             text-align: left;
         }
 
+        /* Time parent header spans 2 columns, no bottom border to blend with sub-headers */
+        th.time-parent {
+            border-bottom: 1px solid #000;
+            padding-bottom: 0;
+        }
+
+        /* Sub-header row inside thead */
+        th.time-sub {
+            font-size: 9px;
+            padding: 3px 2px;
+            background-color: #e0e0e0;
+        }
+
         .footer-section {
             margin-top: 10px;
             border: 1px solid #000;
@@ -134,7 +147,6 @@
 
 <body>
 
-
     @foreach ($dataset as $dataset_data)
     <div class="date-section">
         DATE: {{ $reportDate }}
@@ -156,6 +168,7 @@
             test must be performed and must be record below indication P (Pass) or F (Fail)
         </p>
     </div>
+
     <div class="equipment-section">
         <div class="equipment-list">
             <strong>Equipment:</strong> {{ $dataset_data['report_head']['equipment'] }} <br>
@@ -164,35 +177,39 @@
         <div class="operator-info">
             <strong>Operator name:</strong> {{ $dataset_data['report_head']['measure_by'] }}<br>
             <strong>People Qty:</strong> {{ $dataset_data['report_head']['people_qty'] }} &nbsp;&nbsp;&nbsp;
-            <strong>Scale
-                #:</strong> {{
-            $dataset_data['report_head']['scale'] }} &nbsp;&nbsp;&nbsp;
-            <strong>Pre-Op Complete:</strong> {{ $dataset_data['report_head']['equipment'] }}
+            <strong>Scale #:</strong> {{ $dataset_data['report_head']['scale'] }} &nbsp;&nbsp;&nbsp;
+            <strong>Pre-Op Complete:</strong> {{ $dataset_data['report_head']['pre_op_complete'] }}
         </div>
     </div>
 
     <table>
         <thead>
+            <!-- Row 1: Main headers — Time spans 2 columns -->
             <tr>
-                <th style="width: 5%;">Time</th>
-                <th style="width: 15%;">Product Description</th>
-                <th style="width: 10%;">Lot number</th>
-                <th style="width: 5%;">Temp °F</th>
-                <th style="width: 8%;">Allergen<br>(If applicable)</th>
-                <th style="width: 5%;">Allergen Test Result</th>
-                <th style="width: 7%;">Pack Size</th>
-                <th style="width: 6%;">Sample 1</th>
-                <th style="width: 6%;">Sample 2</th>
-                <th style="width: 6%;">Sample 3</th>
-                <th style="width: 5%;">Kit Letter</th>
-                <th style="width: 8%;">Qty Produced (Final)</th>
-                <th style="width: 5%;">FS Initial</th>
+                <th colspan="2" style="width: 10%;">Time</th>
+                <th style="width: 14%;" rowspan="2">Product Description</th>
+                <th style="width: 10%;" rowspan="2">Lot number</th>
+                <th style="width: 5%;" rowspan="2">Temp °F</th>
+                <th style="width: 8%;" rowspan="2">Allergen<br>(If applicable)</th>
+                <th style="width: 5%;" rowspan="2">Allergen Test Result</th>
+                <th style="width: 7%;" rowspan="2">Pack Size</th>
+                <th style="width: 5%;" rowspan="2">Sample 1</th>
+                <th style="width: 5%;" rowspan="2">Sample 2</th>
+                <th style="width: 5%;" rowspan="2">Sample 3</th>
+                <th style="width: 5%;" rowspan="2">Kit Letter</th>
+                <th style="width: 8%;" rowspan="2">Qty Produced (Final)</th>
+                <th style="width: 5%;" rowspan="2">FS Initial</th>
+            </tr>
+            <tr>
+                <th class="time-sub" style="width: 5%;">Start</th>
+                <th class="time-sub" style="width: 5%;">End</th>
             </tr>
         </thead>
         <tbody>
             @foreach($dataset_data['report_line_items'] as $row)
             <tr>
-                <td>{{ $row['time'] }}</td>
+                <td>{{ $row['start_time'] }}</td>
+                <td>{{ $row['end_time'] }}</td>
                 <td class="left-align">{{ strtoupper($row['product_description']) }}</td>
                 <td>{{ $row['lot_number'] }}</td>
                 <td>{{ $row['temp'] }}</td>
@@ -228,7 +245,6 @@
     </div>
     <div style="page-break-after: always;"></div>
     @endforeach
-
 
 </body>
 

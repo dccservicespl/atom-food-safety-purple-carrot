@@ -409,8 +409,8 @@ class PortioningMeasureController extends Controller
             $item = $measurement->item_details;
 
             $reportLineItems[] = [
-                'time' => Carbon::parse($measurement->created_at)->format('g:i A'),
-                'end_time' => Carbon::parse($measurement->created_at)->format('g:i A'),
+                'start_time' => Carbon::parse($measurement->start_time)->format('g:i A'),
+                'end_time' => Carbon::parse($measurement->end_time)->format('g:i A'),
                 'measured_by' => $measurement->measuredBy->name ?? 'N/A',
                 'product_description' => $item->component_details ?? 'N/A',
                 'lot_number' => $measurement->lot_number ?? 'N/A',

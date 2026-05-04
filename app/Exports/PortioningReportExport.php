@@ -83,7 +83,7 @@ class PortioningReportExport implements FromArray, WithEvents
             // Data rows
             foreach ($dataset_data['report_line_items'] as $row) {
                 $excelData[] = [
-                    $row['time'],
+                    $row['start_time'],
                     $row['end_time'],
                     strtoupper($row['product_description']),
                     $row['lot_number'],

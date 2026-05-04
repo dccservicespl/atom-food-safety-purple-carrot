@@ -30,6 +30,8 @@ class PortioningMeasurement extends Model
         'attachment',
         'description',
         'reviewed_by',
+        'start_time',
+        'end_time',
     ];
 
     protected $casts = [

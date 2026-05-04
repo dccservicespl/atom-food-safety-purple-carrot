@@ -36,6 +36,9 @@ class PortioningMeasureForm extends Component
     public $portioning_category_id;
     public $item_id = null;
 
+    public $item_process_start_time;
+    public $item_process_end_time;
+
     // New properties for measure form
     public ?int $measurement_id = null;
     public $lot_number = '';
@@ -254,6 +257,8 @@ class PortioningMeasureForm extends Component
             $get_the_measure_item = PortioningMeasurement::findOrFail($measure_item_id);
             $this->item_id = $get_the_measure_item->item_id;
             $orderDetail = PortioningOrderDetail::findOrFail($get_the_measure_item->item_id);
+            $this->item_process_start_time = $get_the_measure_item->start_time;
+            $this->item_process_end_time = $get_the_measure_item->end_time;
         } else {
             $this->item_id = $measure_item_id;
             $orderDetail = PortioningOrderDetail::findOrFail($this->item_id);
@@ -336,6 +341,7 @@ class PortioningMeasureForm extends Component
             'description' => 'nullable|string',
             'simple' => 'array|min:1',
             'simple.*' => 'required|string|max:255',
+            'item_process_end_time' => 'after_or_equal:item_process_start_time',
         ]);
 
         try {
@@ -365,6 +371,8 @@ class PortioningMeasureForm extends Component
                 'qty_produces_final' => $this->qty_produces_final ?: null,
                 'fs_initial' => $this->fs_initial ?: null,
                 'description' => $this->description ?: null,
+                'start_time' => $this->item_process_start_time ?: null,
+                'end_time' => $this->item_process_end_time ?: null,
             ];
 
             // Handle attachment upload
@@ -438,7 +446,9 @@ class PortioningMeasureForm extends Component
             'attachment',
             'attachmentPreview',
             'existingAttachment',
-            'description'
+            'description',
+            'item_process_start_time',
+            'item_process_end_time',
         ]);
         $this->simple = [''];
         $this->measurement_id = null;

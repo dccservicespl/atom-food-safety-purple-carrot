@@ -25,10 +25,10 @@ class WeekDetail extends Component
         $this->order_head_id = $order_head_id;
         $this->order_head    = PortioningOrderHead::where('order_head_id', $order_head_id)->firstOrFail();
 
-        // Generate full week days from from_date to to_date
-        $from    = Carbon::parse($this->order_head->from_date);
-        $to      = Carbon::parse($this->order_head->to_date);
-        $days    = [];
+        // Generate full week days from from_date to to_date, ensuring full week
+        $from = Carbon::parse($this->order_head->from_date)->startOfWeek(Carbon::MONDAY);
+        $to = Carbon::parse($this->order_head->to_date)->endOfWeek(Carbon::SUNDAY);
+        $days = [];
         $current = $from->copy();
 
         while ($current->lte($to)) {
@@ -57,6 +57,15 @@ class WeekDetail extends Component
 
     public function selectDay($day)
     {
+        $week_from = Carbon::parse($this->order_head->from_date);
+        $week_to = Carbon::parse($this->order_head->to_date);
+        $today = now()->startOfDay();
+        $is_current_week = $today->between($week_from, $week_to);
+
+        if ($is_current_week && Carbon::parse($day)->gt($today)) {
+            return; // Don't allow selecting future days in current week
+        }
+
         $this->selected_day = $day;
     }
 

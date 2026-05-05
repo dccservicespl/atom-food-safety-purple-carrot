@@ -36,12 +36,13 @@ $is_current_week = $today->between($week_from, $week_to);
                     <tr>
                         @foreach ($week_days as $day)
                         @php
-                        $is_today = \Carbon\Carbon::parse($day)->format('l') === now()->format('l');
                         $is_selected = $selected_day === $day;
+                        $is_future = $is_current_week && \Carbon\Carbon::parse($day)->gt(now()->startOfDay());
                         @endphp
 
-                        <th wire:click="selectDay('{{ $day }}')"
-                            class="{{ $is_selected ? 'th-active' : 'th-inactive' }}" style="cursor:pointer;">
+                        <th @if(!$is_future) wire:click="selectDay('{{ $day }}')" @endif
+                            class="{{ $is_selected ? 'th-active' : ($is_future ? 'th-disabled' : 'th-inactive') }}"
+                            style="cursor:{{ $is_future ? 'not-allowed' : 'pointer' }};">
                             {{ \Carbon\Carbon::parse($day)->format('l') }}
                         </th>
                         @endforeach
@@ -53,6 +54,7 @@ $is_current_week = $today->between($week_from, $week_to);
                         @foreach ($week_days as $day)
                         @php
                         $is_selected = $selected_day === $day;
+                        $is_future = $is_current_week && \Carbon\Carbon::parse($day)->gt(now()->startOfDay());
                         // dd($days_with_categories[$day])
                         @endphp
 
@@ -63,16 +65,10 @@ $is_current_week = $today->between($week_from, $week_to);
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
 
-                                @if ($is_selected && !$is_past_week)
+                                @if (!$is_future)
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
                                     class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
-                                    {{ $category['category_name'] }}
-                                </a>
-                                @elseif ($is_past_week)
-                                <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
-                                    class="chip"
-                                    style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:pointer;opacity:0.6;">
                                     {{ $category['category_name'] }}
                                 </a>
                                 @else
@@ -111,7 +107,7 @@ $is_current_week = $today->between($week_from, $week_to);
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var th_elements = document.querySelectorAll('.th-inactive');
+        var th_elements = document.querySelectorAll('.th-disabled');
         th_elements.forEach(function(th) {
             th.style.pointerEvents = 'none';
         });

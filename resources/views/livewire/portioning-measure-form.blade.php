@@ -17,6 +17,10 @@
                         href="#">Item
                         Measure Log</a>
                 </li>
+                <li class="nav-item">
+                    <button class="btn btn-warning" wire:click='reScheduleProcessModel'>Re-schedule
+                        Process</button>
+                </li>
             </ul>
             {{-- <div class="d-flex align-items-center gap-3">
                 <div class="color fs-6 fw-medium">
@@ -126,7 +130,7 @@
                 <div class="d-flex gap-3">
                     <div class="d-flex align-items-center gap-2 text-color"><span><i
                                 class="bi bi-calendar2-minus"></i></span>
-                        <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
+                        <p>{{ date('D - d M', strtotime(request()->measure_date)) }}</p>
                     </div>
                     {{-- @if (!$check_start_time || !$check_start_time->start_time)
                     <button type="button" class="btn_2" wire:click="openStartTimePopup">
@@ -264,7 +268,7 @@
                 <div class="d-flex gap-3">
                     <div class="d-flex align-items-center gap-2 text-color"><span><i
                                 class="bi bi-calendar2-minus"></i></span>
-                        <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
+                        <p>{{ date('D - d M', strtotime(request()->measure_date)) }}</p>
                     </div>
 
                     <!-- <button wire:click="downloadReport" wire:loading.attr="disabled"
@@ -593,6 +597,53 @@
                             </span>
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if ($reschedule_popup)
+    <div class="modal show d-block" style="background:rgba(0,0,0,0.5); z-index: 9999;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <div class="modal-title">
+                        <i class="bi bi-calendar"></i> Reschedule The Process
+                    </div>
+                    <button wire:click='closeReschedulePopup' class="btn-close-custom" data-bs-dismiss="modal"
+                        aria-label="Close">&#x2715;</button>
+                </div>
+
+                <div class="modal-body">
+                    <form wire:submit.prevent="rescheduleProcess">
+
+                        <div class="mb-3">
+                            <label class="form-label" for="reschedule_date">Select New Date</label>
+                            <input type="date" wire:model="reschedule_date"
+                                class="form-control @error('reschedule_date') is-invalid @enderror" id="reschedule_date"
+                                required>
+                            @error('reschedule_date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="modal-footer d-flex">
+                            <button wire:click='closeReschedulePopup' type="button" class="btn-cancel"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn-start" wire:loading.attr="disabled"
+                                wire:target="rescheduleProcess">
+                                <span wire:loading.remove wire:target="rescheduleProcess">
+                                    Reschedule
+                                </span>
+                                <span wire:loading wire:target="rescheduleProcess" style="display:none;">
+                                    <span class="spinner-border spinner-border-sm me-1"></span>
+                                    Rescheduling...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

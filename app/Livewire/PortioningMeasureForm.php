@@ -59,6 +59,9 @@ class PortioningMeasureForm extends Component
     public $measure_date = '';
     public $selected_item_data = null;
 
+    public $reschedule_popup = false;
+    public $reschedule_date = '';
+
     protected function rules(): array
     {
         return [
@@ -514,5 +517,33 @@ class PortioningMeasureForm extends Component
     public function switchTableType($type)
     {
         $this->listing_table_type = $type;
+    }
+
+    public function reScheduleProcessModel()
+    {
+        $this->reschedule_popup = true;
+    }
+
+    public function closeReschedulePopup()
+    {
+        $this->reschedule_popup = false;
+    }
+
+    public function rescheduleProcess()
+    {
+        $ger_order_head = PortioningOrderHead::find($this->order_head_id);
+        $min_date = $ger_order_head->from_date;
+        $max_date = $ger_order_head->to_date;
+        // Validate the date
+        $this->validate([
+            'reschedule_date' => 'required|date|after_or_equal:' . $min_date . '|before_or_equal:' . $max_date,
+        ]);
+
+        $update_portioning_order_details = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
+            ->where('portioning_category_id', $this->portioning_category_id)
+            ->update(['scheduled_day' => date('Y-m-d', strtotime($this->reschedule_date))]);
+        // Show the date using dd
+        return redirect()->route('week_details', [$ger_order_head->week_number,$this->order_head_id,
+        ])->with('success', 'Process has been rescheduled to ' . date('m-d-Y', strtotime($this->reschedule_date)));
     }
 }

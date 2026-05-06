@@ -12,7 +12,7 @@ class WeekDetail extends Component
     public $order_head_id;
     public $order_head;
     public $selected_day;
-    public $week_days            = [];
+    public $week_days = [];
     public $days_with_categories = [];
     public $today;
 
@@ -108,6 +108,7 @@ class WeekDetail extends Component
 
     public function render()
     {
+        // dd($this->week_days);
         return view('livewire.week-detail');
     }
 }

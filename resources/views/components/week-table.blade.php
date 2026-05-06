@@ -20,7 +20,7 @@ $is_current_week = $today->between($week_from, $week_to);
         opacity: 0.8;
     } */
 
-     .week-table thead th.th-active {
+    .week-table thead th.th-active {
         background: #0a4d78;
         color: #ffffff;
         width: auto;
@@ -66,7 +66,7 @@ $is_current_week = $today->between($week_from, $week_to);
                                 @endphp
 
                                 @if (!$is_future)
-                                <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id']]) }}"
+                                <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id'], 'measure_date' => $day]) }}"
                                     class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
                                     {{ $category['category_name'] }}

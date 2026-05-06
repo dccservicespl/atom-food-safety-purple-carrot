@@ -8,6 +8,8 @@ use App\Models\PortioningMeasurement;
 use App\Models\PortioningMeasurementSample;
 use App\Models\PortioningOrderDetail;
 use App\Models\PortioningOrderHead;
+use Carbon\Carbon;
+use Carbon\Traits\Date;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -83,6 +85,10 @@ class PortioningMeasureForm extends Component
     public function mount()
     {
         $this->simple = [''];
+        if ($this->listing_table_type != "item_measure_log") {
+            $this->item_process_start_time = Carbon::now()->format('H:i');
+            // $this->item_process_end_time = Carbon::now()->addMinutes(2)->format('H:i');
+        }
     }
 
     public function updatedAttachment()
@@ -345,7 +351,8 @@ class PortioningMeasureForm extends Component
             'description' => 'nullable|string',
             'simple' => 'array|min:1',
             'simple.*' => 'required|string|max:255',
-            'item_process_end_time' => 'after_or_equal:item_process_start_time',
+            'item_process_start_time' => 'required',
+            'item_process_end_time' => 'required|after_or_equal:item_process_start_time',
         ]);
 
         try {

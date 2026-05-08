@@ -1374,10 +1374,16 @@ section.month .month-scroll::-webkit-scrollbar {
 
 .form-card .simple-panel-body {
     padding: 16px 18px;
+    display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+}
+/* .form-card .simple-panel-body {
+    padding: 16px 18px;
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-}
+} */
 
 /* ── Simple item row ── */
 .form-card .simple-item {
@@ -1389,7 +1395,7 @@ section.month .month-scroll::-webkit-scrollbar {
     background: #ffffff;
     /* flex: 1 1 200px; */
     min-width: 180px;
-    max-width: 320px;
+    max-width: 100%;
     transition: border-color 0.18s;
     animation: itemIn 0.25s ease both;
 }
@@ -1635,6 +1641,7 @@ section.month .month-scroll::-webkit-scrollbar {
     font-weight: 600;
 }
 
+/*  */
 .form-card .item-badge {
     padding: 10px 14px;
     background: #e9f8ff;

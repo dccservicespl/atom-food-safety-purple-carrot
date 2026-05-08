@@ -215,16 +215,16 @@
                 <div class="col-lg-8">
                     <div class="row">
                         <div class="col-4">
-                            <div class="card_total_quantity card-box">
-                                <h4 class="color fw-bold fs-6">Total Quantity</h4>
+                            <div class="card_total_quantity card-box h-100">
+                                <h4 class="color fw-bold fs-6 text-center">Total Quantity</h4>
                                 <h2 class="fs-2 color fw-bold">{{
                                     number_format($total_quantity = $portioning_order_data->sum('quantity'))
                                     }}</h2>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="card_completed_quantity card-box">
-                                <h4 class="fw-bold fs-6">Completed Quantity</h4>
+                            <div class="card_completed_quantity card-box h-100">
+                                <h4 class="fw-bold fs-6 text-center">Completed Quantity</h4>
                                 <h2 class="fs-2 fw-bold">{{
                                     number_format($complete_quantity =
                                     $portioning_order_data->where('status','Completed')->sum('quantity'))
@@ -232,8 +232,8 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="card_pending_quantity card-box">
-                                <h4 class="fw-bold fs-6">Pending Quantity</h4>
+                            <div class="card_pending_quantity card-box h-100">
+                                <h4 class="fw-bold fs-6 text-center">Pending Quantity</h4>
                                 <h2 class="fs-2 fw-bold">{{ number_format($portioning_order_data->where('status', '!=',
                                     'Completed')->sum('quantity')) }}</h2>
                             </div>

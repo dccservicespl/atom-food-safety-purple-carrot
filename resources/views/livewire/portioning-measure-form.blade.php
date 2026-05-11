@@ -130,7 +130,7 @@
                 <div class="d-flex gap-3">
                     <div class="d-flex align-items-center gap-2 text-color"><span><i
                                 class="bi bi-calendar2-minus"></i></span>
-                        <p>{{ date('D - d M', strtotime(request()->measure_date)) }}</p>
+                        <p>{{ date('D - d M', strtotime($past_measure_date)) }}</p>
                     </div>
                     {{-- @if (!$check_start_time || !$check_start_time->start_time)
                     <button type="button" class="btn_2" wire:click="openStartTimePopup">
@@ -268,7 +268,7 @@
                 <div class="d-flex gap-3">
                     <div class="d-flex align-items-center gap-2 text-color"><span><i
                                 class="bi bi-calendar2-minus"></i></span>
-                        <p>{{ date('D - d M', strtotime(request()->measure_date)) }}</p>
+                        <p>{{ date('D - d M', strtotime($past_measure_date)) }}</p>
                     </div>
 
                     <!-- <button wire:click="downloadReport" wire:loading.attr="disabled"
@@ -795,9 +795,9 @@
             {{-- ── Simple section ── --}}
             <div class="simple-panel section-gap">
                 <div class="simple-panel-header">
-                    <p class="panel-title">Simple</p>
+                    <p class="panel-title">Sample</p>
                     <button type="button" class="btn-add-simple" wire:click="addSample">
-                        <i class="bi bi-plus-square-fill"></i> Add Simple
+                        <i class="bi bi-plus-square-fill"></i> Add Sample
                     </button>
                 </div>
                 <div class="simple-panel-body">

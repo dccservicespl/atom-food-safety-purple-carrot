@@ -103,9 +103,9 @@
         {{-- ── Simple section ── --}}
         <div class="simple-panel section-gap">
             <div class="simple-panel-header">
-                <p class="panel-title">Simple</p>
+                <p class="panel-title">Sample</p>
                 <button type="button" class="btn-add-simple" wire:click="addSample">
-                    <i class="bi bi-plus-square-fill"></i> Add Simple
+                    <i class="bi bi-plus-square-fill"></i> Add Sample
                 </button>
             </div>
             <div class="simple-panel-body" id="simpleItems">

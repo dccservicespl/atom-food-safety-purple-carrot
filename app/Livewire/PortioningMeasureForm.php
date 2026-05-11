@@ -59,6 +59,7 @@ class PortioningMeasureForm extends Component
 
     public $selected_item_name = '';
     public $measure_date = '';
+    public $past_measure_date;
     public $selected_item_data = null;
 
     public $reschedule_popup = false;
@@ -84,6 +85,7 @@ class PortioningMeasureForm extends Component
 
     public function mount()
     {
+        $this->past_measure_date = request()->measure_date;
         $this->simple = [''];
         if ($this->listing_table_type != "item_measure_log") {
             $this->item_process_start_time = Carbon::now()->format('H:i');
@@ -352,7 +354,7 @@ class PortioningMeasureForm extends Component
             'simple' => 'array|min:1',
             'simple.*' => 'required|string|max:255',
             'item_process_start_time' => 'required',
-            'item_process_end_time' => 'required|after_or_equal:item_process_start_time',
+            'item_process_end_time' => 'nullable|after_or_equal:item_process_start_time',
         ]);
 
         try {

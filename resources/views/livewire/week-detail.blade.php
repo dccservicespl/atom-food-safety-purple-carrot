@@ -37,10 +37,6 @@
     </section>
 
     <!-- Weekly Table -->
-    <x-week-table
-        :week_days="$week_days"
-        :days_with_categories="$days_with_categories"
-        :selected_day="$selected_day"
-        :order_head="$order_head"
+    <x-week-table :week_days="$week_days" :days_with_categories="$days_with_categories" :selected_day="$selected_day" :order_head="$order_head"
         route_name="order_measure_details" />
 </div>

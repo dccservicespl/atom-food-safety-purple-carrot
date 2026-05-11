@@ -75,6 +75,7 @@ class WeekDetail extends Component
             ->where('portioning_order_details.order_head_id', $this->order_head_id)
             ->select(
                 'portioning_order_details.scheduled_day',
+                'portioning_order_details.is_scheduled',
                 'portioning_order_details.status',
                 'portioning_categories.category_id',
                 'portioning_categories.category_name',
@@ -99,6 +100,7 @@ class WeekDetail extends Component
                     'category_name' => $catName,
                     'category_id'   => $row->category_id,
                     'status'        => $row->status ?? 'not_started',
+                    'is_scheduled'  => $row->is_scheduled??'No'
                 ];
             }
         }
@@ -108,7 +110,7 @@ class WeekDetail extends Component
 
     public function render()
     {
-        // dd($this->week_days);
+        // dd($this->week_days, $this->days_with_categories);
         return view('livewire.week-detail');
     }
 }

@@ -548,9 +548,34 @@ class PortioningMeasureForm extends Component
             'reschedule_date' => 'required|date|after_or_equal:' . $min_date . '|before_or_equal:' . $max_date,
         ]);
 
-        $update_portioning_order_details = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
+        // $portioningOrderDetail = PortioningOrderDetail::where([
+        //     'order_head_id' => $this->order_head_id,
+        //     'portioning_category_id' => $this->portioning_category_id,
+        // ])->first();
+
+        // if ($portioningOrderDetail) {
+
+        //     $portioningOrderDetail->update([
+        //         'old_schedule_date' => $portioningOrderDetail->scheduled_day,
+        //         'scheduled_day'     => date('Y-m-d', strtotime($this->reschedule_date)),
+        //         'is_scheduled'      => 'Yes',
+        //     ]);
+        // }
+
+        // $update_portioning_order_details = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
+        //     ->where('portioning_category_id', $this->portioning_category_id)
+        //     ->update([
+        //         'scheduled_day' => date('Y-m-d', strtotime($this->reschedule_date)),
+        //         'is_scheduled' => 'Yes',
+        //         'old_schedule_date'=> scheduled_day
+        //     ]);
+        PortioningOrderDetail::where('order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
-            ->update(['scheduled_day' => date('Y-m-d', strtotime($this->reschedule_date))]);
+            ->update([
+                'old_schedule_date' => DB::raw('scheduled_day'),
+                'scheduled_day'     => date('Y-m-d', strtotime($this->reschedule_date)),
+                'is_scheduled'      => 'Yes',
+            ]);
         // Show the date using dd
         return redirect()->route('week_details', [$ger_order_head->week_number,$this->order_head_id,
         ])->with('success', 'Process has been rescheduled to ' . date('m-d-Y', strtotime($this->reschedule_date)));

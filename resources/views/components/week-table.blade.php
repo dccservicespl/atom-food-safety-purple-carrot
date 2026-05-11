@@ -65,6 +65,12 @@ $is_current_week = $today->between($week_from, $week_to);
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
                                 @endphp
 
+                                @if ($category['is_scheduled'] === 'Yes')
+                                <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id'], 'measure_date' => $day]) }}"
+                                    class="chip" style="background:#FFE6E6;border:1px solid #B41E1E;color:#B41E1E;">
+                                    {{ $category['category_name'] }}
+                                </a>
+                                @else
                                 @if (!$is_future)
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id'], 'measure_date' => $day]) }}"
                                     class="chip"
@@ -77,6 +83,9 @@ $is_current_week = $today->between($week_from, $week_to);
                                     {{ $category['category_name'] }}
                                 </span>
                                 @endif
+                                @endif
+
+
                                 @empty
                                 {{-- No categories for this day --}}
                                 @endforelse
@@ -101,6 +110,10 @@ $is_current_week = $today->between($week_from, $week_to);
             <div class="d-flex align-items-center gap-2">
                 <div style="background:#CAFFB8;border:1px solid #208200;width:30px;height:30px;border-radius:8px"></div>
                 <p class="mb-0">Completed</p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div style="background:#FFE6E6;border:1px solid #B41E1E;width:30px;height:30px;border-radius:8px"></div>
+                <p class="mb-0">Reschedule</p>
             </div>
         </div>
     </section>

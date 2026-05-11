@@ -24,6 +24,8 @@ class PortioningOrderDetail extends Model
         'film_size',
         '95_percent',
         'status',
+        'is_scheduled',
+        'old_schedule_date',
         'created_at',
         'updated_at',
     ];

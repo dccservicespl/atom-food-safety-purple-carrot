@@ -64,6 +64,7 @@ class PortioningMeasureForm extends Component
 
     public $reschedule_popup = false;
     public $reschedule_date = '';
+    public array $expandedRows = [];
 
     protected function rules(): array
     {
@@ -276,7 +277,7 @@ class PortioningMeasureForm extends Component
             $orderDetail = PortioningOrderDetail::findOrFail($this->item_id);
             $this->measure_date = date('m/d/Y', strtotime($orderDetail->scheduled_day));
         }
-         $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
+        $this->selected_item_name = $orderDetail->component_details ?? $orderDetail->component_details ?? 'Item';
 
         // $this->selected_item_data = $orderDetail;
 
@@ -507,20 +508,41 @@ class PortioningMeasureForm extends Component
             //     ->where('scheduled_day', date('Y-m-d'))
             //     ->get();
 
+            // $data = PortioningMeasurement::query()
+            //     ->with('orderDetail')
+            //     ->join('portioning_measure_heads as pmh', 'pmh.id', '=', 'portioning_measurements.measure_id')
+            //     ->where('pmh.portioning_order_head_id', $this->order_head_id)
+            //     ->where('pmh.portioning_category_id', $this->portioning_category_id)
+            //     //->whereDate('pmh.scheduled_day', now())
+            //     ->select('portioning_measurements.*') // duplicate column conflict avoid
+            //     ->get();
+
             $data = PortioningMeasurement::query()
-                ->with('orderDetail')
+                ->with(['orderDetail', 'measureHead'])
                 ->join('portioning_measure_heads as pmh', 'pmh.id', '=', 'portioning_measurements.measure_id')
                 ->where('pmh.portioning_order_head_id', $this->order_head_id)
                 ->where('pmh.portioning_category_id', $this->portioning_category_id)
-                //->whereDate('pmh.scheduled_day', now())
-                ->select('portioning_measurements.*') // duplicate column conflict avoid
-                ->get();
+                ->select('portioning_measurements.*')
+                ->get()
+                ->groupBy('item_id')
+                ->toArray();
             // dd($data);
         }
 
         $this->portioning_order_data = $data;
         $portioning_category_name = PortioningCategory::where('category_id',  $this->portioning_category_id)->value('category_name');
         return view('livewire.portioning-measure-form', compact('check_start_time', 'portioning_category_name'));
+    }
+
+    public function toggleAccordion(int $orderDetailId): void
+    {
+        if (in_array($orderDetailId, $this->expandedRows)) {
+            $this->expandedRows = array_values(
+                array_filter($this->expandedRows, fn($id) => $id !== $orderDetailId)
+            );
+        } else {
+            $this->expandedRows[] = $orderDetailId;
+        }
     }
 
     public function switchTableType($type)
@@ -577,7 +599,9 @@ class PortioningMeasureForm extends Component
                 'is_scheduled'      => 'Yes',
             ]);
         // Show the date using dd
-        return redirect()->route('week_details', [$ger_order_head->week_number,$this->order_head_id,
+        return redirect()->route('week_details', [
+            $ger_order_head->week_number,
+            $this->order_head_id,
         ])->with('success', 'Process has been rescheduled to ' . date('m-d-Y', strtotime($this->reschedule_date)));
     }
 }

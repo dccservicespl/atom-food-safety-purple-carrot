@@ -175,7 +175,7 @@
             <strong>Table:</strong> {{ $dataset_data['report_head']['table_name'] }}
         </div>
         <div class="operator-info">
-            <strong>Operator name:</strong> {{ $dataset_data['report_head']['measure_by'] }}<br>
+            <strong>Operator name:</strong> {{ $dataset_data['report_line_items'][0]['measured_by'] }}<br>
             <strong>People Qty:</strong> {{ $dataset_data['report_head']['people_qty'] }} &nbsp;&nbsp;&nbsp;
             <strong>Scale #:</strong> {{ $dataset_data['report_head']['scale'] }} &nbsp;&nbsp;&nbsp;
             <strong>Pre-Op Complete:</strong> {{ $dataset_data['report_head']['pre_op_complete'] }}
@@ -209,7 +209,7 @@
             @foreach($dataset_data['report_line_items'] as $row)
             <tr>
                 <td>{{ $row['start_time'] }}</td>
-                <td>{{ $row['end_time'] }}</td>
+                <td>{{ $row['end_time'] ?? '-' }}</td>
                 <td class="left-align">{{ strtoupper($row['product_description']) }}</td>
                 <td>{{ $row['lot_number'] }}</td>
                 <td>{{ $row['temp'] }}</td>

@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class PortioningCategory extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'portioning_category_Id';
+    protected $primaryKey = 'category_id';
 }

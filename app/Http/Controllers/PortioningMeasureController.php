@@ -351,7 +351,7 @@ class PortioningMeasureController extends Controller
     {
         $portioningHeads = PortioningMeasureHead::where('portioning_order_head_id', $order_head_id)
             ->where('portioning_category_id', $portioning_category_id)
-            ->with('measure_by')
+            ->with('measure_by', 'portioning_category')
             ->orderBy('created_at', 'asc')
             ->first();
 
@@ -381,7 +381,7 @@ class PortioningMeasureController extends Controller
     {
         $portioningHeads = PortioningMeasureHead::where('portioning_order_head_id', $order_head_id)
             ->where('portioning_category_id', $portioning_category_id)
-            ->with('measure_by')
+            ->with('measure_by', 'portioning_category')
             ->orderBy('created_at', 'asc')
             ->first();
 
@@ -401,30 +401,55 @@ class PortioningMeasureController extends Controller
         $reportLineItems = [];
         $get_portioning_measurement_data = PortioningMeasurement::where('measure_id', $portioningHeads->id)
             ->with(['samples', 'item_details', 'measuredBy'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->get()
+            ->groupBy('item_id');
         // dd($portioningHeads, $get_portioning_measurement_data);
-        foreach ($get_portioning_measurement_data as $measurement) {
-            $samples = $measurement->samples;
-            $item = $measurement->item_details;
+        // foreach ($get_portioning_measurement_data as $measurement) {
+        //     $samples = $measurement->samples;
+        //     $item = $measurement->item_details;
 
-            $reportLineItems[] = [
-                'start_time' => $measurement->start_time ? Carbon::parse($measurement->start_time)->format('g:i A') : '-',
-                'end_time'   => $measurement->end_time ? Carbon::parse($measurement->end_time)->format('g:i A') : '-',
-                'measured_by' => $measurement->measuredBy->name ?? 'N/A',
-                'product_description' => $item->component_details ?? 'N/A',
-                'lot_number' => $measurement->lot_number ?? 'N/A',
-                'temp' => $measurement->temperature ?? '',
-                'allergen' => $measurement->allergen ?? 'WHEAT',
-                'allergen_test_result' => $measurement->allergen_test_result ?? 'N/A',
-                'pack_size' => $measurement->pack_size ?? '2ea',
-                'sample_1' => $samples[0]->sample_value ?? 'N/A',
-                'sample_2' => $samples[1]->sample_value ?? 'N/A',
-                'sample_3' => $samples[2]->sample_value ?? 'N/A',
-                'kit_letter' => $measurement->kit_letter ?? 'DM',
-                'qty_produced' => $measurement->qty_produced ?? 'N/A',
-                'fs_initial' => $measurement->fs_initial ?? 'LA',
-            ];
+        //     $reportLineItems[] = [
+        //         'start_time' => $measurement->start_time ? Carbon::parse($measurement->start_time)->format('g:i A') : '-',
+        //         'end_time'   => $measurement->end_time ? Carbon::parse($measurement->end_time)->format('g:i A') : '-',
+        //         'measured_by' => $measurement->measuredBy->name ?? 'N/A',
+        //         'product_description' => $item->component_details ?? 'N/A',
+        //         'lot_number' => $measurement->lot_number ?? 'N/A',
+        //         'temp' => $measurement->temperature ?? '',
+        //         'allergen' => $measurement->allergen ?? 'WHEAT',
+        //         'allergen_test_result' => $measurement->allergen_result ?? 'N/A',
+        //         'pack_size' => $measurement->pack_size ?? '2ea',
+        //         'sample_1' => $samples[0]->sample_value ?? 'N/A',
+        //         'sample_2' => $samples[1]->sample_value ?? 'N/A',
+        //         'sample_3' => $samples[2]->sample_value ?? 'N/A',
+        //         'kit_letter' => $measurement->kit_letter ?? 'DM',
+        //         'qty_produced' => $measurement->qty_produces_final ?? 'N/A',
+        //         'fs_initial' => $measurement->fs_initial ?? 'LA',
+        //     ];
+        // }
+
+        foreach ($get_portioning_measurement_data as $measurements) {
+            foreach ($measurements as $measurement) {
+                $samples = $measurement->samples;
+                $item = $measurement->item_details;
+
+                $reportLineItems[] = [
+                    'start_time'           => $measurement->start_time ? Carbon::parse($measurement->start_time)->format('g:i A') : '-',
+                    'end_time'             => $measurement->end_time ? Carbon::parse($measurement->end_time)->format('g:i A') : '-',
+                    'measured_by'          => $measurement->measuredBy->name ?? 'N/A',
+                    'product_description'  => $item->component_details ?? 'N/A',
+                    'lot_number'           => $measurement->lot_number ?? 'N/A',
+                    'temp'                 => $measurement->temperature ?? 'N/A',
+                    'allergen'             => $measurement->allergen ?? 'N/A',
+                    'allergen_test_result' => $measurement->allergen_result ?? 'N/A',
+                    'pack_size'            => $measurement->pack_size ?? 'N/A',
+                    'sample_1'             => $samples[0]->sample_value ?? 'N/A',
+                    'sample_2'             => $samples[1]->sample_value ?? 'N/A',
+                    'sample_3'             => $samples[2]->sample_value ?? 'N/A',
+                    'kit_letter'           => $measurement->kit_letter ?? 'N/A',
+                    'qty_produced'         => $measurement->qty_produces_final ?? 'N/A',
+                    'fs_initial'           => $measurement->fs_initial ?? 'N/A',
+                ];
+            }
         }
 
         $dataset[] = [
@@ -432,7 +457,7 @@ class PortioningMeasureController extends Controller
                 'start_time' => $portioningHeads->start_time ? Carbon::parse($portioningHeads->start_time)->format('g:i A') : '-',
                 'end_time' => $portioningHeads->end_time ? Carbon::parse($portioningHeads->end_time)->format('g:i A') : '-',
                 'measure_by' => $portioningHeads->measure_by->name ?? 'N/A',
-                'equipment' => $portioningHeads->equipment,
+                'equipment' => $portioningHeads->portioning_category->category_name ?? 'N/A',
                 'table_name' => $portioningHeads->table_name,
                 'people_qty' => $portioningHeads->people_qty,
                 'scale' => $portioningHeads->scale,

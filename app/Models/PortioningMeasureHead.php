@@ -39,4 +39,9 @@ class PortioningMeasureHead extends Model
     {
         return $this->belongsTo(User::class, 'measure_by');
     }
+
+    public function portioning_category()
+    {
+        return $this->belongsTo(PortioningCategory::class, 'portioning_category_id');
+    }
 }

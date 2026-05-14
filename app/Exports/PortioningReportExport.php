@@ -54,6 +54,7 @@ class PortioningReportExport implements FromArray, WithEvents
                 'People Qty: ' . $dataset_data['report_head']['people_qty'],
                 '',
                 'Scale #: ' . $dataset_data['report_head']['scale'],
+                '',
                 'Pre-Op Complete: ' . $dataset_data['report_head']['pre_op_complete'],
                 '', '', ''
             ];

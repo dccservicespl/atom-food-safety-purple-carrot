@@ -6,12 +6,14 @@
             <div class="week_card {{ $week->status == 'Not Started'?" present ":"
                 completed " }} justify-content-betwee position-relative w-100">
                 @if ($week->status === "Not Started")
-                <span class="badge present"><span>Present Day:</span> <span>{{ date('d M', strtotime($week->from_date)) }}</span> </span>
+                <span class="badge present"><span>Present Day:</span> <span>{{ date('d M', strtotime($week->from_date))
+                        }}</span> </span>
                 @else
                 <span class="badge completed"><span>Completed</span></span>
                 @endif
                 <div class="week_details d-flex justify-content-between">
-                    <h4 class="mb-5">Week - {{ $loop->iteration }} </h4>
+                    <h4 class="mb-5">Week - {{ App\Helpers\WebHookHelper::getMonthWeekFromYearWeek(date('Y',
+                        strtotime($week->from_date)), $week->week_number)['week_of_month'] }} </h4>
                     <div class="text-end mb-5">
                         <p class="mb-2"> {{ date('d M', strtotime($week->from_date))." to ". date('d M',
                             strtotime($week->to_date)) }}</p>

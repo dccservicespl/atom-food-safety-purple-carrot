@@ -8,6 +8,7 @@ use App\Models\MixingMeasure;
 use App\Models\Inspectiondetails;
 use App\Models\InspectionStatus;
 use App\Models\UserRoleMaping;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -361,6 +362,17 @@ class WebHookHelper{
         $short_name = trim( Str::before($data, ' ') . ' ' . Str::upper(Str::substr(Str::afterLast($data, ' '), 0, 1)) );
         // dd($short_name);
         return $short_name ?? '-';
+    }
+
+    public static function getMonthWeekFromYearWeek($year, $week)
+    {
+        $date = Carbon::now()->setISODate($year, $week);
+        return [
+            'month' => $date->format('F'),
+            'week_of_month' => $date->weekOfMonth,
+            'start_date' => $date->copy()->startOfWeek()->format('d-m-Y'),
+            'end_date' => $date->copy()->endOfWeek()->format('d-m-Y'),
+        ];
     }
 }
 ?>

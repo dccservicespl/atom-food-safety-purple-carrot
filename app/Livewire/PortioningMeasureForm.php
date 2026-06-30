@@ -347,7 +347,7 @@ class PortioningMeasureForm extends Component
             'temperature' => 'required|numeric',
             'allergen_result' => 'required|in:Yes,No,N/A',
             'allergen' => 'nullable|string|max:255',
-            'pack_size' => 'required|numeric',
+            'pack_size' => 'required|string',
             'kit_letter' => 'required|string|max:50',
             'qty_produces_final' => 'nullable|numeric',
             'fs_initial' => 'nullable|string|max:50',

@@ -16,9 +16,9 @@ class PortioningMeasurementSample extends Model
         'sample_value',
     ];
 
-    protected $casts = [
-        'sample_value' => 'decimal:2',
-    ];
+    // protected $casts = [
+    //     'sample_value' => 'decimal:2',
+    // ];
 
     public function measurement()
     {

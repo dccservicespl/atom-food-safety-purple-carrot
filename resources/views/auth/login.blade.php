@@ -7,9 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- ===============================================--><!--    Document Title--><!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
     <title>{{ env('APP_NAME') }}</title>
-    <!-- ===============================================--><!--    Favicons--><!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
@@ -20,7 +24,9 @@
     <script src="/assets/js/config.js"></script>
     <script src="/assets/vendors/simplebar/simplebar.min.js"></script>
 
-    <!-- ===============================================--><!--    Stylesheets--><!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap"
@@ -51,7 +57,9 @@
 </style>
 
 <body>
-    <!-- ===============================================--><!--    Main Content--><!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
     <main class="main" id="top">
         <div class="container-fluid">
             <script>
@@ -73,7 +81,8 @@
                                         <img src="/assets/img/logo.png" style="height:300px" alt="">
                                     </a>
                                     <div class="mt-3 mb-3">
-                                        <h2 class="login_title">F<span class="text-primary">OO</span>D SAFETY</h2>
+                                        <h2 class="login_title">43rd St. F<span class="text-primary">OO</span>D SAFETY
+                                        </h2>
                                     </div>
                                     <p class="text-center text-900 font-weight-bolder mt-3 h4">Login into your account
                                     </p>
@@ -127,9 +136,13 @@
             </div>
         </div>
     </main>
-    <!-- ===============================================--><!--    End of Main Content--><!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
 
-    <!-- ===============================================--><!--    JavaScripts--><!-- ===============================================-->
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
     <script src="/assets/vendors/popper/popper.min.js"></script>
     <script src="/assets/vendors/bootstrap/bootstrap.min.js"></script>
     <script src="/assets/vendors/anchorjs/anchor.min.js"></script>

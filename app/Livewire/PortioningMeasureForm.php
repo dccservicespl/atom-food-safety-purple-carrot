@@ -69,7 +69,7 @@ class PortioningMeasureForm extends Component
     protected function rules(): array
     {
         return [
-            'table'      => 'required|integer|between:1,8',
+            'table'      => 'nullable',
             'preop'      => 'required',
             'people_qty' => 'required|integer|min:1',
             'scale'      => 'required|string|max:50',
@@ -242,7 +242,7 @@ class PortioningMeasureForm extends Component
                 [
                     'start_time'      => date('H:i:s'),
                     'measure_by'      => Auth::user()->id,
-                    'table_name'      => $this->table,
+                    'table_name'      => $this->table??0,
                     'people_qty'      => $this->people_qty,
                     'scale'           => $this->scale,
                     'pre_op_complete' => $this->preop,

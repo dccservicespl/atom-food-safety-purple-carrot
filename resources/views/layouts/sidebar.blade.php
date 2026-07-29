@@ -7,15 +7,27 @@
             <div class="profile-trigger d-flex gap-3 align-items-center" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <div class="text-end d-none d-sm-block">
-                    <h4 class="profile-name fs-5 fw-bold">Jack Will</h4>
-                    <p class="profile-role fs-6 text-color">Food Safety Manager</p>
+                    <h4 class="profile-name fs-5 fw-bold">{{ Auth::user()->name }}</h4>
+                    <p class="profile-role fs-6 text-color">
+                        @if (Auth::user()->role_id == 1)
+                            Food Safety Technician
+                        @elseif (Auth::user()->role_id == 2)
+                            Food Safety Manager
+                        @elseif (Auth::user()->role_id == 3)
+                            Label Inspection Operator
+                        @elseif (Auth::user()->role_id == 4)
+                            Production Schedule Upload
+                        @else
+                            User
+                        @endif
+                    </p>
                 </div>
                 <div class="profile-icon-wrapper">
                     <i class="bi bi-person-circle fs-1"></i>
                 </div>
             </div>
 
-            <ul class="dropdown-menu dropdown-menu-end">
+            {{-- <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                     <a class="dropdown-item" href="#">
                         <i class="bi bi-person-fill"></i> My Profile
@@ -35,7 +47,7 @@
                         <i class="bi bi-box-arrow-left"></i> Log Out
                     </a>
                 </li>
-            </ul>
+            </ul> --}}
         </div>
     </header>
 </div>

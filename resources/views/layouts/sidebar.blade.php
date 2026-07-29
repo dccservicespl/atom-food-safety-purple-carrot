@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            {{-- <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                     <a class="dropdown-item" href="#">
                         <i class="bi bi-person-fill"></i> My Profile
@@ -47,7 +47,7 @@
                         <i class="bi bi-box-arrow-left"></i> Log Out
                     </a>
                 </li>
-            </ul> --}}
+            </ul>
         </div>
     </header>
 </div>

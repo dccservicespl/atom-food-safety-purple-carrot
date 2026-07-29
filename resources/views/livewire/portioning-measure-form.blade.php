@@ -825,9 +825,9 @@
             <div class="simple-panel section-gap">
                 <div class="simple-panel-header">
                     <p class="panel-title">Sample</p>
-                    {{-- <button type="button" class="btn-add-simple" wire:click="addSample">
+                    <button type="button" class="btn-add-simple" wire:click="addSample">
                         <i class="bi bi-plus-square-fill"></i> Add Sample
-                    </button> --}}
+                    </button>
                 </div>
                 <div class="simple-panel-body">
                     @foreach($simple as $index => $value)

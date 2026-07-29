@@ -28,7 +28,6 @@
                         <h3 class="fw-bold mb-2">Total Quantity</h3>
                         <h2 class="fw-bold fs-1">{{ number_format($week->total_qty, 0) }}</h2>
                     </div>
-
                     <div class="text-end text-end d-flex justify-content-end"><a
                             href="{{route('week_details', [$week->week_number, $week->order_head_id])}}"
                             class="btn_arrow present"><i class="bi bi-arrow-right"></i></a></div>

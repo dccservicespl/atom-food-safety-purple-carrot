@@ -17,10 +17,13 @@
                         href="#">Item
                         Measure Log</a>
                 </li>
+                @if (Auth::user()->role_id < 4)
                 <li class="nav-item">
                     <button class="btn btn-warning" wire:click='reScheduleProcessModel'>Re-schedule
                         Process</button>
-                </li>
+                    </li>
+                @endif
+
             </ul>
             {{-- <div class="d-flex align-items-center gap-3">
                 <div class="color fs-6 fw-medium">
@@ -72,12 +75,14 @@
                                             }}</span></td>
                                     <td><span class="qty-value">{{ $read_only_data->quantity }}</span></td>
                                     <td class="text-center">
+                                        @if (Auth::user()->role_id < 4)
                                         <a href="#" class="action-btn" @disabled(true)>
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="2.5">
                                                 <path d="M5 12h14M12 5l7 7-7 7" />
                                             </svg>
                                         </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty
@@ -181,6 +186,7 @@
                                     </td>
                                     <td><span class="qty-value">{{ $data->quantity }}</span></td>
                                     <td class="text-center">
+                                        @if (Auth::user()->role_id < 4)
                                         <button wire:click="measurementFormOpen({{ $data->order_detail_id }})"
                                             class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -188,6 +194,7 @@
                                                 <path d="M5 12h14M12 5l7 7-7 7" />
                                             </svg>
                                         </button>
+                                        @endif
                                         {{-- <a href="{{ route('portioning_measurement_form_new') }}"
                                             class="action-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -396,6 +403,7 @@
                                                     <td><span class="qty-value">{{ $log['order_detail']['quantity']
                                                             }}</span></td>
                                                     <td class="text-center">
+                                                        @if (Auth::user()->role_id < 4)
                                                         <button wire:click="measurementFormOpen({{ $log['id'] }})"
                                                             class="action-btn">
                                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -403,6 +411,7 @@
                                                                 <path d="M5 12h14M12 5l7 7-7 7" />
                                                             </svg>
                                                         </button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @endforeach

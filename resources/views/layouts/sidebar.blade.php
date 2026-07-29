@@ -14,7 +14,7 @@
                         @elseif (Auth::user()->role_id == 2)
                             Food Safety Manager
                         @elseif (Auth::user()->role_id == 3)
-                            Label Inspection Operator
+                            Floor Data Collection (QA)
                         @elseif (Auth::user()->role_id == 4)
                             Production Schedule Upload
                         @else

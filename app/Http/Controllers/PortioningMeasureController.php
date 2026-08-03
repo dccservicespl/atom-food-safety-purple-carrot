@@ -136,6 +136,45 @@ class PortioningMeasureController extends Controller
 
         $final_array = $import->getData();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update all rows (subtract 7 days)
+        |--------------------------------------------------------------------------
+        */
+        foreach ($final_array as $sheetKey => &$rows) {
+            foreach ($rows as &$row) {
+
+                if (!empty($row['from_date'])) {
+                    $row['from_date'] = Carbon::parse($row['from_date'])
+                        ->subWeek()
+                        ->toDateString();
+                }
+
+                if (!empty($row['to_date'])) {
+                    $row['to_date'] = Carbon::parse($row['to_date'])
+                        ->subWeek()
+                        ->toDateString();
+                }
+
+                if (!empty($row['scheduled_day'])) {
+                    $row['scheduled_day'] = Carbon::parse($row['scheduled_day'])
+                        ->subWeek()
+                        ->toDateString();
+                }
+
+                if (!empty($row['week'])) {
+                    $row['week'] = Carbon::parse($row['week'])
+                        ->subWeek()
+                        ->format('n.j');
+                }
+            }
+        }
+
+        unset($rows, $row);
+
+
+
         $firstSheetRows = reset($final_array);
         $firstRow       = $firstSheetRows[0] ?? [];
 
@@ -143,6 +182,7 @@ class PortioningMeasureController extends Controller
         $toDate   = $firstRow['to_date']   ?? now()->addDays(6)->toDateString();
         $week     = $firstRow['week'] ?? Carbon::parse($firstRow['from_date'])->format('n.j');
 
+        // dd($final_array, $fromDate, $toDate, $week);
         $check_head_exists = PortioningOrderHead::where('week', $week)
             ->where('from_date', $fromDate)
             ->where('to_date', $toDate)

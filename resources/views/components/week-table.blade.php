@@ -58,7 +58,7 @@ $is_current_week = $today->between($week_from, $week_to);
                         // dd($days_with_categories[$day])
                         @endphp
 
-                        <td class="{{ $is_selected ? 'td-active' : 'td-inactive' }}">
+                        <td class="{{ $is_selected ? 'td-active' : 'td-inactive' }} text-nowrap">
                             <div class="cell-inner">
                                 @forelse ($days_with_categories[$day] ?? [] as $category)
                                 @php
@@ -84,8 +84,7 @@ $is_current_week = $today->between($week_from, $week_to);
                                 </span>
                                 @endif
                                 @endif
-
-
+                                
                                 @empty
                                 {{-- No categories for this day --}}
                                 @endforelse

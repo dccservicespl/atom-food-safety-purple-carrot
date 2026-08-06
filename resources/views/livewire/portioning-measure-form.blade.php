@@ -898,14 +898,14 @@
                         <div class="upload-icon">
                             <i class="bi bi-camera"></i>
                         </div>
-                        <h6>Upload Attachment</h6>
+                        <h6>Open Your Device Camera</h6>
                         <p>Click to Open Camera</p>
                         <button type="button" class="btn-camera" title="Click to upload image">
                             <i class="bi bi-camera-fill"></i> Open Camera
                         </button>
                     </div>
 
-                    <input type="file" id="attachmentInput" class="d-none" accept="image/*" capture="environment"
+                    <input type="file" id="attachmentInput" class="d-none" accept="image/*" capture="camera"
                         wire:model="attachment">
 
                     {{-- Preview grid --}}

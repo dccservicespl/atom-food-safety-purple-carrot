@@ -156,8 +156,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/items/create', LabelInspectionItemMaster::class)->name('items.create');
     Route::get('/items/{id}/edit', LabelInspectionItemMaster::class)->name('items.edit');
 
-
-
     // Kitting Route
     Route::get('admin/kitting-measure-date-listing', [KittingController::class, 'kittingMeasureDateListing'])->name('kitting_measure_date_listing');
     Route::get('admin/meal_kit_type', [KittingController::class, 'meal_kit_type'])->name('meal_kit_type');

@@ -64,7 +64,7 @@ class PortioningMeasureController extends Controller
     public function portioning_measure_data_upload_action(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:xlsx',
+            'file' => 'required|file|mimes:xls,xlsx',
         ]);
 
         if ($validator->fails()) {
@@ -84,6 +84,8 @@ class PortioningMeasureController extends Controller
             'Hand Allergen',
         ];
 
+        // dd($request->all());
+
         // Read all sheet names from the uploaded file
         try {
             $spreadsheet = IOFactory::load($request->file('file')->getPathname());
@@ -95,46 +97,67 @@ class PortioningMeasureController extends Controller
             ], 422);
         }
 
-        // Strip version suffix and match to target base names
-        $resolved_sheets    = [];
-        $matched_base_names = [];
+        if (!$request->exists('selected_sheets')) {
+            $default_selected_sheets = [];
+            $matched_base_names = [];
 
-        foreach ($all_sheet_names as $sheet_name) {
-            $base_name = trim(preg_replace('/\s+[\d.]+$/', '', $sheet_name));
+            foreach ($all_sheet_names as $sheet_name) {
+                $base_name = trim(preg_replace('/\s+[\d.]+$/', '', $sheet_name));
 
-            // Only take the FIRST occurrence of each base name — skip duplicates
-            if (in_array($base_name, $target_base_names) && !in_array($base_name, $matched_base_names)) {
-                $resolved_sheets[$sheet_name] = $base_name;
-                $matched_base_names[]         = $base_name;
+                if (in_array($base_name, $target_base_names, true) && !in_array($base_name, $matched_base_names, true)) {
+                    $default_selected_sheets[] = $sheet_name;
+                    $matched_base_names[] = $base_name;
+                }
             }
+
+            return response()->json([
+                'status' => 'select_sheets',
+                'file_name' => $request->file('file')->getClientOriginalName(),
+                'sheet_names' => $all_sheet_names,
+                'selected_sheets' => $default_selected_sheets,
+            ]);
         }
 
-        // Check if No sheets matched at all
-        if (empty($resolved_sheets)) {
+        $selection_validator = Validator::make($request->all(), [
+            'selected_sheets' => 'required|array|min:1',
+            'selected_sheets.*' => 'required|string',
+        ]);
+
+        if ($selection_validator->fails()) {
             return response()->json([
                 'status'  => 'error',
-                'message' => 'The uploaded Excel file does not match the required format. Please upload the correct Portioning Measure file.',
+                'message' => 'Please select at least one sheet to process.',
             ], 422);
         }
 
-        // Check which required sheets are missing
-        $missing_sheets = array_diff($target_base_names, $matched_base_names);
+        $selected_sheets = array_values(array_unique($request->input('selected_sheets')));
+        $unknown_sheets = array_diff($selected_sheets, $all_sheet_names);
 
-        if (!empty($missing_sheets)) {
-            $missing_list = implode(', ', $missing_sheets);
+        if (!empty($unknown_sheets)) {
             return response()->json([
                 'status'  => 'error',
-                'message' => "The following sheet(s) were not found: {$missing_list}. Please check the sheet names in the Excel file.",
+                'message' => 'One or more selected sheets are not present in the uploaded Excel file. Please select the sheets again.',
             ], 422);
         }
 
-        // All sheets matched — proceed with import
+        $resolved_sheets = [];
+        foreach ($selected_sheets as $sheet_name) {
+            $resolved_sheets[$sheet_name] = trim(preg_replace('/\s+[\d.]+$/', '', $sheet_name));
+        }
+
         $import = new PortioningMultiSheetImport();
         $import->setResolvedSheets($resolved_sheets);
 
         Excel::import($import, $request->file('file'));
 
-        $final_array = $import->getData();
+        $final_array = array_filter($import->getData(), fn($rows) => !empty($rows));
+
+        if (empty($final_array)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'The selected sheet(s) do not contain any processable portioning data.',
+            ], 422);
+        }
 
 
         /*

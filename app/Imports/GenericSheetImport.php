@@ -130,7 +130,7 @@ class GenericSheetImport implements ToArray, WithStartRow
             $cleaned[] = $mapped;
         }
 
-        $this->data[$this->sheet_name] = $cleaned;
+        $this->data[$this->sheet_name] = array_merge($this->data[$this->sheet_name] ?? [], $cleaned);
     }
 
     protected function parseWeekInfo(?string $title): ?array

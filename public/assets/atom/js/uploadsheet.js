@@ -9,6 +9,8 @@ fileInput.addEventListener('change', function (e) {
 
     if (file) {
         updateFileStatus(file.name);
+    } else {
+        resetForm();
     }
 
 });
@@ -48,22 +50,21 @@ dropZone.addEventListener('drop', (e) => {
 // submit using ajax
 $('#submit-btn').on('click', function () {
 
+    const file = fileInput.files[0];
+    if (!file) {
+        return;
+    }
+
     let formData = new FormData();
 
-    formData.append('file', $('#file-input')[0].files[0]);
+    formData.append('file', file);
 
     let btn = $(this);
 
-    btn.html('<i class="bi bi-arrow-repeat"></i> Processing...');
+    btn.html('<i class="bi bi-arrow-repeat"></i> Reading Sheets...');
     btn.prop('disabled', true);
 
     let url = $('#upload-form').data('url');
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
     $.ajax({
         url: url,
@@ -75,20 +76,16 @@ $('#submit-btn').on('click', function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            if (response.status === 'success') {
-                // btn.html('<i class="bi bi-check-circle-fill"></i> Uploaded Successfully');
-                btn.html('Submit Sheet');
-                btn.removeClass('btn-primary').addClass('btn-success');
-                showFlash('success', response.message);
-                resetForm();
-                setTimeout(() => {
-                    location.reload();
-                }, 3000);
+            btn.html('Submit Sheet');
+            btn.prop('disabled', false);
+
+            if (response.status === 'select_sheets') {
+                showSheetSelection(response);
             }
         },
 
         error: function (xhr) {
-            btn.html('<i class="bi bi-upload"></i> Upload');
+            btn.html('Submit Sheet');
             btn.prop('disabled', false);
 
             let message = 'Something went wrong. Please try again.';
@@ -101,6 +98,94 @@ $('#submit-btn').on('click', function () {
         }
     });
 });
+
+$('#process-selected-sheets').on('click', function () {
+    const selectedSheets = Array.from(document.querySelectorAll('#portioningSheetChoices input:checked'))
+        .map((checkbox) => checkbox.value);
+
+    if (selectedSheets.length === 0) {
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    selectedSheets.forEach((sheetName) => formData.append('selected_sheets[]', sheetName));
+
+    const submitButton = $(this);
+    const uploadButton = $('#submit-btn');
+    submitButton.html('<i class="bi bi-arrow-repeat"></i> Processing...');
+    submitButton.prop('disabled', true);
+    uploadButton.prop('disabled', true);
+
+    $.ajax({
+        url: $('#upload-form').data('url'),
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('portioningSheetModal')).hide();
+                showFlash('success', response.message);
+                resetForm();
+                setTimeout(() => location.reload(), 3000);
+            }
+        },
+        error: function (xhr) {
+            submitButton.html('Submit Sheet');
+            submitButton.prop('disabled', false);
+            uploadButton.prop('disabled', false);
+
+            let message = 'Something went wrong. Please try again.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+            }
+            showFlash('error', message);
+        }
+    });
+});
+
+function showSheetSelection(response) {
+    const choices = document.getElementById('portioningSheetChoices');
+    const selected = new Set(response.selected_sheets);
+    const selectedCount = document.getElementById('portioningSelectedCount');
+    const submitButton = document.getElementById('process-selected-sheets');
+
+    document.getElementById('portioningFileName').textContent = response.file_name;
+    choices.replaceChildren();
+
+    response.sheet_names.forEach((sheetName, index) => {
+        const wrapper = document.createElement('div');
+        const input = document.createElement('input');
+        const label = document.createElement('label');
+
+        wrapper.className = 'form-check form-check-inline m-0';
+        input.className = 'btn-check';
+        input.type = 'checkbox';
+        input.id = `portioning-sheet-${index}`;
+        input.value = sheetName;
+        input.checked = selected.has(sheetName);
+        label.className = 'btn btn-outline-secondary btn-sm';
+        label.htmlFor = input.id;
+        label.textContent = sheetName;
+
+        input.addEventListener('change', updateSelectedCount);
+        wrapper.append(input, label);
+        choices.append(wrapper);
+    });
+
+    function updateSelectedCount() {
+        const count = choices.querySelectorAll('input:checked').length;
+        selectedCount.textContent = `${count} Tabs selected`;
+        submitButton.disabled = count === 0;
+    }
+
+    updateSelectedCount();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('portioningSheetModal')).show();
+}
 
 function showFlash(type, message) {
 

@@ -4,6 +4,7 @@
 <div id="flash-container" style="padding-left: 65px; padding-right: 65px;">
     <x-flash />
 </div>
+
 <!-- upload  -->
 <form id="upload-form" data-url="{{ route('portioning_measure_data_upload_action') }}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -33,6 +34,30 @@
     </section>
 </form>
 <!-- upload  -->
+
+<div class="modal fade" id="portioningSheetModal" tabindex="-1" aria-labelledby="portioningSheetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="portioningSheetModalLabel">Select sheets to process</h5>
+                    <small class="text-white">Selected Sheet: <span id="portioningFileName"></span></small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                <div id="portioningSheetChoices" class="d-flex flex-wrap gap-2"></div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <span id="portioningSelectedCount" class="text-muted">0 Tabs selected</span>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="process-selected-sheets" class="btn btn-success" disabled>Submit Sheet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Past Upload Sheets -->
 <section class="past_sheets mb-5">
@@ -83,6 +108,7 @@
         </div>
     </div>
 </section>
+
 <!-- Delete confirmation  modal-->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">

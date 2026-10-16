@@ -795,6 +795,66 @@ section.month .month-scroll::-webkit-scrollbar {
     white-space: nowrap;
 }
 
+.component-table .portioning-select-column {
+    width: 72px;
+    min-width: 72px;
+    text-align: center;
+}
+
+.portioning-select-checkbox {
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0;
+    accent-color: #198754;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.portioning-select-checkbox:focus-visible {
+    outline: 3px solid rgba(25, 135, 84, 0.3);
+    outline-offset: 3px;
+}
+
+.portioning-selection-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(18, 32, 25, 0.2);
+    backdrop-filter: blur(2px);
+    cursor: wait;
+}
+
+.portioning-selection-loading__message {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.35rem;
+    border: 1px solid rgba(25, 135, 84, 0.15);
+    border-radius: 0.85rem;
+    background: #fff;
+    box-shadow: 0 0.75rem 2rem rgba(18, 32, 25, 0.18);
+    color: #244b38;
+    font-weight: 600;
+}
+
+.portioning-selection-loading__spinner {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 3px solid #d8eee1;
+    border-top-color: #198754;
+    border-radius: 50%;
+    animation: portioning-selection-spin 0.7s linear infinite;
+}
+
+@keyframes portioning-selection-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .component-table tbody tr {
     border-bottom: 1px solid #ededed;
     transition: background 0.15s ease;
@@ -1667,4 +1727,3 @@ section.month .month-scroll::-webkit-scrollbar {
 }.green .progress-ring {
     stroke: #75c800;
 }
-

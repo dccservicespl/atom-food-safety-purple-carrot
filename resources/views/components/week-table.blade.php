@@ -44,6 +44,7 @@ $is_current_week = $today->between($week_from, $week_to);
                             class="{{ $is_selected ? 'th-active' : ($is_future ? 'th-disabled' : 'th-inactive') }}"
                             style="cursor:{{ $is_future ? 'not-allowed' : 'pointer' }};">
                             {{ \Carbon\Carbon::parse($day)->format('l') }}
+                            {{ \Carbon\Carbon::parse($day)->format('j M') }}
                         </th>
                         @endforeach
                     </tr>
@@ -55,7 +56,6 @@ $is_current_week = $today->between($week_from, $week_to);
                         @php
                         $is_selected = $selected_day === $day;
                         $is_future = $is_current_week && \Carbon\Carbon::parse($day)->gt(now()->startOfDay());
-                        // dd($days_with_categories[$day])
                         @endphp
 
                         <td class="{{ $is_selected ? 'td-active' : 'td-inactive' }} text-nowrap">
@@ -63,28 +63,29 @@ $is_current_week = $today->between($week_from, $week_to);
                                 @forelse ($days_with_categories[$day] ?? [] as $category)
                                 @php
                                 $status_badge = status_config($category['status'] ?? 'Not Started');
+                                // dd($category);
                                 @endphp
 
                                 @if ($category['is_scheduled'] === 'Yes')
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id'], 'measure_date' => $day]) }}"
                                     class="chip" style="background:#FFE6E6;border:1px solid #B41E1E;color:#B41E1E;">
-                                    {{ $category['category_name'] }}
+                                    {{ $category['category_name'] }} ({{ $category['quantity'] }})
                                 </a>
                                 @else
                                 @if (!$is_future)
                                 <a href="{{ route($route_name, ['order_head_id' => $order_head->order_head_id, 'portioning_category_id' => $category['category_id'], 'measure_date' => $day]) }}"
                                     class="chip"
                                     style="background:{{ $status_badge['bg'] }};border:1px solid {{ $status_badge['border'] }};color:{{ $status_badge['color'] }};">
-                                    {{ $category['category_name'] }}
+                                    {{ $category['category_name'] }} ({{ $category['quantity'] }})
                                 </a>
                                 @else
                                 <span class="chip"
                                     style="background:#f0f0f0;border:1px solid #cccccc;color:#000;cursor:default;opacity:0.6;">
-                                    {{ $category['category_name'] }}
+                                    {{ $category['category_name'] }} ({{ $category['quantity'] }})
                                 </span>
                                 @endif
                                 @endif
-                                
+
                                 @empty
                                 {{-- No categories for this day --}}
                                 @endforelse

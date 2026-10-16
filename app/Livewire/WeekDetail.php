@@ -77,12 +77,12 @@ class WeekDetail extends Component
                 'portioning_order_details.scheduled_day',
                 'portioning_order_details.is_scheduled',
                 'portioning_order_details.status',
+                'portioning_order_details.quantity',
                 'portioning_categories.category_id',
                 'portioning_categories.category_name',
             )
             ->orderBy('scheduled_day')
             ->get();
-
         // Initialize all days even if empty
         $data = [];
         foreach ($this->week_days as $day) {
@@ -100,7 +100,8 @@ class WeekDetail extends Component
                     'category_name' => $catName,
                     'category_id'   => $row->category_id,
                     'status'        => $row->status ?? 'not_started',
-                    'is_scheduled'  => $row->is_scheduled??'No'
+                    'is_scheduled'  => $row->is_scheduled??'No',
+                    'quantity' => $row->where('scheduled_day', $day)->where('portioning_category_id', $row->category_id)->count(),
                 ];
             }
         }

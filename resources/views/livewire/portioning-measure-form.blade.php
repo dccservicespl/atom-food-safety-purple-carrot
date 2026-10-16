@@ -1,4 +1,12 @@
 <div>
+    <div class="portioning-selection-loading" wire:loading.flex
+        wire:target="selectedOrderDetailIds,toggleSelectAllOrderDetails" role="status" aria-live="polite">
+        <div class="portioning-selection-loading__message">
+            <span class="portioning-selection-loading__spinner" aria-hidden="true"></span>
+            <span>Updating item selection...</span>
+        </div>
+    </div>
+
     @if ($mode === 'read_only' || $mode === 'edit_mode')
     <section class="mb-4">
         <div class="container">
@@ -19,9 +27,11 @@
                 </li>
                 @if (Auth::user()->role_id < 4)
                 <li class="nav-item">
-                    <button class="btn btn-warning" wire:click='reScheduleProcessModel'>Re-schedule
+                    <button type="button" class="btn btn-warning" wire:click="reScheduleProcessModel"
+                        @disabled(count($selectedOrderDetailIds) === 0)>
+                        Re-schedule
                         Process</button>
-                    </li>
+                </li>
                 @endif
 
             </ul>
@@ -137,21 +147,6 @@
                                 class="bi bi-calendar2-minus"></i></span>
                         <p>{{ date('D - d M', strtotime(date('Y-m-d'))) }}</p>
                     </div>
-                    {{-- @if (!$check_start_time || !$check_start_time->start_time)
-                    <button type="button" class="btn_2" wire:click="openStartTimePopup">
-                        <span><i class="bi bi-clock"></i></span> Start Time
-                    </button>
-                    <!-- DEBUG: {{ $showStartTimeModal ? 'TRUE' : 'FALSE' }} -->
-                    @endif
-                    @if ($mode === 'edit_mode')
-                    @if($check_start_time->end_time == null)
-                    <button type="button" wire:click="openEndTimePopup" class="btn_3 ">
-                        <span><i class="bi bi-clock"></i></span>
-                        End Time
-                    </button>
-                    @endif
-                    @endif --}}
-
                 </div>
             </div>
         </div>
@@ -162,9 +157,21 @@
             <div class="" style="">
                 <div class="table-card">
                     <div class="table-scroll-wrapper">
+                        @php
+                            $selected_order_detail_ids = array_map('strval', $selectedOrderDetailIds);
+                            $all_order_details_selected = $portioning_order_data->isNotEmpty()
+                                && $portioning_order_data->every(fn ($data) => in_array((string) $data->order_detail_id, $selected_order_detail_ids, true));
+                        @endphp
                         <table class="{{ $is_ended ? 'component-table disabled' : 'component-table' }}">
                             <thead>
                                 <tr>
+                                    <th class="text-center portioning-select-column">
+                                        <input class="portioning-select-checkbox" type="checkbox"
+                                            aria-label="Select all items"
+                                            wire:click="toggleSelectAllOrderDetails"
+                                            @checked($all_order_details_selected)
+                                            @disabled($portioning_order_data->isEmpty())>
+                                    </th>
                                     <th>Letter</th>
                                     <th>Component Details</th>
                                     <th>Label</th>
@@ -177,6 +184,12 @@
                             <tbody>
                                 @forelse ($portioning_order_data as $data)
                                 <tr>
+                                    <td class="text-center portioning-select-column">
+                                        <input class="portioning-select-checkbox" type="checkbox"
+                                            aria-label="Select {{ $data->component_details }}"
+                                            value="{{ $data->order_detail_id }}"
+                                            wire:model.live="selectedOrderDetailIds">
+                                    </td>
                                     <td><span class="letter-badge">{{ $data->letter }}</span></td>
                                     <td>{{ $data->component_details }}</td>
                                     <td>{{ $data->label }}</td>
@@ -196,19 +209,11 @@
                                             </svg>
                                         </button>
                                         @endif
-                                        {{-- <a href="{{ route('portioning_measurement_form_new') }}"
-                                            class="action-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2.5">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg>
-                                        </a> --}}
                                     </td>
                                 </tr>
                                 @empty
                                 <x-no-data-found />
                                 @endforelse
-
                             </tbody>
                         </table>
                     </div>

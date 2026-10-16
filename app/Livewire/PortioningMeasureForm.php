@@ -13,6 +13,7 @@ use Carbon\Traits\Date;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Throwable;
@@ -64,6 +65,7 @@ class PortioningMeasureForm extends Component
 
     public $reschedule_popup = false;
     public $reschedule_date = '';
+    public array $selectedOrderDetailIds = [];
     public array $expandedRows = [];
 
     protected function rules(): array
@@ -86,12 +88,18 @@ class PortioningMeasureForm extends Component
 
     public function mount()
     {
-        $this->past_measure_date = request()->measure_date;
+        $measureDate = request()->query('measure_date');
+        $this->past_measure_date = $measureDate;
+        if (is_string($measureDate) && Carbon::hasFormat($measureDate, 'Y-m-d')) {
+            $this->reschedule_date = $measureDate;
+        }
+
         $this->simple = [''];
         if ($this->listing_table_type != "item_measure_log") {
             $this->item_process_start_time = Carbon::now()->format('H:i');
             // $this->item_process_end_time = Carbon::now()->addMinutes(2)->format('H:i');
         }
+        $this->measure_date = $measureDate;
     }
 
     public function updatedAttachment()
@@ -497,25 +505,11 @@ class PortioningMeasureForm extends Component
             $data = PortioningOrderDetail::with('category')
                 ->where('order_head_id', $this->order_head_id)
                 ->where('portioning_category_id', $this->portioning_category_id)
-                //->where('scheduled_day', date('Y-m-d'))
+                ->where('scheduled_day', date('Y-m-d', strtotime($this->reschedule_date)))
                 ->get();
         }
 
         if ($this->listing_table_type === 'item_measure_log') {
-            // $data = PortioningOrderDetail::with('category')
-            //     ->where('order_head_id', $this->order_head_id)
-            //     ->where('portioning_category_id', $this->portioning_category_id)
-            //     ->where('scheduled_day', date('Y-m-d'))
-            //     ->get();
-
-            // $data = PortioningMeasurement::query()
-            //     ->with('orderDetail')
-            //     ->join('portioning_measure_heads as pmh', 'pmh.id', '=', 'portioning_measurements.measure_id')
-            //     ->where('pmh.portioning_order_head_id', $this->order_head_id)
-            //     ->where('pmh.portioning_category_id', $this->portioning_category_id)
-            //     //->whereDate('pmh.scheduled_day', now())
-            //     ->select('portioning_measurements.*') // duplicate column conflict avoid
-            //     ->get();
 
             $data = PortioningMeasurement::query()
                 ->with(['orderDetail', 'measureHead'])
@@ -526,7 +520,6 @@ class PortioningMeasureForm extends Component
                 ->get()
                 ->groupBy('item_id')
                 ->toArray();
-            // dd($data);
         }
 
         $this->portioning_order_data = $data;
@@ -548,6 +541,26 @@ class PortioningMeasureForm extends Component
     public function switchTableType($type)
     {
         $this->listing_table_type = $type;
+        if ($type !== 'item_list') {
+            $this->selectedOrderDetailIds = [];
+        }
+    }
+
+    public function toggleSelectAllOrderDetails(): void
+    {
+        $orderDetailIds = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
+            ->where('portioning_category_id', $this->portioning_category_id)
+            ->pluck('order_detail_id')
+            ->map(static fn ($id) => (string) $id)
+            ->all();
+
+        $selectedIds = array_map('strval', $this->selectedOrderDetailIds);
+        if (empty(array_diff($orderDetailIds, $selectedIds))) {
+            $this->selectedOrderDetailIds = [];
+            return;
+        }
+
+        $this->selectedOrderDetailIds = $orderDetailIds;
     }
 
     public function reScheduleProcessModel()
@@ -562,36 +575,24 @@ class PortioningMeasureForm extends Component
 
     public function rescheduleProcess()
     {
-        $ger_order_head = PortioningOrderHead::find($this->order_head_id);
+        $ger_order_head = PortioningOrderHead::findOrFail($this->order_head_id);
         $min_date = $ger_order_head->from_date;
         $max_date = $ger_order_head->to_date;
-        // Validate the date
+
         $this->validate([
             'reschedule_date' => 'required|date|after_or_equal:' . $min_date . '|before_or_equal:' . $max_date,
+            'selectedOrderDetailIds' => 'required|array|min:1',
+            'selectedOrderDetailIds.*' => [
+                'required',
+                'integer',
+                Rule::exists('portioning_order_details', 'order_detail_id')
+                    ->where('order_head_id', $this->order_head_id)
+                    ->where('portioning_category_id', $this->portioning_category_id),
+            ],
         ]);
 
-        // $portioningOrderDetail = PortioningOrderDetail::where([
-        //     'order_head_id' => $this->order_head_id,
-        //     'portioning_category_id' => $this->portioning_category_id,
-        // ])->first();
-
-        // if ($portioningOrderDetail) {
-
-        //     $portioningOrderDetail->update([
-        //         'old_schedule_date' => $portioningOrderDetail->scheduled_day,
-        //         'scheduled_day'     => date('Y-m-d', strtotime($this->reschedule_date)),
-        //         'is_scheduled'      => 'Yes',
-        //     ]);
-        // }
-
-        // $update_portioning_order_details = PortioningOrderDetail::where('order_head_id', $this->order_head_id)
-        //     ->where('portioning_category_id', $this->portioning_category_id)
-        //     ->update([
-        //         'scheduled_day' => date('Y-m-d', strtotime($this->reschedule_date)),
-        //         'is_scheduled' => 'Yes',
-        //         'old_schedule_date'=> scheduled_day
-        //     ]);
-        PortioningOrderDetail::where('order_head_id', $this->order_head_id)
+        PortioningOrderDetail::whereIn('order_detail_id', $this->selectedOrderDetailIds)
+            ->where('order_head_id', $this->order_head_id)
             ->where('portioning_category_id', $this->portioning_category_id)
             ->update([
                 'old_schedule_date' => DB::raw('scheduled_day'),
